@@ -1,0 +1,262 @@
+{
+  "version": "v4.2",
+  "updatedAt": "2026-06-01",
+  "summary": [
+    {
+      "value": "20",
+      "label": "Canali input"
+    },
+    {
+      "value": "5",
+      "label": "Mix monitor"
+    },
+    {
+      "value": "8×6 m",
+      "label": "Palco minimo"
+    },
+    {
+      "value": "60′",
+      "label": "Montaggio + check"
+    }
+  ],
+  "sections": [
+    {
+      "title": "Palco",
+      "icon": "stage",
+      "items": [
+        {
+          "label": "Dimensioni minime",
+          "value": "8 × 6 m (larghezza × profondità)"
+        },
+        {
+          "label": "Altezza",
+          "value": "Min. 80 cm, coperto se all'aperto"
+        },
+        {
+          "label": "Riser batteria",
+          "value": "3 × 2 m, h 40 cm, superficie antiscivolo"
+        },
+        {
+          "label": "Carico / scarico",
+          "value": "Accesso diretto per furgone, 2 facchini consigliati"
+        },
+        {
+          "label": "Tempi",
+          "value": "Montaggio 30′ · Soundcheck 30′ · Cambio palco 20′"
+        }
+      ]
+    },
+    {
+      "title": "Alimentazione",
+      "icon": "power",
+      "items": [
+        {
+          "label": "Backline",
+          "value": "2 linee 230 V / 16 A dedicate, lato palco SX e DX"
+        },
+        {
+          "label": "Luci",
+          "value": "Linea separata da quella audio"
+        },
+        {
+          "label": "Messa a terra",
+          "value": "Certificata e comune a palco e FOH"
+        },
+        {
+          "label": "Multiprese",
+          "value": "6 ciabatte distribuite sul palco"
+        }
+      ]
+    },
+    {
+      "title": "Backline",
+      "icon": "backline",
+      "items": [
+        {
+          "label": "Chitarre",
+          "value": "2 × testata 100 W valvolare + 2 × cassa 4×12 (della band)"
+        },
+        {
+          "label": "Basso",
+          "value": "Testata valvolare + cassa 8×10 (della band)"
+        },
+        {
+          "label": "Batteria",
+          "value": "Kit completo con piatti, cassa 24″ (della band)"
+        },
+        {
+          "label": "Festival",
+          "value": "Backline condivisa valutabile su richiesta"
+        }
+      ]
+    },
+    {
+      "title": "PA & FOH",
+      "icon": "foh",
+      "items": [
+        {
+          "label": "Impianto",
+          "value": "Stereo full-range + sub, min. 105 dB(A) al FOH senza distorsione"
+        },
+        {
+          "label": "Mixer",
+          "value": "Digitale, min. 24 input (Yamaha CL/QL, Allen & Heath SQ/dLive, Midas M32)"
+        },
+        {
+          "label": "Posizione FOH",
+          "value": "Centrale, a 2/3 della sala, mai sotto balconate"
+        },
+        {
+          "label": "Fonico",
+          "value": "Della band se previsto, altrimenti briefing di 30′ con il fonico locale"
+        }
+      ]
+    },
+    {
+      "title": "Monitor",
+      "icon": "monitor",
+      "items": [
+        {
+          "label": "Mandate",
+          "value": "5 aux indipendenti con EQ grafico dedicato"
+        },
+        {
+          "label": "Voce",
+          "value": "In-ear della band (1 mandata stereo)"
+        },
+        {
+          "label": "Chitarre e basso",
+          "value": "3 × wedge 12″/15″ biamplificati"
+        },
+        {
+          "label": "Batteria",
+          "value": "Drum fill 15″ + sub"
+        }
+      ]
+    },
+    {
+      "title": "Luci",
+      "icon": "lights",
+      "items": [
+        {
+          "label": "Wash",
+          "value": "Min. 8 wash LED RGBW tra frontale e controluce"
+        },
+        {
+          "label": "Effetti",
+          "value": "4 blinder, hazer consentito (verificare i sensori antincendio)"
+        },
+        {
+          "label": "Operatore",
+          "value": "Light designer della band disponibile su richiesta"
+        }
+      ]
+    }
+  ],
+  "inputList": [
+    {
+      "source": "Kick In",
+      "microphone": "Shure Beta 91A",
+      "stand": "—"
+    },
+    {
+      "source": "Kick Out",
+      "microphone": "Shure Beta 52A",
+      "stand": "Asta corta"
+    },
+    {
+      "source": "Snare Top",
+      "microphone": "Shure SM57",
+      "stand": "Clip"
+    },
+    {
+      "source": "Snare Bottom",
+      "microphone": "Sennheiser e604",
+      "stand": "Clip"
+    },
+    {
+      "source": "Hi-Hat",
+      "microphone": "AKG C451 B",
+      "stand": "Asta corta"
+    },
+    {
+      "source": "Rack Tom",
+      "microphone": "Sennheiser e604",
+      "stand": "Clip"
+    },
+    {
+      "source": "Floor Tom",
+      "microphone": "Sennheiser e604",
+      "stand": "Clip"
+    },
+    {
+      "source": "Overhead L",
+      "microphone": "Condensatore small diaphragm",
+      "stand": "Asta giraffa"
+    },
+    {
+      "source": "Overhead R",
+      "microphone": "Condensatore small diaphragm",
+      "stand": "Asta giraffa"
+    },
+    {
+      "source": "Bass DI",
+      "microphone": "DI attiva",
+      "stand": "—"
+    },
+    {
+      "source": "Bass Mic",
+      "microphone": "Sennheiser MD 421",
+      "stand": "Asta corta"
+    },
+    {
+      "source": "Guitar Lead A",
+      "microphone": "Shure SM57",
+      "stand": "Asta corta"
+    },
+    {
+      "source": "Guitar Lead B",
+      "microphone": "Sennheiser e906",
+      "stand": "Asta corta"
+    },
+    {
+      "source": "Guitar Rhythm A",
+      "microphone": "Shure SM57",
+      "stand": "Asta corta"
+    },
+    {
+      "source": "Guitar Rhythm B",
+      "microphone": "Sennheiser e906",
+      "stand": "Asta corta"
+    },
+    {
+      "source": "Lead Vocal",
+      "microphone": "Shure Beta 58A (della band)",
+      "stand": "Asta giraffa"
+    },
+    {
+      "source": "Backing Vocal SX",
+      "microphone": "Shure SM58",
+      "stand": "Asta giraffa"
+    },
+    {
+      "source": "Backing Vocal DX",
+      "microphone": "Shure SM58",
+      "stand": "Asta giraffa"
+    },
+    {
+      "source": "FX Sampler L",
+      "microphone": "DI stereo",
+      "stand": "—"
+    },
+    {
+      "source": "FX Sampler R",
+      "microphone": "DI stereo",
+      "stand": "—"
+    }
+  ],
+  "notes": [
+    "Il rider completo con stage plot e piano luci viene inviato alla conferma della data.",
+    "Eventuali variazioni vanno concordate con il referente tecnico almeno 7 giorni prima dell'evento."
+  ]
+}

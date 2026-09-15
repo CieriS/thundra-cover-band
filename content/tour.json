@@ -1,0 +1,82 @@
+[
+  {
+    "date": "2026-10-03",
+    "doorsTime": "21:30",
+    "venue": "Fonderia Live",
+    "city": "Milano",
+    "province": "MI",
+    "status": "SOLD_OUT",
+    "ticketUrl": "",
+    "note": "Opening night"
+  },
+  {
+    "date": "2026-10-17",
+    "doorsTime": "21:00",
+    "venue": "Officine Sonore",
+    "city": "Torino",
+    "province": "TO",
+    "status": "AVAILABLE",
+    "ticketUrl": "https://example.com/tickets/thundra-torino-2026-10-17",
+    "note": ""
+  },
+  {
+    "date": "2026-10-31",
+    "doorsTime": "22:00",
+    "venue": "Voltage Club",
+    "city": "Bologna",
+    "province": "BO",
+    "status": "AVAILABLE",
+    "ticketUrl": "https://example.com/tickets/thundra-bologna-2026-10-31",
+    "note": "Halloween Night"
+  },
+  {
+    "date": "2026-11-06",
+    "doorsTime": "21:00",
+    "venue": "Teatro Ciclope",
+    "city": "Padova",
+    "province": "PD",
+    "status": "SOLD_OUT",
+    "ticketUrl": "",
+    "note": ""
+  },
+  {
+    "date": "2026-11-28",
+    "doorsTime": "21:30",
+    "venue": "Hangar 21",
+    "city": "Roma",
+    "province": "RM",
+    "status": "AVAILABLE",
+    "ticketUrl": "https://example.com/tickets/thundra-roma-2026-11-28",
+    "note": ""
+  },
+  {
+    "date": "2026-12-12",
+    "doorsTime": "21:00",
+    "venue": "Arena Adriatica Winter Stage",
+    "city": "Rimini",
+    "province": "RN",
+    "status": "CONFIRMED",
+    "ticketUrl": "",
+    "note": ""
+  },
+  {
+    "date": "2027-01-16",
+    "doorsTime": "21:30",
+    "venue": "Capannone Rosso",
+    "city": "Firenze",
+    "province": "FI",
+    "status": "CONFIRMED",
+    "ticketUrl": "",
+    "note": ""
+  },
+  {
+    "date": "2027-02-06",
+    "doorsTime": "20:00",
+    "venue": "Winter Rock Fest",
+    "city": "Brescia",
+    "province": "BS",
+    "status": "CONFIRMED",
+    "ticketUrl": "",
+    "note": "Festival · headliner"
+  }
+]

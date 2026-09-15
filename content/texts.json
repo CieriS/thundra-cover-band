@@ -1,0 +1,87 @@
+{
+  "hero": {
+    "eyebrow": "Tribute to AC/DC",
+    "availability": "Booking 2026/27 aperto",
+    "primaryCta": "Richiedi disponibilità",
+    "secondaryCta": "Prossime date",
+    "signalLabel": "Live signal",
+    "nextShowLabel": "Prossimo show",
+    "featuredSongTitle": "Thunderstruck"
+  },
+  "sections": {
+    "about": {
+      "navLabel": "Band",
+      "eyebrow": "Manifesto",
+      "title": "Volume, sudore e zero compromessi.",
+      "description": "Non siamo una cover band da sottofondo. Thundra ricostruisce l'impatto di un concerto degli AC/DC: suono, attitudine e dinamica di palco."
+    },
+    "tour": {
+      "navLabel": "Tour",
+      "eyebrow": "Tour 2026 — 2027",
+      "title": "Prossime date.",
+      "description": "Club, festival e piazze in tutta Italia. Le date contrassegnate come disponibili hanno le prevendite già aperte."
+    },
+    "setlist": {
+      "navLabel": "Setlist",
+      "eyebrow": "Repertorio",
+      "title": "Venti colpi. Nessun filler.",
+      "description": "Da High Voltage a Black Ice: la scaletta si adatta alla durata dello show, i classici non si toccano."
+    },
+    "rider": {
+      "navLabel": "Tech Rider",
+      "eyebrow": "Per promoter e fonici",
+      "title": "Pronti in sessanta minuti.",
+      "description": "Scheda tecnica sintetica per organizzatori e service audio. La versione completa con stage plot viene inviata alla conferma della data."
+    },
+    "booking": {
+      "navLabel": "Booking",
+      "eyebrow": "Richiesta disponibilità",
+      "title": "Porta l'alta tensione sul tuo palco.",
+      "description": "Compila il modulo: generiamo una richiesta formale pronta da inviare via email o da copiare. Rispondiamo entro 48 ore lavorative."
+    }
+  },
+  "tourCta": {
+    "title": "La tua città non è in lista?",
+    "description": "Club, festival, eventi privati e aziendali: valutiamo ogni proposta in tutta Italia e in Canton Ticino.",
+    "action": "Verifica disponibilità"
+  },
+  "tourEmptyMessage": "Nuove date in arrivo: seguici sui social o scrivici per portare Thundra nella tua città.",
+  "booking": {
+    "steps": [
+      {
+        "title": "Compila",
+        "description": "Inserisci i dettagli dell'evento: data, città, locale e budget indicativo."
+      },
+      {
+        "title": "Invia o copia",
+        "description": "Apri la richiesta nel tuo client email oppure copia il testo già formattato."
+      },
+      {
+        "title": "Conferma",
+        "description": "Ti rispondiamo entro 48 ore lavorative con disponibilità e preventivo."
+      }
+    ],
+    "directContactLabel": "Contatto diretto",
+    "note": "Per festival e grandi eventi indica anche orari di palco e l'eventuale backline condivisa.",
+    "privacyNote": "Nessun dato viene salvato: la richiesta viene generata direttamente nel tuo browser."
+  },
+  "footer": {
+    "contactEyebrow": "Booking & info",
+    "disclaimer": "Thundra è una tribute band indipendente. AC/DC e tutti i marchi citati appartengono ai rispettivi proprietari; nessuna affiliazione ufficiale."
+  },
+  "images": {
+    "liveStage": {
+      "photo": "/images/mockup/live-stage.svg",
+      "alt": "Foto live segnaposto: la band sul palco tra luci ambra, amplificatori e pubblico",
+      "caption": "Live — foto segnaposto"
+    },
+    "crowd": {
+      "photo": "/images/mockup/crowd.svg",
+      "alt": "Foto segnaposto del pubblico sotto il palco con le mani alzate"
+    }
+  },
+  "techRiderRequest": {
+    "label": "Richiedi rider completo",
+    "subject": "Richiesta Tech Rider completo — Thundra"
+  }
+}

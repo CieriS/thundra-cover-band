@@ -1,0 +1,182 @@
+[
+  {
+    "title": "It's a Long Way to the Top (If You Wanna Rock 'n' Roll)",
+    "album": "High Voltage",
+    "year": 1976,
+    "duration": "5:01",
+    "tags": [
+      "BAGPIPES",
+      "SINGALONG"
+    ]
+  },
+  {
+    "title": "T.N.T.",
+    "album": "High Voltage",
+    "year": 1976,
+    "duration": "3:35",
+    "tags": [
+      "SINGALONG",
+      "HIGH_TEMPO"
+    ]
+  },
+  {
+    "title": "The Jack",
+    "album": "High Voltage",
+    "year": 1976,
+    "duration": "5:52",
+    "tags": [
+      "SHUFFLE",
+      "SINGALONG"
+    ]
+  },
+  {
+    "title": "Dirty Deeds Done Dirt Cheap",
+    "album": "Dirty Deeds Done Dirt Cheap",
+    "year": 1976,
+    "duration": "3:51",
+    "tags": [
+      "SINGALONG"
+    ]
+  },
+  {
+    "title": "Problem Child",
+    "album": "Dirty Deeds Done Dirt Cheap",
+    "year": 1976,
+    "duration": "5:25",
+    "tags": []
+  },
+  {
+    "title": "Let There Be Rock",
+    "album": "Let There Be Rock",
+    "year": 1977,
+    "duration": "6:06",
+    "tags": [
+      "EXTENDED_SOLO",
+      "HIGH_TEMPO"
+    ]
+  },
+  {
+    "title": "Whole Lotta Rosie",
+    "album": "Let There Be Rock",
+    "year": 1977,
+    "duration": "5:23",
+    "tags": [
+      "SINGALONG",
+      "HIGH_TEMPO"
+    ]
+  },
+  {
+    "title": "Bad Boy Boogie",
+    "album": "Let There Be Rock",
+    "year": 1977,
+    "duration": "4:27",
+    "tags": [
+      "EXTENDED_SOLO"
+    ]
+  },
+  {
+    "title": "Riff Raff",
+    "album": "Powerage",
+    "year": 1978,
+    "duration": "5:12",
+    "tags": [
+      "HIGH_TEMPO"
+    ]
+  },
+  {
+    "title": "Sin City",
+    "album": "Powerage",
+    "year": 1978,
+    "duration": "4:45",
+    "tags": []
+  },
+  {
+    "title": "Highway to Hell",
+    "album": "Highway to Hell",
+    "year": 1979,
+    "duration": "3:28",
+    "tags": [
+      "ENCORE",
+      "SINGALONG"
+    ]
+  },
+  {
+    "title": "Shot Down in Flames",
+    "album": "Highway to Hell",
+    "year": 1979,
+    "duration": "3:22",
+    "tags": []
+  },
+  {
+    "title": "Hells Bells",
+    "album": "Back in Black",
+    "year": 1980,
+    "duration": "5:12",
+    "tags": [
+      "FX_CUE"
+    ]
+  },
+  {
+    "title": "Shoot to Thrill",
+    "album": "Back in Black",
+    "year": 1980,
+    "duration": "5:17",
+    "tags": [
+      "HIGH_TEMPO"
+    ]
+  },
+  {
+    "title": "Back in Black",
+    "album": "Back in Black",
+    "year": 1980,
+    "duration": "4:15",
+    "tags": [
+      "SINGALONG"
+    ]
+  },
+  {
+    "title": "You Shook Me All Night Long",
+    "album": "Back in Black",
+    "year": 1980,
+    "duration": "3:30",
+    "tags": [
+      "SINGALONG"
+    ]
+  },
+  {
+    "title": "For Those About to Rock (We Salute You)",
+    "album": "For Those About to Rock We Salute You",
+    "year": 1981,
+    "duration": "5:44",
+    "tags": [
+      "CLOSER",
+      "FX_CUE"
+    ]
+  },
+  {
+    "title": "Thunderstruck",
+    "album": "The Razors Edge",
+    "year": 1990,
+    "duration": "4:52",
+    "tags": [
+      "LEGATO_INTRO",
+      "SINGALONG"
+    ]
+  },
+  {
+    "title": "Moneytalks",
+    "album": "The Razors Edge",
+    "year": 1990,
+    "duration": "3:48",
+    "tags": []
+  },
+  {
+    "title": "Rock 'n' Roll Train",
+    "album": "Black Ice",
+    "year": 2008,
+    "duration": "4:21",
+    "tags": [
+      "OPENER"
+    ]
+  }
+]

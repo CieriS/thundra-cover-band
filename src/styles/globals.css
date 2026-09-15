@@ -1,0 +1,199 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ---------------------------------------------------------------------------
+ * Design tokens
+ * ------------------------------------------------------------------------- */
+
+:root {
+  --background: #fcfcfc;
+  --foreground: #0a0a0a;
+  --surface: #f4f4f5;
+  --border: #e4e4e7;
+  --muted-foreground: #52525b;
+  --accent: #facc15;
+  --accent-foreground: #0a0a0a;
+  --accent-ink: #a16207;
+  --ring: #0a0a0a;
+  --danger: #b91c1c;
+}
+
+.dark {
+  --background: #0a0a0a;
+  --foreground: #fafafa;
+  --surface: #171717;
+  --border: #262626;
+  --muted-foreground: #a3a3a3;
+  --accent: #facc15;
+  --accent-foreground: #0a0a0a;
+  --accent-ink: #facc15;
+  --ring: #facc15;
+  --danger: #f87171;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-border: var(--border);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent-ink: var(--accent-ink);
+  --color-ring: var(--ring);
+  --color-danger: var(--danger);
+
+  --font-sans: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono Variable", ui-monospace, SFMono-Regular, monospace;
+  --font-display: "Archivo Variable", "Geist Variable", ui-sans-serif, sans-serif;
+}
+
+@theme {
+  --spacing-18: 4.5rem;
+
+  --animate-accordion-down: accordion-down 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-accordion-up: accordion-up 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-marquee: marquee 60s linear infinite;
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+
+  @keyframes marquee {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * Base
+ * ------------------------------------------------------------------------- */
+
+@layer base {
+  *,
+  ::before,
+  ::after {
+    border-color: var(--color-border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-accent-foreground);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * Utilities
+ * ------------------------------------------------------------------------- */
+
+@utility container-page {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 110rem;
+  padding-inline: 1rem;
+
+  @media (width >= 40rem) {
+    padding-inline: 1.5rem;
+  }
+
+  @media (width >= 64rem) {
+    padding-inline: 2.5rem;
+  }
+}
+
+@utility section-y {
+  padding-block: 6rem;
+
+  @media (width >= 48rem) {
+    padding-block: 8rem;
+  }
+
+  @media (width >= 80rem) {
+    padding-block: 10rem;
+  }
+}
+
+/* Animated underline for links */
+@utility link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 1px;
+  box-decoration-break: clone;
+  transition:
+    background-size 450ms cubic-bezier(0.16, 1, 0.3, 1),
+    color 200ms ease;
+
+  &:hover,
+  &:focus-visible,
+  &[aria-current="location"] {
+    background-size: 100% 1px;
+  }
+}
+
+/* Animated line-through for secondary links */
+@utility link-strike {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 0 55%;
+  background-repeat: no-repeat;
+  background-size: 0% 1px;
+  transition:
+    background-size 450ms cubic-bezier(0.16, 1, 0.3, 1),
+    color 200ms ease;
+
+  &:hover,
+  &:focus-visible {
+    background-size: 100% 1px;
+  }
+}
+
+@utility text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1px var(--color-foreground);
+}
+
+/* Editorial column guides */
+@utility bg-columns {
+  background-image: linear-gradient(to right, var(--color-border) 1px, transparent 1px);
+  background-size: calc(100% / 4) 100%;
+
+  @media (width >= 64rem) {
+    background-size: calc(100% / 12) 100%;
+  }
+}
