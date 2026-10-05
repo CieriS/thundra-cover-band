@@ -1,0 +1,13 @@
+date: 2027-01-30
+time: # [DA COMPILARE] orario di inizio, formato "22:00"
+venue: Osteria Cellulosa
+city: Lama di Reno
+province: BO
+address: # [DA COMPILARE] via e numero civico
+mapsUrl: # [DA COMPILARE] link Google Maps (se vuoto: ricerca automatica per nome e città)
+admission: # [DA COMPILARE] free | paid
+price:
+bookingUrl: # [DA COMPILARE] link per prenotare un tavolo, se esiste
+bookingLabel:
+poster:
+note:
