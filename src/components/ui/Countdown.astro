@@ -1,0 +1,71 @@
+---
+/**
+ * Countdown to a show. The numbers are rendered at build time, so the block is
+ * meaningful without JavaScript; the client script keeps them current.
+ */
+import { countdown } from '@/lib/dates';
+
+interface Props {
+  target: Date;
+  /** Hours and minutes are hidden while the start time is unknown. */
+  dayOnly?: boolean;
+}
+
+const { target, dayOnly = false } = Astro.props;
+const initial = countdown(target, new Date());
+
+const units = [
+  { key: 'days', value: initial.days, one: 'giorno', many: 'giorni' },
+  ...(dayOnly
+    ? []
+    : [
+        { key: 'hours', value: initial.hours, one: 'ora', many: 'ore' },
+        { key: 'minutes', value: initial.minutes, one: 'minuto', many: 'minuti' },
+      ]),
+];
+---
+
+<div class="countdown" data-countdown data-target={target.toISOString()} role="timer" aria-label="Tempo che manca al concerto">
+  {
+    units.map((unit) => (
+      <div class="unit">
+        <span class="digits poster" data-unit={unit.key}>
+          <span class="digit">{String(unit.value).padStart(2, '0')}</span>
+        </span>
+        <span class="label text-mute" data-label data-one={unit.one} data-many={unit.many}>
+          {unit.value === 1 ? unit.one : unit.many}
+        </span>
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .countdown {
+    display: flex;
+    gap: clamp(1rem, 4vw, 2.5rem);
+  }
+
+  .unit {
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .digits {
+    position: relative;
+    display: block;
+    /* Fixed box: changing digits can never shift the layout. */
+    min-width: 2ch;
+    height: 1em;
+    overflow: hidden;
+    font-size: var(--text-4xl);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    color: var(--color-bone);
+  }
+
+  .digits :global(.digit) {
+    display: block;
+    line-height: 1;
+  }
+</style>

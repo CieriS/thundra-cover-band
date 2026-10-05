@@ -1,0 +1,296 @@
+---
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+import LightningSVG from '@/components/ui/LightningSVG.astro';
+import ResponsiveImage from '@/components/ui/ResponsiveImage.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import { copy } from '@/config/copy';
+import { images } from '@/config/images';
+import { isTodo, site, TODO } from '@/config/site';
+import { bookingMessage, mailtoUrl, whatsappUrl } from '@/lib/contact';
+import { today } from '@/lib/content';
+
+interface Props {
+  /** The dedicated /booking page uses an h1. */
+  page?: boolean;
+}
+
+const { page = false } = Astro.props;
+const { booking } = copy;
+const message = bookingMessage();
+const Sub = page ? 'h2' : 'h3';
+
+const facts = [
+  { label: booking.facts.duration, value: site.show.durationLabel },
+  { label: booking.facts.sets, value: site.show.sets },
+  { label: booking.facts.ownPa, value: site.show.ownPa },
+  { label: booking.facts.experience, value: site.show.experience },
+  { label: booking.facts.area, value: `${site.area.cities.join(', ')} ${site.area.note}` },
+];
+---
+
+<section id="booking" class:list={['section booking', !page && 'cut-top']} aria-labelledby="booking-title">
+  <div class="wrap layout">
+    <div class="grid content-start gap-10">
+      <SectionHeading
+        id="booking-title"
+        as={page ? 'h1' : 'h2'}
+        eyebrow={booking.eyebrow}
+        title={booking.title}
+        intro={booking.intro}
+        size="lg"
+      />
+
+      <div class="photo">
+        <ResponsiveImage
+          src={images.booking.src}
+          alt={images.booking.alt}
+          ratio="3 / 2"
+          sizes="(min-width: 64rem) 55vw, 100vw"
+          placeholder={images.booking.placeholder}
+          reveal
+        />
+        <LightningSVG variant="b" class="photo-bolt" />
+      </div>
+
+      <div class="grid gap-4">
+        <Sub class="poster text-2xl">{booking.benefitsTitle}</Sub>
+        <ul class="benefits">
+          {
+            booking.benefits.map((benefit, index) => (
+              <li data-reveal="rise" style={`--i: ${index}`}>
+                <p class="poster text-xl text-red-ink">{benefit.title}</p>
+                <p class="text-mute">{benefit.text}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="grid gap-4">
+        <Sub class="poster text-2xl">{booking.reliabilityTitle}</Sub>
+        <ul class="checks">
+          {booking.reliability.map((item) => <li>{item}</li>)}
+        </ul>
+      </div>
+    </div>
+
+    <aside class="panel" aria-label={booking.contactTitle}>
+      <Sub class="poster text-2xl">{booking.factsTitle}</Sub>
+      <dl class="facts">
+        {
+          facts.map((fact) => (
+            <div>
+              <dt class="label text-mute">{fact.label}</dt>
+              <dd>{isTodo(fact.value) ? <span class="todo">{TODO}</span> : fact.value}</dd>
+            </div>
+          ))
+        }
+      </dl>
+      <p>
+        <a class="rider" href={site.techRider.href} download>
+          <Icon name="download" />
+          {booking.riderCta}
+        </a>
+        {site.techRider.isPlaceholder && <span class="todo mt-2">{TODO} {booking.riderPlaceholder}</span>}
+      </p>
+
+      <hr class="border-line" />
+
+      <Sub class="poster text-2xl">{booking.contactTitle}</Sub>
+      <p class="text-mute">{booking.contactIntro}</p>
+      <div class="grid gap-3">
+        <Button href={whatsappUrl(site.contact.whatsapp, message)} size="lg" block rel="noopener noreferrer">
+          <Icon name="chat" />
+          {booking.whatsappCta}
+        </Button>
+        <Button href={site.contact.phoneHref} variant="outline" block>
+          <Icon name="phone" />
+          {booking.callCta} {site.contact.phoneDisplay}
+        </Button>
+        {
+          isTodo(site.contact.email) ? (
+            <p class="text-sm">
+              <span class="todo">{TODO} email di contatto</span>
+            </p>
+          ) : (
+            <Button
+              href={mailtoUrl(site.contact.email, `Richiesta data ${site.name}`, message)}
+              variant="ghost"
+              block
+            >
+              <Icon name="mail" />
+              {booking.emailCta}
+            </Button>
+          )
+        }
+      </div>
+
+      <!--
+        Progressive enhancement: the form is a plain GET to wa.me carrying only the
+        `text` field, so it works without JavaScript (generic message). With JavaScript
+        the message is rebuilt from the fields before the form is submitted.
+        The visible fields have no `name`: nothing else leaves the page.
+      -->
+      <form
+        class="form"
+        action={`https://wa.me/${site.contact.whatsapp}`}
+        method="get"
+        target="_blank"
+        data-booking-form
+      >
+        <Sub class="poster text-xl">{booking.form.title}</Sub>
+        <input type="hidden" name="text" value={message} data-booking-text />
+        <label>
+          <span class="label text-mute">{booking.form.venue}</span>
+          <input class="field" type="text" autocomplete="organization" maxlength="80" data-booking-field="venue" />
+        </label>
+        <label>
+          <span class="label text-mute">{booking.form.city}</span>
+          <input class="field" type="text" autocomplete="address-level2" maxlength="60" data-booking-field="city" />
+        </label>
+        <label>
+          <span class="label text-mute">{booking.form.date}</span>
+          <input class="field" type="date" min={today()} data-booking-field="date" />
+        </label>
+        <label>
+          <span class="label text-mute">{booking.form.contact}</span>
+          <input class="field" type="text" autocomplete="name" maxlength="120" data-booking-field="contact" />
+        </label>
+        <Button type="submit" variant="volt" block>
+          <Icon name="chat" />
+          {booking.form.submit}
+        </Button>
+        <p class="text-xs text-mute">
+          {booking.form.hint}
+          <a class="underline underline-offset-4" href="/privacy/">Privacy</a>.
+        </p>
+      </form>
+    </aside>
+  </div>
+</section>
+
+<style>
+  .booking {
+    background: var(--color-night-900);
+  }
+
+  .layout {
+    display: grid;
+    gap: 3rem;
+  }
+
+  .photo {
+    position: relative;
+    margin-left: calc(var(--spacing-gutter) * -1);
+  }
+
+  .photo :global(.photo-bolt) {
+    position: absolute;
+    top: -2rem;
+    right: 1.5rem;
+    width: 3.5rem;
+  }
+
+  .benefits {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .benefits li {
+    display: grid;
+    gap: 0.4rem;
+    padding: 1.1rem 1.25rem;
+    border-left: 4px solid var(--color-red);
+    background: var(--color-night-800);
+  }
+
+  .checks {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .checks li {
+    position: relative;
+    padding-left: 1.75rem;
+  }
+
+  .checks li::before {
+    content: '';
+    position: absolute;
+    top: 0.5em;
+    left: 0;
+    width: 0.9rem;
+    height: 0.5rem;
+    background: var(--color-volt);
+    clip-path: polygon(20% 0, 100% 0, 80% 100%, 0 100%);
+  }
+
+  .panel {
+    display: grid;
+    align-content: start;
+    gap: 1.25rem;
+    padding: 1.5rem 1.25rem;
+    border: 1px solid var(--color-line);
+    border-top: 4px solid var(--color-red);
+    background: var(--color-night-950);
+  }
+
+  .facts {
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .facts div {
+    display: grid;
+    gap: 0.15rem;
+    padding-bottom: 0.9rem;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .facts dd {
+    font-size: var(--text-lg);
+    font-weight: 600;
+  }
+
+  .rider {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 2.75rem;
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-color: var(--color-red);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.35em;
+  }
+
+  .form {
+    display: grid;
+    gap: 1rem;
+    margin-top: 0.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .form label {
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  @media (min-width: 64rem) {
+    .layout {
+      grid-template-columns: minmax(0, 1.15fr) minmax(22rem, 0.85fr);
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .panel {
+      padding: 2rem;
+    }
+
+    .benefits {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

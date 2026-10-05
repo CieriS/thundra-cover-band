@@ -1,0 +1,79 @@
+---
+import antonUrl from '@fontsource/anton/files/anton-latin-400-normal.woff2?url';
+import Footer from './Footer.astro';
+import Header from './Header.astro';
+import MobileActionBar from './MobileActionBar.astro';
+import { site } from '@/config/site';
+import { serializeJsonLd } from '@/lib/structured-data';
+import '@/styles/global.css';
+
+interface Props {
+  /** Page title, without the band name. Omit on the home page. */
+  title?: string;
+  description?: string;
+  /** JSON-LD objects for this page. */
+  jsonLd?: readonly object[];
+  /** On pages with a hero the mobile action bar appears only after it. */
+  hasHero?: boolean;
+  noindex?: boolean;
+}
+
+const { title, description = site.description, jsonLd = [], hasHero = false, noindex = false } = Astro.props;
+
+const fullTitle = title
+  ? `${title} | ${site.name} - ${site.subtitle}`
+  : `${site.name} - ${site.subtitle} | Date live e booking`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL('/og.jpg', Astro.site);
+// Preview deployments (e.g. a branch on Vercel) must not compete with production.
+const isPreview = process.env['VERCEL_ENV'] === 'preview';
+---
+
+<!doctype html>
+<html lang={site.lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {(noindex || isPreview) && <meta name="robots" content="noindex, nofollow" />}
+    <meta name="theme-color" content="#04060c" />
+    <meta name="color-scheme" content="dark" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="preload" href={antonUrl} as="font" type="font/woff2" crossorigin />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={`${site.name} - ${site.subtitle}`} />
+    <meta property="og:locale" content="it_IT" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${site.name} - ${site.subtitle}`} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    {jsonLd.map((data) => <script type="application/ld+json" set:html={serializeJsonLd(data)} />)}
+
+    <!-- Motion styles hide content only when this class is present: no JS, no hidden content. -->
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#contenuto">Vai al contenuto</a>
+    <Header />
+    <main id="contenuto" tabindex="-1" class="outline-none">
+      <slot />
+    </main>
+    <Footer />
+    <MobileActionBar afterHero={hasHero} />
+    <script>
+      import '@/scripts/site';
+    </script>
+  </body>
+</html>

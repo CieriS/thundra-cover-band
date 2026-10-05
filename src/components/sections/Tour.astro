@@ -1,0 +1,103 @@
+---
+import Button from '@/components/ui/Button.astro';
+import EventCard from '@/components/ui/EventCard.astro';
+import Icon from '@/components/ui/Icon.astro';
+import Marquee from '@/components/ui/Marquee.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import { copy } from '@/config/copy';
+import { site } from '@/config/site';
+import type { EventEntry } from '@/lib/content';
+import { uniqueCities } from '@/lib/events';
+
+interface Props {
+  events: EventEntry[];
+  /** The dedicated /date page uses an h1 and has no "all dates" link. */
+  page?: boolean;
+}
+
+const { events, page = false } = Astro.props;
+const cities = events.length > 0 ? uniqueCities(events) : [...site.area.cities];
+---
+
+<section id="tour" class="section tour" aria-labelledby="tour-title">
+  <div class="wrap">
+    <SectionHeading
+      id="tour-title"
+      as={page ? 'h1' : 'h2'}
+      eyebrow={copy.tour.eyebrow}
+      title={copy.tour.title}
+      intro={copy.tour.intro}
+    />
+  </div>
+
+  <Marquee items={cities} outlined class="my-8 md:my-12" />
+
+  <div class="wrap grid gap-8">
+    {
+      events.length > 0 ? (
+        <ol class="grid gap-4">
+          {events.map((event) => (
+            <li data-reveal="rise">
+              <EventCard event={event} headingLevel={page ? 'h2' : 'h3'} />
+            </li>
+          ))}
+        </ol>
+      ) : (
+        <div class="empty" data-reveal="fade">
+          <p class="poster text-3xl">{copy.tour.emptyTitle}</p>
+          <p class="max-w-md text-lg text-mute">{copy.tour.emptyText}</p>
+          <Button href={site.social.instagram.url} rel="noopener noreferrer">
+            <Icon name="instagram" />
+            {copy.tour.emptyCta}
+          </Button>
+        </div>
+      )
+    }
+
+    <p class="flex flex-wrap gap-x-8 gap-y-2">
+      {
+        !page && events.length > 0 && (
+          <a class="more" href="/date/">
+            {copy.tour.all}
+            <Icon name="arrow" />
+          </a>
+        )
+      }
+      <a class="more" href="/archivio/">
+        {copy.tour.archive}
+        <Icon name="arrow" />
+      </a>
+    </p>
+  </div>
+</section>
+
+<style>
+  .tour {
+    background: var(--color-night-900);
+  }
+
+  .empty {
+    display: grid;
+    justify-items: start;
+    gap: 1rem;
+    padding: 2rem 1.25rem;
+    border: 1px dashed var(--color-line);
+    border-left: 4px solid var(--color-red);
+  }
+
+  .more {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-color: var(--color-red);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.35em;
+  }
+
+  .more:hover {
+    color: var(--color-red-ink);
+  }
+</style>

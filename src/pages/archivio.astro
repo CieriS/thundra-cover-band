@@ -1,0 +1,50 @@
+---
+import BaseLayout from '@/components/layout/BaseLayout.astro';
+import Button from '@/components/ui/Button.astro';
+import EventCard from '@/components/ui/EventCard.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import { copy } from '@/config/copy';
+import { site } from '@/config/site';
+import { getEvents } from '@/lib/content';
+
+const { past } = await getEvents();
+const years = [...new Set(past.map((event) => event.data.date.slice(0, 4)))];
+---
+
+<BaseLayout
+  title="Archivio date"
+  description={`Le date passate di ${site.name}, tributo agli AC/DC: i locali e le città in cui abbiamo già suonato.`}
+>
+  <section class="section" aria-labelledby="archivio-title">
+    <div class="wrap grid gap-10">
+      <SectionHeading
+        id="archivio-title"
+        as="h1"
+        eyebrow="Archivio"
+        title={copy.archive.title}
+        intro={past.length > 0 ? copy.archive.intro : copy.archive.empty}
+      />
+
+      {
+        years.map((year) => (
+          <div class="grid gap-4">
+            <h2 class="poster outline-type text-4xl">{year}</h2>
+            <ol class="grid gap-4">
+              {past
+                .filter((event) => event.data.date.startsWith(year))
+                .map((event) => (
+                  <li>
+                    <EventCard event={event} past />
+                  </li>
+                ))}
+            </ol>
+          </div>
+        ))
+      }
+
+      <p>
+        <Button href="/date/">{copy.hero.ctaFans}</Button>
+      </p>
+    </div>
+  </section>
+</BaseLayout>

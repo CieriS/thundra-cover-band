@@ -1,0 +1,36 @@
+---
+/**
+ * Band mark. Uses the official logo file from src/assets/brand/ when present;
+ * otherwise the band name as plain text. The logo is never redrawn here.
+ */
+import { Image } from 'astro:assets';
+import { logo } from '@/config/images';
+import { site } from '@/config/site';
+
+interface Props {
+  /** Rendered height of the logo in pixels. */
+  height?: number;
+  class?: string;
+}
+
+const { height = 28, class: className } = Astro.props;
+const width = logo ? Math.round((logo.width / logo.height) * height) : 0;
+---
+
+{
+  logo ? (
+    <Image
+      class={className}
+      src={logo}
+      alt={site.name}
+      height={height * 2}
+      width={width * 2}
+      style={`height:${height}px;width:auto`}
+      loading="eager"
+    />
+  ) : (
+    <span class:list={['poster', className]} style={`font-size:${height}px;line-height:1`}>
+      {site.name}
+    </span>
+  )
+}

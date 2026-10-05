@@ -1,0 +1,125 @@
+---
+import LightningSVG from '@/components/ui/LightningSVG.astro';
+import ResponsiveImage from '@/components/ui/ResponsiveImage.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import { copy } from '@/config/copy';
+import { fallbacks, images, pickFallback } from '@/config/images';
+import { getMembers } from '@/lib/content';
+
+const members = await getMembers();
+---
+
+<section id="band" class="section cut-top band" aria-labelledby="band-title">
+  <div class="wrap">
+    <div class="intro">
+      <div class="grid content-start gap-6">
+        <SectionHeading id="band-title" eyebrow={copy.band.eyebrow} title={copy.band.title} />
+        <div class="grid max-w-lg gap-3 text-lg" data-reveal="fade">
+          {copy.band.text.map((paragraph, index) => <p class={index > 0 ? 'text-mute' : 'font-semibold'}>{paragraph}</p>)}
+        </div>
+      </div>
+      <div class="group">
+        <ResponsiveImage
+          src={images.band.src}
+          alt={images.band.alt}
+          ratio="3 / 2"
+          sizes="(min-width: 64rem) 50vw, 100vw"
+          placeholder={images.band.placeholder}
+          reveal
+        />
+        <LightningSVG variant="c" class="group-bolt" />
+      </div>
+    </div>
+
+    <ul class="members" aria-label="Formazione">
+      {
+        members.map((member, index) => (
+          <li data-reveal="rise" style={`--i: ${index}`}>
+            <ResponsiveImage
+              src={member.data.photo ?? pickFallback(fallbacks.member, index)}
+              alt={member.data.photo ? `${member.data.name}, ${member.data.role}` : ''}
+              ratio="4 / 5"
+              sizes="(min-width: 64rem) 19vw, (min-width: 40rem) 30vw, 62vw"
+              widths={[320, 480, 720, 960]}
+              placeholder={!member.data.photo}
+            />
+            <p class="label mt-3 text-red-ink">{member.data.role}</p>
+            <h3 class="poster text-xl">{member.data.name}</h3>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .band {
+    background: var(--color-night-800);
+  }
+
+  .intro {
+    display: grid;
+    gap: 2.5rem;
+  }
+
+  .group {
+    position: relative;
+    /* Bleeds past the right gutter: image and text overlap like a poster. */
+    margin-right: calc(var(--spacing-gutter) * -1);
+  }
+
+  .group :global(.group-bolt) {
+    position: absolute;
+    bottom: -3rem;
+    left: -0.5rem;
+    width: 3.5rem;
+  }
+
+  /* Phones: a native horizontal snap row that runs off the edge. */
+  .members {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 62vw;
+    gap: 1rem;
+    margin-top: 3.5rem;
+    margin-inline: calc(var(--spacing-gutter) * -1);
+    padding-inline: var(--spacing-gutter);
+    padding-bottom: 0.75rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--spacing-gutter);
+    overscroll-behavior-x: contain;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-red) transparent;
+  }
+
+  .members li {
+    scroll-snap-align: start;
+  }
+
+  @media (min-width: 40rem) {
+    .members {
+      grid-auto-columns: 30vw;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .intro {
+      grid-template-columns: 1fr 1fr;
+      align-items: end;
+      gap: 4rem;
+    }
+
+    .members {
+      grid-auto-flow: row;
+      grid-template-columns: repeat(5, 1fr);
+      margin-inline: 0;
+      padding-inline: 0;
+      overflow: visible;
+    }
+
+    .members li:nth-child(even) {
+      margin-top: 2.5rem;
+    }
+  }
+</style>

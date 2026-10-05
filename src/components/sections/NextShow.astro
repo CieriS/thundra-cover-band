@@ -1,0 +1,172 @@
+---
+import Button from '@/components/ui/Button.astro';
+import Countdown from '@/components/ui/Countdown.astro';
+import Icon from '@/components/ui/Icon.astro';
+import LightningSVG from '@/components/ui/LightningSVG.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import { copy } from '@/config/copy';
+import { site } from '@/config/site';
+import type { EventEntry } from '@/lib/content';
+import { dateParts } from '@/lib/dates';
+import { admissionLabel, countdownTarget, mapsUrl, placeLabel } from '@/lib/events';
+
+interface Props {
+  event: EventEntry;
+}
+
+const { event } = Astro.props;
+const { data } = event;
+const date = dateParts(data.date);
+const admission = admissionLabel(data);
+---
+
+<section id="prossimo" class="section" aria-labelledby="prossimo-title">
+  <div class="wrap grid gap-10">
+    <SectionHeading id="prossimo-title" eyebrow={copy.nextShow.eyebrow} title={copy.nextShow.title} size="lg" />
+
+    <article class="card" data-reveal="fade">
+      <time class="when poster" datetime={data.date}>
+        <span class="weekday">{date.weekday}</span>
+        <span class="day">{date.day}</span>
+        <span class="month">{date.monthLong} {date.year}</span>
+      </time>
+
+      <div class="what">
+        <div>
+          <h3 class="poster venue">{data.venue}</h3>
+          <p class="poster city">{placeLabel(data)}</p>
+          <ul class="meta">
+            <li>{data.time ? `Inizio ore ${data.time}` : copy.nextShow.timeUnknown}</li>
+            {admission && <li>{admission}</li>}
+            {data.address && <li>{data.address}</li>}
+          </ul>
+        </div>
+
+        <div data-countdown-wrap>
+          <Countdown target={countdownTarget(data, site.timeZone)} dayOnly={!data.time} />
+          <p class="today poster" data-countdown-done hidden>{copy.nextShow.today}</p>
+        </div>
+
+        <div class="actions">
+          <Button href={`/date/${event.id}.ics`} download>
+            <Icon name="calendar" />
+            {copy.nextShow.calendar}
+          </Button>
+          <Button href={mapsUrl(data)} variant="outline" target="_blank" rel="noopener noreferrer">
+            <Icon name="pin" />
+            {copy.nextShow.directions}
+            <span class="visually-hidden"> (apre Google Maps in una nuova scheda)</span>
+          </Button>
+          {
+            data.bookingUrl && (
+              <Button href={data.bookingUrl} variant="volt" target="_blank" rel="noopener noreferrer">
+                <Icon name="ticket" />
+                {data.bookingLabel ?? 'Prenota'}
+              </Button>
+            )
+          }
+        </div>
+      </div>
+      <LightningSVG variant="b" class="card-bolt" />
+    </article>
+  </div>
+</section>
+
+<style>
+  .card {
+    position: relative;
+    display: grid;
+    border: 1px solid var(--color-line);
+    background: var(--color-night-900);
+  }
+
+  .when {
+    display: grid;
+    align-content: center;
+    gap: 0.25rem;
+    padding: 1.5rem 1.25rem 2.25rem;
+    background: var(--color-red);
+    /* Diagonal lower edge that bites into the card body. */
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 1.5rem), 0 100%);
+  }
+
+  .weekday,
+  .month {
+    font-size: var(--text-xl);
+    line-height: 1;
+  }
+
+  .day {
+    font-size: clamp(8rem, 44vw, 15rem);
+    line-height: 0.78;
+    margin-left: -0.04em;
+  }
+
+  .what {
+    display: grid;
+    gap: 1.75rem;
+    padding: 1rem 1.25rem 1.5rem;
+  }
+
+  .venue {
+    font-size: var(--text-3xl);
+    overflow-wrap: anywhere;
+  }
+
+  .city {
+    margin-top: 0.3rem;
+    color: var(--color-volt);
+    font-size: var(--text-2xl);
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.15rem 1.25rem;
+    margin-top: 0.75rem;
+    color: var(--color-mute);
+  }
+
+  .today {
+    font-size: var(--text-2xl);
+    color: var(--color-red-ink);
+  }
+
+  .actions {
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .card :global(.card-bolt) {
+    position: absolute;
+    top: -2.5rem;
+    right: 1rem;
+    width: 3.5rem;
+  }
+
+  @media (min-width: 40rem) {
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+    }
+  }
+
+  @media (min-width: 56rem) {
+    .card {
+      grid-template-columns: minmax(18rem, 2fr) 3fr;
+    }
+
+    .when {
+      padding: 2.5rem 4rem 2.5rem 2.5rem;
+      clip-path: polygon(0 0, 100% 0, calc(100% - 3rem) 100%, 0 100%);
+    }
+
+    .day {
+      font-size: clamp(10rem, 17vw, 17rem);
+    }
+
+    .what {
+      padding: 2.5rem 2.5rem 2.5rem 1rem;
+    }
+  }
+</style>

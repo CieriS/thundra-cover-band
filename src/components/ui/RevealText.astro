@@ -1,0 +1,28 @@
+---
+/**
+ * Heading revealed line by line from a mask. Lines are authored explicitly,
+ * the text stays plain text in the DOM, so screen readers read it normally.
+ */
+interface Props {
+  lines: readonly string[];
+  as?: 'h1' | 'h2' | 'h3' | 'p';
+  class?: string;
+  id?: string;
+}
+
+const { lines, as: Tag = 'h2', class: className, id } = Astro.props;
+---
+
+<Tag id={id} class:list={['poster reveal-lines', className]} data-reveal="lines">
+  {
+    lines.map((line, index) => (
+      <>
+        <span class="reveal-line">
+          <span class="reveal-line-inner" style={`--i: ${index}`}>
+            {line}
+          </span>
+        </span>{' '}
+      </>
+    ))
+  }
+</Tag>

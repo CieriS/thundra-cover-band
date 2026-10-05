@@ -1,0 +1,82 @@
+---
+import BaseLayout from '@/components/layout/BaseLayout.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import { isTodo, site, TODO } from '@/config/site';
+import { dateParts } from '@/lib/dates';
+
+const updated = dateParts(site.legal.lastUpdated);
+---
+
+<BaseLayout
+  title="Privacy"
+  description={`Informativa sulla privacy del sito di ${site.name}: nessun cookie di profilazione, nessun tracciamento, video caricati solo su richiesta.`}
+>
+  <section class="section">
+    <div class="wrap grid gap-8">
+      <SectionHeading id="privacy-title" as="h1" eyebrow="Informativa" title={['Privacy']} size="lg" />
+
+      <div class="prose-legal max-w-2xl">
+        <p>
+          In breve: questo sito non usa cookie di profilazione, non fa statistiche sui visitatori e non
+          raccoglie dati tramite moduli. Per questo non trovi nessun banner dei cookie.
+        </p>
+
+        <h2>Titolare del trattamento</h2>
+        <p>
+          {isTodo(site.legal.owner) ? <span class="todo">{TODO} titolare del trattamento</span> : site.legal.owner}
+          . Contatto: <a href={site.contact.phoneHref}>{site.contact.phoneDisplay}</a>
+          {
+            !isTodo(site.contact.email) && (
+              <>
+                , <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a>
+              </>
+            )
+          }.
+        </p>
+
+        <h2>Dati di navigazione</h2>
+        <p>
+          Il sito è composto da pagine statiche ospitate da {site.legal.hosting}. Come ogni servizio di hosting,
+          il fornitore registra per motivi tecnici e di sicurezza alcuni dati della connessione (per esempio
+          indirizzo IP, data e ora, pagina richiesta). Noi non usiamo questi dati per identificarti.
+        </p>
+
+        <h2>Cookie</h2>
+        <p>
+          Il sito non installa cookie propri né di terze parti durante la navigazione. I caratteri tipografici
+          e le immagini sono serviti direttamente dal sito, senza chiamate a servizi esterni.
+        </p>
+
+        <h2>Video</h2>
+        <p>
+          I video sono mostrati come immagini statiche. Il player viene caricato dal dominio
+          youtube-nocookie.com solo dopo che tocchi il pulsante di riproduzione: da quel momento YouTube
+          (Google) può trattare i tuoi dati secondo la propria informativa.
+        </p>
+
+        <h2>Contatti e richieste di booking</h2>
+        <p>
+          Il modulo nella pagina Booking non invia dati al sito: prepara un messaggio e apre WhatsApp, dove
+          sei tu a decidere se inviarlo. Se ci scrivi su WhatsApp, per telefono o per email, usiamo i dati che
+          ci comunichi (nome, recapito, nome del locale, data richiesta) solo per rispondere alla richiesta e
+          organizzare l'eventuale serata. Non li cediamo a terzi.
+        </p>
+
+        <h2>Collegamenti esterni</h2>
+        <p>
+          Il sito contiene collegamenti a Instagram, Facebook, WhatsApp e Google Maps. Quando li apri lasci
+          questo sito e valgono le informative di quei servizi.
+        </p>
+
+        <h2>I tuoi diritti</h2>
+        <p>
+          Puoi chiedere in ogni momento di accedere ai tuoi dati, correggerli o cancellarli, scrivendo ai
+          contatti indicati sopra. Hai inoltre il diritto di proporre reclamo al Garante per la protezione dei
+          dati personali.
+        </p>
+
+        <p>Ultimo aggiornamento: {updated.long}.</p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

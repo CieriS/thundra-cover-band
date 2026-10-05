@@ -1,0 +1,114 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+type Variant = 'primary' | 'outline' | 'volt' | 'ghost';
+
+type Props = {
+  variant?: Variant;
+  size?: 'md' | 'lg';
+  /** Stretches to the full width of the container. */
+  block?: boolean;
+} & (HTMLAttributes<'a'> | HTMLAttributes<'button'>);
+
+const { variant = 'primary', size = 'md', block = false, class: className, ...rest } = Astro.props;
+const Tag = 'href' in rest && rest.href ? 'a' : 'button';
+// The union of anchor and button attributes cannot be narrowed through a dynamic tag.
+const attrs = rest as Record<string, unknown>;
+---
+
+<Tag class:list={['btn', `btn-${variant}`, `btn-${size}`, block && 'btn-block', className]} {...attrs}>
+  <slot />
+</Tag>
+
+<style>
+  .btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6em;
+    min-height: 3rem;
+    padding: 0.7rem 1.4rem;
+    font-family: var(--font-display);
+    font-size: 1.0625rem;
+    letter-spacing: 0.06em;
+    line-height: 1.1;
+    text-align: center;
+    text-transform: uppercase;
+    /* Slanted poster-style edges. */
+    clip-path: polygon(0.6rem 0, 100% 0, calc(100% - 0.6rem) 100%, 0 100%);
+    transition:
+      transform var(--duration-fast) var(--ease-snap),
+      background-color var(--duration-fast) linear,
+      color var(--duration-fast) linear;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .btn-lg {
+    min-height: 3.5rem;
+    padding: 0.9rem 1.9rem;
+    font-size: 1.25rem;
+  }
+
+  .btn-block {
+    display: flex;
+    width: 100%;
+  }
+
+  .btn-primary {
+    background: var(--color-red);
+    color: var(--color-bone);
+  }
+
+  .btn-volt {
+    background: var(--color-volt);
+    color: var(--color-night-950);
+  }
+
+  .btn-outline {
+    background: var(--color-bone);
+    color: var(--color-night-950);
+  }
+
+  .btn-ghost {
+    background: var(--color-night-700);
+    color: var(--color-bone);
+  }
+
+  .btn:active {
+    transform: scale(0.96);
+  }
+
+  .btn:focus-visible {
+    /* clip-path would cut the default outline: draw it inside. */
+    outline-offset: -4px;
+    outline-color: var(--color-bone);
+  }
+
+  .btn-outline:focus-visible,
+  .btn-volt:focus-visible {
+    outline-color: var(--color-night-950);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-primary:hover {
+      background: var(--color-bone);
+      color: var(--color-night-950);
+    }
+
+    .btn-outline:hover,
+    .btn-ghost:hover {
+      background: var(--color-red);
+      color: var(--color-bone);
+    }
+
+    .btn-volt:hover {
+      background: var(--color-bone);
+    }
+  }
+</style>

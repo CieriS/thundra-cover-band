@@ -1,0 +1,43 @@
+---
+/** Small inline icon set (stroke based, inherits currentColor). Always decorative. */
+const icons = {
+  calendar: 'M7 3v3M17 3v3M4 9h16M5 5h14a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zM12 12v5M9.5 14.5h5',
+  pin: 'M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.500C5 14.8 12 21 12 21zM12 12a2.500 2.500 0 1 0 0-5 2.500 2.500 0 0 0 0 5z',
+  phone: 'M5 4h4l2 5-2.500 1.500a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1z',
+  mail: 'M4 6h16v12H4zM4 7l8 6 8-6',
+  chat: 'M20 11.500a8 8 0 0 1-11.800 7L4 20l1.500-4.200A8 8 0 1 1 20 11.500z',
+  instagram: 'M7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4zM12 16a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM17.500 6.500h.01',
+  facebook: 'M14 21v-8h3l.500-4H14V7c0-1.100.400-2 2-2h1.500V1.500C17 1.300 15.800 1 14.500 1 11.700 1 10 2.700 10 5.800V9H7v4h3v8',
+  play: 'M8 5v14l11-7z',
+  arrow: 'M5 12h14M13 6l6 6-6 6',
+  download: 'M12 4v11M7 11l5 5 5-5M5 20h14',
+  close: 'M6 6l12 12M18 6 6 18',
+  menu: 'M4 7h16M4 12h16M4 17h16',
+  ticket: 'M4 8a2 2 0 0 0 0 4v4h16v-4a2 2 0 0 0 0-4V8H4zM14 8v8',
+} as const;
+
+interface Props {
+  name: keyof typeof icons;
+  size?: number;
+  class?: string;
+}
+
+const { name, size = 20, class: className } = Astro.props;
+---
+
+<svg
+  class={className}
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  fill={name === 'play' ? 'currentColor' : 'none'}
+  stroke="currentColor"
+  stroke-width="1.8"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  focusable="false"
+  style="flex-shrink:0"
+>
+  <path d={icons[name]}></path>
+</svg>

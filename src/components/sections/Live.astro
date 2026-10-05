@@ -1,0 +1,62 @@
+---
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import VideoFacade from '@/components/ui/VideoFacade.astro';
+import { copy } from '@/config/copy';
+import { youtubeId } from '@/lib/contact';
+import { getVideos } from '@/lib/content';
+
+const videos = (await getVideos()).slice(0, 3);
+const hasRealVideo = videos.some((video) => youtubeId(video.data.youtube));
+const [main, ...others] = videos;
+---
+
+<section id="live" class="section" aria-labelledby="live-title">
+  <div class="wrap grid gap-10">
+    <SectionHeading
+      id="live-title"
+      eyebrow={copy.live.eyebrow}
+      title={copy.live.title}
+      intro={hasRealVideo ? copy.live.intro : copy.live.comingSoon}
+    />
+
+    {
+      main && (
+        <div class:list={['videos', others.length > 0 && 'has-more']}>
+          <div class="main">
+            <VideoFacade title={main.data.title} youtube={main.data.youtube} poster={main.data.poster} />
+          </div>
+          {others.map((video) => (
+            <VideoFacade
+              title={video.data.title}
+              youtube={video.data.youtube}
+              poster={video.data.poster}
+              sizes="(min-width: 64rem) 30vw, 100vw"
+            />
+          ))}
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .videos {
+    display: grid;
+    gap: 2rem;
+  }
+
+  @media (min-width: 64rem) {
+    .videos {
+      max-width: 62rem;
+    }
+
+    .videos.has-more {
+      grid-template-columns: 2fr 1fr;
+      max-width: none;
+    }
+
+    .has-more .main {
+      grid-row: span 2;
+    }
+  }
+</style>

@@ -1,0 +1,31 @@
+---
+import BaseLayout from '@/components/layout/BaseLayout.astro';
+import Band from '@/components/sections/Band.astro';
+import Booking from '@/components/sections/Booking.astro';
+import FinalCTA from '@/components/sections/FinalCTA.astro';
+import Gallery from '@/components/sections/Gallery.astro';
+import Hero from '@/components/sections/Hero.astro';
+import Live from '@/components/sections/Live.astro';
+import NextShow from '@/components/sections/NextShow.astro';
+import Setlist from '@/components/sections/Setlist.astro';
+import Social from '@/components/sections/Social.astro';
+import Tour from '@/components/sections/Tour.astro';
+import { getEvents } from '@/lib/content';
+import { bandJsonLd, eventsJsonLd } from '@/lib/seo';
+
+const { upcoming, next } = await getEvents();
+const jsonLd = [await bandJsonLd(Astro.site!), ...(await eventsJsonLd(upcoming, Astro.site!))];
+---
+
+<BaseLayout jsonLd={jsonLd} hasHero>
+  <Hero next={next} />
+  {next && <NextShow event={next} />}
+  <Tour events={upcoming} />
+  <Live />
+  <Band />
+  <Setlist />
+  <Booking />
+  <Gallery />
+  <Social />
+  <FinalCTA />
+</BaseLayout>

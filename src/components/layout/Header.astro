@@ -1,0 +1,160 @@
+---
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { nav, site } from '@/config/site';
+import Brand from './Brand.astro';
+
+const current = Astro.url.pathname;
+const isCurrent = (href: string) => !href.includes('#') && current.startsWith(href);
+---
+
+<header class="site-header">
+  <div class="wrap flex h-14 items-center justify-between gap-4 lg:h-16">
+    <a href="/" class="flex min-h-11 items-center" aria-label={`${site.name}, pagina iniziale`}>
+      <Brand height={26} />
+    </a>
+
+    <nav class="hidden lg:block" aria-label="Principale">
+      <ul class="flex items-center gap-7">
+        {
+          nav.map((item) => (
+            <li>
+              <a
+                class="nav-link label"
+                href={item.href}
+                aria-current={isCurrent(item.href) ? 'page' : undefined}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <!-- Without JavaScript this link jumps to the navigation in the footer. -->
+    <a class="menu-button label lg:hidden" href="#navigazione" data-menu-open aria-haspopup="dialog">
+      <Icon name="menu" size={22} />
+      Menu
+    </a>
+  </div>
+</header>
+
+<dialog class="menu" id="menu" aria-label="Menu" data-menu>
+  <div class="menu-inner">
+    <div class="flex h-14 items-center justify-between">
+      <Brand height={26} />
+      <button class="menu-button label" type="button" data-menu-close>
+        <Icon name="close" size={22} />
+        Chiudi
+      </button>
+    </div>
+    <nav aria-label="Menu">
+      <ul class="menu-list">
+        {
+          nav.map((item, index) => (
+            <li style={`--i: ${index}`}>
+              <a class="poster" href={item.href} data-menu-link>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+    <div class="grid gap-3 pb-[max(1.25rem,env(safe-area-inset-bottom))]">
+      <Button href={site.contact.phoneHref} variant="outline" block>
+        <Icon name="phone" />
+        {site.contact.phoneDisplay}
+      </Button>
+      <div class="flex gap-3">
+        <Button href={site.social.instagram.url} variant="ghost" block rel="noopener noreferrer">
+          <Icon name="instagram" />
+          Instagram
+        </Button>
+        <Button href={site.social.facebook.url} variant="ghost" block rel="noopener noreferrer">
+          <Icon name="facebook" />
+          Facebook
+        </Button>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    border-bottom: 1px solid var(--color-line);
+    background: var(--color-night-950);
+  }
+
+  .nav-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    color: var(--color-mute);
+    transition: color var(--duration-fast) linear;
+  }
+
+  .nav-link:hover,
+  .nav-link[aria-current='page'] {
+    color: var(--color-bone);
+  }
+
+  .nav-link[aria-current='page'] {
+    box-shadow: inset 0 -2px var(--color-red);
+  }
+
+  .menu-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    cursor: pointer;
+  }
+
+  .menu {
+    width: 100%;
+    max-width: none;
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: var(--color-night-950);
+  }
+
+  .menu::backdrop {
+    background: var(--color-night-950);
+  }
+
+  .menu-inner {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    height: 100%;
+    padding-inline: var(--spacing-gutter);
+    overflow-y: auto;
+  }
+
+  .menu-list {
+    display: grid;
+    align-content: center;
+    gap: 0.25rem;
+    height: 100%;
+    padding-block: 1.5rem;
+  }
+
+  .menu-list a {
+    display: block;
+    padding-block: 0.2rem;
+    font-size: clamp(2.75rem, 13vw, 5rem);
+    line-height: 1;
+  }
+
+  .menu-list a:active {
+    color: var(--color-red-ink);
+  }
+</style>

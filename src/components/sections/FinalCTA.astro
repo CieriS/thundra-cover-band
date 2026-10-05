@@ -1,0 +1,42 @@
+---
+import Button from '@/components/ui/Button.astro';
+import RevealText from '@/components/ui/RevealText.astro';
+import { copy } from '@/config/copy';
+import { site } from '@/config/site';
+---
+
+<section class="final" aria-labelledby="final-title">
+  <p class="ghost poster" aria-hidden="true">{site.name}</p>
+  <div class="wrap grid gap-6">
+    <RevealText id="final-title" lines={copy.finalCta.title} class="text-5xl" />
+    <p class="max-w-md text-lg font-semibold">{copy.finalCta.text}</p>
+    <div class="grid gap-3 sm:flex sm:flex-wrap">
+      <Button href="/date/" size="lg" variant="outline">{copy.hero.ctaFans}</Button>
+      <Button href="/booking/" size="lg" variant="ghost">{copy.hero.ctaBooking}</Button>
+    </div>
+  </div>
+</section>
+
+<style>
+  .final {
+    position: relative;
+    padding-block: calc(var(--spacing-section) + var(--slant));
+    overflow: hidden;
+    background: var(--color-red);
+    clip-path: polygon(0 var(--slant), 100% 0, 100% 100%, 0 100%);
+    isolation: isolate;
+  }
+
+  /* Oversized band name running off both edges, as a graphic layer. */
+  .ghost {
+    position: absolute;
+    right: -4vw;
+    bottom: -0.16em;
+    z-index: -1;
+    color: var(--color-red-deep);
+    font-size: clamp(8rem, 38vw, 34rem);
+    line-height: 0.8;
+    white-space: nowrap;
+    opacity: 0.55;
+  }
+</style>

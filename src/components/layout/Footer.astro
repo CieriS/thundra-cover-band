@@ -1,0 +1,101 @@
+---
+import Icon from '@/components/ui/Icon.astro';
+import { isTodo, nav, site, TODO } from '@/config/site';
+import Brand from './Brand.astro';
+
+const year = new Date().getFullYear();
+const links = [...nav, { label: 'Archivio date', href: '/archivio/' }];
+---
+
+<footer class="border-t border-line bg-night-900">
+  <div class="wrap grid gap-10 py-12 md:grid-cols-3 md:py-16">
+    <div class="grid content-start gap-3">
+      <Brand height={40} />
+      <p class="label text-mute">{site.subtitle}</p>
+      <p class="text-sm text-mute">
+        {site.area.cities.join(', ')}
+        {site.area.note}.
+      </p>
+    </div>
+
+    <nav id="navigazione" aria-label="Pagine del sito" tabindex="-1">
+      <h2 class="label mb-3 text-red-ink">Naviga</h2>
+      <ul class="grid grid-cols-2 gap-x-6">
+        {
+          links.map((item) => (
+            <li>
+              <a class="footer-link" href={item.href}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div>
+      <h2 class="label mb-3 text-red-ink">Contatti</h2>
+      <ul>
+        <li>
+          <a class="footer-link" href={site.contact.phoneHref}>
+            <Icon name="phone" />
+            {site.contact.phoneDisplay}
+          </a>
+        </li>
+        <li>
+          {
+            isTodo(site.contact.email) ? (
+              <span class="footer-link">
+                <Icon name="mail" />
+                <span class="todo">{TODO} email</span>
+              </span>
+            ) : (
+              <a class="footer-link" href={`mailto:${site.contact.email}`}>
+                <Icon name="mail" />
+                {site.contact.email}
+              </a>
+            )
+          }
+        </li>
+        <li>
+          <a class="footer-link" href={site.social.instagram.url} rel="noopener noreferrer">
+            <Icon name="instagram" />
+            Instagram
+            <span class="visually-hidden">: {site.social.instagram.handle}</span>
+          </a>
+        </li>
+        <li>
+          <a class="footer-link" href={site.social.facebook.url} rel="noopener noreferrer">
+            <Icon name="facebook" />
+            Facebook
+            <span class="visually-hidden">: {site.social.facebook.handle}</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="border-t border-line">
+    <div class="wrap grid gap-2 py-6 text-xs text-mute md:flex md:items-center md:justify-between">
+      <p>{site.disclaimer}</p>
+      <p class="flex gap-4 whitespace-nowrap">
+        <span>© {year} {site.name}</span>
+        <a class="underline underline-offset-4" href="/privacy/">Privacy</a>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 2.75rem;
+    color: var(--color-bone);
+  }
+
+  a.footer-link:hover {
+    color: var(--color-red-ink);
+  }
+</style>

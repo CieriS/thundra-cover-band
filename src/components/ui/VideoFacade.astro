@@ -1,0 +1,130 @@
+---
+/**
+ * Lightweight video facade: a static poster; the youtube-nocookie iframe is
+ * created only after the visitor taps (no third-party request before that).
+ * Without JavaScript the link simply opens the video on YouTube.
+ * With no video id it renders a "coming soon" card.
+ */
+import type { ImageMetadata } from 'astro';
+import { copy } from '@/config/copy';
+import { fallbacks } from '@/config/images';
+import { TODO } from '@/config/site';
+import { youtubeEmbedUrl, youtubeId } from '@/lib/contact';
+import Icon from './Icon.astro';
+import ResponsiveImage from './ResponsiveImage.astro';
+
+interface Props {
+  title: string;
+  youtube?: string | null | undefined;
+  poster?: ImageMetadata | null | undefined;
+  sizes?: string;
+}
+
+const { title, youtube, poster, sizes = '(min-width: 64rem) 60vw, 100vw' } = Astro.props;
+const id = youtubeId(youtube);
+const image = poster ?? fallbacks.videoPoster;
+---
+
+<figure class="video">
+  <div class="stage">
+    <ResponsiveImage
+      src={image}
+      alt=""
+      ratio="16 / 9"
+      sizes={sizes}
+      widths={[480, 800, 1280]}
+      placeholder={!poster}
+      reveal
+    />
+    {
+      id ? (
+        <a
+          class="trigger"
+          href={`https://www.youtube.com/watch?v=${id}`}
+          data-video-embed={youtubeEmbedUrl(id)}
+          data-video-title={title}
+          rel="noopener noreferrer"
+        >
+          <span class="play">
+            <Icon name="play" size={34} />
+          </span>
+          <span class="visually-hidden">
+            {copy.live.play}: {title}
+          </span>
+        </a>
+      ) : (
+        <div class="soon">
+          <span class="todo">{TODO} video live</span>
+        </div>
+      )
+    }
+  </div>
+  <figcaption>
+    <span class="poster title">{title}</span>
+    {id && <span class="note">{copy.live.consent}</span>}
+  </figcaption>
+</figure>
+
+<style>
+  .stage {
+    position: relative;
+    background: var(--color-night-800);
+  }
+
+  .stage :global(iframe) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  .trigger,
+  .soon {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+  }
+
+  .play {
+    display: grid;
+    place-items: center;
+    width: 5.5rem;
+    height: 5.5rem;
+    padding-left: 0.3rem;
+    background: var(--color-red);
+    color: var(--color-bone);
+    clip-path: polygon(14% 0, 100% 0, 86% 100%, 0 100%);
+    transition: transform var(--duration-fast) var(--ease-snap);
+  }
+
+  .trigger:active .play {
+    transform: scale(0.92);
+  }
+
+  .trigger:focus-visible {
+    outline-offset: -6px;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .trigger:hover .play {
+      transform: scale(1.08);
+    }
+  }
+
+  figcaption {
+    display: grid;
+    gap: 0.25rem;
+    margin-top: 0.75rem;
+  }
+
+  .title {
+    font-size: var(--text-xl);
+  }
+
+  .note {
+    color: var(--color-mute);
+    font-size: var(--text-xs);
+  }
+</style>

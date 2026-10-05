@@ -1,0 +1,68 @@
+---
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import { copy } from '@/config/copy';
+import { getSetlist } from '@/lib/content';
+
+const setlist = await getSetlist();
+---
+
+{
+  setlist && (
+    <section id="scaletta" class="section" aria-labelledby="scaletta-title">
+      <div class="wrap grid gap-10">
+        <SectionHeading
+          id="scaletta-title"
+          eyebrow={copy.setlist.eyebrow}
+          title={copy.setlist.title}
+          intro={copy.setlist.intro}
+        />
+        <ol class="songs poster">
+          {setlist.data.songs.map((song) => (
+            <li data-reveal="rise">
+              <span>{song}</span>
+            </li>
+          ))}
+        </ol>
+        {setlist.data.note && <p class="text-sm text-mute">{setlist.data.note}</p>}
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .songs {
+    counter-reset: song;
+    column-gap: 3rem;
+    font-size: var(--text-2xl);
+    line-height: 1;
+  }
+
+  .songs li {
+    display: grid;
+    grid-template-columns: 2.2ch 1fr;
+    gap: 0.75rem;
+    align-items: baseline;
+    padding-block: 0.7rem;
+    border-bottom: 1px solid var(--color-line);
+    break-inside: avoid;
+    counter-increment: song;
+  }
+
+  .songs li::before {
+    content: counter(song, decimal-leading-zero);
+    color: var(--color-red-ink);
+    font-size: 0.55em;
+  }
+
+  @media (min-width: 48rem) {
+    .songs {
+      columns: 2;
+    }
+  }
+
+  @media (min-width: 80rem) {
+    .songs {
+      columns: 3;
+    }
+  }
+</style>

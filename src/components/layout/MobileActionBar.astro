@@ -1,0 +1,86 @@
+---
+/**
+ * Fixed bottom bar for phones: the two conversions, always under the thumb.
+ * The body reserves its height (see global.css), so it never covers content.
+ * On pages with a hero it slides in after the hero, driven by scroll in CSS
+ * where supported; elsewhere it is simply always visible.
+ */
+import Icon from '@/components/ui/Icon.astro';
+
+interface Props {
+  afterHero?: boolean;
+}
+
+const { afterHero = false } = Astro.props;
+---
+
+<nav class:list={['action-bar lg:hidden', afterHero && 'after-hero']} aria-label="Azioni rapide">
+  <a class="action poster" href="/date/">
+    <Icon name="calendar" />
+    Date
+  </a>
+  <a class="action is-primary poster" href="/booking/">
+    <Icon name="chat" />
+    Booking
+  </a>
+</nav>
+
+<style>
+  .action-bar {
+    position: fixed;
+    inset: auto 0 0;
+    z-index: 50;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    border-top: 1px solid var(--color-line);
+    background: var(--color-night-950);
+  }
+
+  .action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    height: var(--spacing-bar);
+    font-size: 1.25rem;
+    letter-spacing: 0.06em;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .action.is-primary {
+    background: var(--color-red);
+  }
+
+  .action:active {
+    background: var(--color-bone);
+    color: var(--color-night-950);
+  }
+
+  .action:focus-visible {
+    outline-offset: -4px;
+    outline-color: var(--color-bone);
+  }
+
+  @supports (animation-timeline: scroll()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .after-hero {
+        animation: bar-in linear both;
+        animation-timeline: scroll(root block);
+        animation-range: 55svh 80svh;
+      }
+    }
+  }
+
+  @keyframes bar-in {
+    from {
+      transform: translateY(100%);
+      visibility: hidden;
+    }
+
+    to {
+      transform: translateY(0);
+      visibility: visible;
+    }
+  }
+</style>

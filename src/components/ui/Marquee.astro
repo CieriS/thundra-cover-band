@@ -1,0 +1,84 @@
+---
+/** Pure CSS marquee. The second copy is hidden from assistive technology. */
+interface Props {
+  items: readonly string[];
+  /** Seconds for one full loop. */
+  duration?: number;
+  reverse?: boolean;
+  outlined?: boolean;
+  class?: string;
+}
+
+const { items, duration = 28, reverse = false, outlined = false, class: className } = Astro.props;
+
+// Repeat short lists so one copy is always wider than the viewport.
+const repeat = Math.max(1, Math.ceil(8 / Math.max(1, items.length)));
+const track = Array.from({ length: repeat }, () => items).flat();
+---
+
+<div class:list={['marquee', className]} data-marquee>
+  {
+    [false, true].map((copy) => (
+      <ul
+        class:list={['marquee-track poster', reverse && 'is-reverse', outlined && 'outline-type']}
+        style={`--marquee-duration: ${duration}s`}
+        aria-hidden={copy ? 'true' : undefined}
+      >
+        {track.map((item) => (
+          <li>
+            {item}
+            <span class="sep" aria-hidden="true">
+              ✦
+            </span>
+          </li>
+        ))}
+      </ul>
+    ))
+  }
+</div>
+
+<style>
+  .marquee {
+    display: flex;
+    overflow: hidden;
+    user-select: none;
+  }
+
+  .marquee-track {
+    display: flex;
+    flex-shrink: 0;
+    min-width: 100%;
+    font-size: var(--text-4xl);
+    line-height: 1.1;
+    white-space: nowrap;
+    animation: marquee var(--marquee-duration) linear infinite;
+  }
+
+  .marquee-track.is-reverse {
+    animation-direction: reverse;
+  }
+
+  li {
+    display: flex;
+    align-items: center;
+  }
+
+  .sep {
+    margin-inline: 0.45em;
+    color: var(--color-red-ink);
+    font-size: 0.4em;
+    -webkit-text-stroke: 0;
+  }
+
+  @keyframes marquee {
+    to {
+      transform: translateX(-100%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track {
+      animation: none;
+    }
+  }
+</style>

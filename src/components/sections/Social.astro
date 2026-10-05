@@ -1,0 +1,83 @@
+---
+/**
+ * Links to the social profiles with a static photo grid.
+ * No feed or widget is embedded on purpose: weight, cookies, privacy.
+ */
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+import ResponsiveImage from '@/components/ui/ResponsiveImage.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import { copy } from '@/config/copy';
+import { images } from '@/config/images';
+import { site } from '@/config/site';
+
+const { instagram, facebook } = site.social;
+---
+
+<section id="social" class="section cut-top social" aria-labelledby="social-title">
+  <div class="wrap layout">
+    <div class="grid content-start gap-6">
+      <SectionHeading id="social-title" eyebrow={copy.social.eyebrow} title={copy.social.title} intro={copy.social.text} />
+      <div class="grid gap-3 sm:flex sm:flex-wrap">
+        <Button href={instagram.url} size="lg" rel="noopener noreferrer">
+          <Icon name="instagram" />
+          {instagram.label}
+          <span class="visually-hidden">: {instagram.handle}</span>
+        </Button>
+        <Button href={facebook.url} size="lg" variant="outline" rel="noopener noreferrer">
+          <Icon name="facebook" />
+          {facebook.label}
+          <span class="visually-hidden">: {facebook.handle}</span>
+        </Button>
+      </div>
+      <p class="text-sm break-all text-mute">{instagram.handle}</p>
+    </div>
+
+    <ul class="photos" aria-hidden="true">
+      {
+        images.social.map((image) => (
+          <li>
+            <ResponsiveImage
+              src={image.src}
+              alt=""
+              ratio="1 / 1"
+              sizes="(min-width: 64rem) 22vw, 46vw"
+              widths={[240, 400, 640, 800]}
+              placeholder={image.placeholder}
+              reveal
+            />
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .social {
+    background: var(--color-night-800);
+  }
+
+  .layout {
+    display: grid;
+    gap: 2.5rem;
+  }
+
+  .photos {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
+
+  .photos li:nth-child(even) {
+    transform: translateY(1rem);
+  }
+
+  @media (min-width: 64rem) {
+    .layout {
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 4rem;
+    }
+  }
+</style>

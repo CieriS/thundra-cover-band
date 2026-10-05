@@ -1,0 +1,20 @@
+---
+import BaseLayout from '@/components/layout/BaseLayout.astro';
+import Button from '@/components/ui/Button.astro';
+---
+
+<BaseLayout title="Pagina non trovata" noindex>
+  <section class="section">
+    <div class="wrap grid justify-items-start gap-6">
+      <p class="label text-red-ink">Errore 404</p>
+      <h1 class="poster text-5xl">Qui non suona nessuno</h1>
+      <p class="max-w-md text-lg text-mute">
+        La pagina che cerchi non esiste o è stata spostata. Le date, invece, sono sempre al loro posto.
+      </p>
+      <div class="grid gap-3 sm:flex">
+        <Button href="/date/">Prossime date</Button>
+        <Button href="/" variant="outline">Torna all'inizio</Button>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
