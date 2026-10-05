@@ -1,0 +1,275 @@
+@import 'tailwindcss';
+@import '@fontsource/anton/latin-400.css';
+@import '@fontsource-variable/archivo/wght.css';
+@import './motion.css';
+
+/*
+ * Design tokens: the single source of truth for colour, type, spacing,
+ * durations and easings. Tailwind utilities are generated from this block.
+ * Colour pairs used for text are covered by src/styles/contrast.test.ts.
+ */
+@theme {
+  --color-*: initial;
+  --color-night-950: #04060c;
+  --color-night-900: #080c18;
+  --color-night-800: #0e1426;
+  --color-night-700: #18213a;
+  --color-line: #2a3555;
+  --color-bone: #f5f2ea;
+  --color-mute: #aab3c8;
+  /* Fill red: backgrounds and large shapes; bone text on it passes AA. */
+  --color-red: #d4140a;
+  --color-red-deep: #8f0d06;
+  /* Text red: lighter so that red type on night passes AA. */
+  --color-red-ink: #ff5a4a;
+  --color-volt: #4cc9ff;
+  --color-black: #000;
+  --color-white: #fff;
+
+  --font-display: 'Anton', 'Anton Fallback', Impact, 'Arial Narrow', sans-serif;
+  --font-sans: 'Archivo Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Fluid type scale: min at 360px, max at 1440px. */
+  --text-xs: 0.8125rem;
+  --text-sm: 0.9375rem;
+  --text-base: clamp(1rem, 0.96rem + 0.18vw, 1.125rem);
+  --text-lg: clamp(1.125rem, 1.05rem + 0.35vw, 1.375rem);
+  --text-xl: clamp(1.375rem, 1.2rem + 0.8vw, 2rem);
+  --text-2xl: clamp(1.75rem, 1.4rem + 1.6vw, 3rem);
+  --text-3xl: clamp(2.5rem, 1.7rem + 3.6vw, 5rem);
+  --text-4xl: clamp(3.25rem, 1.8rem + 6.6vw, 8rem);
+  --text-5xl: clamp(4rem, 1.4rem + 11.6vw, 13rem);
+  --text-mega: clamp(5rem, 0.5rem + 20vw, 20rem);
+  --text-xl--line-height: 1.15;
+  --text-2xl--line-height: 1;
+  --text-3xl--line-height: 0.94;
+  --text-4xl--line-height: 0.9;
+  --text-5xl--line-height: 0.86;
+  --text-mega--line-height: 0.82;
+
+  --leading-poster: 0.86;
+  --tracking-poster: 0.01em;
+  --tracking-label: 0.18em;
+
+  --spacing-gutter: clamp(1.125rem, 0.6rem + 2.4vw, 3rem);
+  --spacing-section: clamp(4.5rem, 3rem + 7vw, 10rem);
+  --container-page: 84rem;
+  --spacing-bar: 4rem;
+
+  --duration-fast: 160ms;
+  --duration-base: 420ms;
+  --duration-slow: 900ms;
+  --duration-bolt: 620ms;
+  --ease-snap: cubic-bezier(0.2, 0.9, 0.2, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --stagger: 90ms;
+
+  --slant: 3.5vw;
+}
+
+/* Metric-adjusted fallback keeps giant headings stable while Anton loads. */
+@font-face {
+  font-family: 'Anton Fallback';
+  src: local('Impact'), local('Arial Narrow Bold'), local('Arial Bold');
+  size-adjust: 96%;
+  ascent-override: 118%;
+  descent-override: 32%;
+  line-gap-override: 0%;
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+    background: var(--color-night-950);
+    scroll-padding-top: 5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    min-height: 100svh;
+    background: var(--color-night-950);
+    color: var(--color-bone);
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: 1.6;
+    overflow-x: clip;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Film grain: one small tile repeated, static (never animated). */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    pointer-events: none;
+    background: url('/grain.png') 0 0 / 160px 160px;
+    opacity: 0.07;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-volt);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background: var(--color-red);
+    color: var(--color-bone);
+  }
+
+  /* iOS zooms inputs under 16px: never go below. */
+  input,
+  select,
+  textarea {
+    font-size: max(1rem, 16px);
+  }
+
+  dialog {
+    color: inherit;
+  }
+}
+
+@layer components {
+  .wrap {
+    width: 100%;
+    max-width: var(--container-page);
+    margin-inline: auto;
+    padding-inline: var(--spacing-gutter);
+  }
+
+  .section {
+    position: relative;
+    padding-block: var(--spacing-section);
+  }
+
+  .poster {
+    font-family: var(--font-display);
+    font-weight: 400;
+    line-height: var(--leading-poster);
+    letter-spacing: var(--tracking-poster);
+    text-transform: uppercase;
+    text-wrap: balance;
+  }
+
+  .label {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+  }
+
+  /* Outlined poster type used as a graphic layer behind content. */
+  .outline-type {
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--color-line);
+  }
+
+  /* Diagonal cuts between sections. */
+  .cut-top {
+    clip-path: polygon(0 var(--slant), 100% 0, 100% 100%, 0 100%);
+    margin-top: calc(var(--slant) * -1);
+    padding-top: calc(var(--spacing-section) + var(--slant));
+  }
+
+  .cut-both {
+    clip-path: polygon(0 var(--slant), 100% 0, 100% calc(100% - var(--slant)), 0 100%);
+    margin-block: calc(var(--slant) * -1);
+    padding-block: calc(var(--spacing-section) + var(--slant));
+  }
+
+  /* Missing data, shown on purpose so it cannot ship unnoticed. */
+  .todo {
+    display: inline-block;
+    padding: 0.1em 0.5em;
+    border: 1px dashed var(--color-volt);
+    color: var(--color-volt);
+    font-family: var(--font-sans);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    line-height: 1.5;
+    text-transform: none;
+    vertical-align: middle;
+  }
+
+  .skip-link {
+    position: fixed;
+    top: 0.5rem;
+    left: 0.5rem;
+    z-index: 70;
+    padding: 0.75rem 1rem;
+    background: var(--color-bone);
+    color: var(--color-night-950);
+    font-weight: 700;
+    transform: translateY(-200%);
+  }
+
+  .skip-link:focus {
+    transform: none;
+  }
+
+  .field {
+    display: block;
+    width: 100%;
+    min-height: 3.25rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--color-line);
+    background: var(--color-night-950);
+    color: var(--color-bone);
+  }
+
+  .field::placeholder {
+    color: var(--color-mute);
+    opacity: 0.75;
+  }
+
+  .field:focus-visible {
+    outline-offset: 0;
+    border-color: var(--color-volt);
+  }
+
+  .prose-legal :where(h2) {
+    margin-top: 2.5rem;
+    margin-bottom: 0.75rem;
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .prose-legal :where(p, ul) {
+    margin-bottom: 1rem;
+    color: var(--color-mute);
+  }
+
+  .prose-legal :where(ul) {
+    padding-left: 1.25rem;
+    list-style: square;
+  }
+
+  .prose-legal :where(a) {
+    color: var(--color-bone);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+}
+
+@utility visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Room for the fixed mobile action bar so it never covers content. */
+@media (max-width: 63.999rem) {
+  body {
+    padding-bottom: calc(var(--spacing-bar) + env(safe-area-inset-bottom, 0px));
+  }
+}
