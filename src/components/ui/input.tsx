@@ -8,7 +8,7 @@ export function Input({ className, type = "text", ...props }: ComponentProps<"in
     <input
       data-slot="input"
       type={type}
-      className={cn(fieldControlClassName, "h-12", className)}
+      className={cn(fieldControlClassName, "h-14 [&::-webkit-date-and-time-value]:text-left", className)}
       {...props}
     />
   );

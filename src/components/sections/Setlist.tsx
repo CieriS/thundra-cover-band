@@ -82,7 +82,7 @@ export function Setlist() {
       <div className="container-page">
         <SectionHeader copy={sections.setlist} titleId="setlist-title" />
 
-        <Reveal className="mt-14 flex flex-col gap-4 border-b border-foreground pb-4 md:flex-row md:items-center md:justify-between lg:mt-20">
+        <Reveal className="mt-10 flex flex-col gap-4 border-b border-foreground pb-4 md:flex-row md:items-center md:justify-between lg:mt-20">
           <div role="group" aria-label="Filtra per era" className="flex flex-wrap gap-2">
             {eraFilters.map((filter) => {
               const isActive = filter.id === activeEra;
@@ -123,13 +123,13 @@ export function Setlist() {
                 <article
                   key={group.key}
                   aria-labelledby={headingId}
-                  className="grid gap-6 border-b border-border py-8 md:grid-cols-12 md:gap-10 md:py-12"
+                  className="grid gap-5 border-b border-border py-8 md:grid-cols-12 md:gap-10 md:py-12"
                 >
                   <header className="md:col-span-4 lg:col-span-5">
                     <p className="font-mono text-xs tabular-nums text-accent-ink">{group.year}</p>
                     <h3
                       id={headingId}
-                      className="mt-2 font-display text-3xl font-extrabold uppercase leading-[0.9] text-balance font-stretch-condensed sm:text-4xl lg:text-5xl"
+                      className="mt-2 font-display text-3xl uppercase leading-[0.95] text-balance sm:text-4xl lg:text-5xl"
                     >
                       {group.album}
                     </h3>
@@ -149,7 +149,7 @@ export function Setlist() {
                           {String(position).padStart(2, "0")}
                         </span>
                         <div>
-                          <p className="text-lg font-medium leading-snug transition-colors duration-300 group-hover:text-accent-ink sm:text-xl">
+                          <p className="text-lg font-medium leading-snug group-hover:text-accent-ink sm:text-xl">
                             {song.title}
                           </p>
                           {song.tags.length > 0 && (

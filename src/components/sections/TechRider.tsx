@@ -47,15 +47,13 @@ export function TechRider() {
       <div className="container-page">
         <SectionHeader copy={sections.rider} titleId="rider-title" />
 
-        <div className="mt-14 grid gap-12 lg:mt-20 lg:grid-cols-12 lg:gap-10">
+        <div className="mt-10 grid gap-10 lg:mt-20 lg:grid-cols-12">
           <Reveal className="lg:col-span-4">
             <dl className="grid grid-cols-2 gap-px border border-border bg-border">
               {techRider.summary.map((item) => (
                 <div key={item.label} className="flex flex-col-reverse gap-3 bg-background p-4 sm:p-6">
                   <dt className={`${monoClassName} text-muted-foreground`}>{item.label}</dt>
-                  <dd className="font-display text-4xl font-black leading-none font-stretch-condensed sm:text-5xl">
-                    {item.value}
-                  </dd>
+                  <dd className="font-display text-4xl leading-none sm:text-5xl">{item.value}</dd>
                 </div>
               ))}
             </dl>
@@ -70,9 +68,9 @@ export function TechRider() {
             </ul>
 
             <div className="mt-8 flex flex-col gap-4">
-              <Button asChild variant="outline" size="lg" className="self-start">
+              <Button asChild variant="outline" size="lg" className="w-full sm:w-auto sm:self-start">
                 <a href={riderRequestHref}>
-                  <Mail />
+                  <Mail aria-hidden="true" />
                   {techRider.requestLabel}
                 </a>
               </Button>
@@ -83,7 +81,7 @@ export function TechRider() {
             </div>
           </Reveal>
 
-          <Reveal delay={0.1} className="lg:col-span-8">
+          <Reveal className="lg:col-span-8">
             <Accordion
               type="multiple"
               defaultValue={firstSection ? [firstSection.id] : []}
@@ -140,10 +138,7 @@ export function TechRider() {
                       </thead>
                       <tbody>
                         {techRider.inputList.map((input) => (
-                          <tr
-                            key={input.channel}
-                            className="border-t border-border transition-colors hover:bg-surface"
-                          >
+                          <tr key={input.channel} className="border-t border-border hover:bg-surface">
                             <td className="px-4 py-2.5 font-mono tabular-nums text-accent-ink">
                               {String(input.channel).padStart(2, "0")}
                             </td>

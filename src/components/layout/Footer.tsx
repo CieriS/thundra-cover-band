@@ -1,36 +1,35 @@
 import { ArrowUp, ArrowUpRight } from "lucide-react";
 
 import { SocialIcon } from "@/components/ui/social-icon";
-import { band, footerContent, navigationOrder, sections } from "@/data/band-data";
+import { band, footerContent, sectionOrder, sections } from "@/data/band-data";
+import { useToday } from "@/hooks/use-today";
 
 const eyebrowClassName = "font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground";
 
 export function Footer() {
-  const year = new Date().getFullYear();
+  const year = useToday().slice(0, 4);
 
   return (
     <footer className="overflow-hidden border-t border-border bg-surface">
-      <div className="container-page pt-16 pb-8 sm:pt-24">
-        <div className="grid gap-12 lg:grid-cols-12">
+      <div className="container-page pt-14 pb-6 sm:pt-24 sm:pb-8">
+        <div className="grid gap-10 lg:grid-cols-12 lg:gap-12">
           <div className="lg:col-span-6">
             <p className={eyebrowClassName}>{footerContent.contactEyebrow}</p>
             <a
               href={`mailto:${band.contactEmail}`}
-              className="link-underline mt-4 inline font-display text-[clamp(2rem,6vw,4.5rem)] font-bold leading-tight [overflow-wrap:anywhere] font-stretch-condensed"
+              className="mt-3 inline-flex min-h-12 items-center font-display text-[clamp(2rem,9vw,4.5rem)] leading-tight underline decoration-accent decoration-2 underline-offset-8 [overflow-wrap:anywhere]"
             >
               {band.contactEmail}
             </a>
-            <p className="mt-6 max-w-md text-sm leading-relaxed text-muted-foreground">
-              {band.slogan}
-            </p>
+            <p className="mt-4 max-w-md text-sm leading-relaxed text-muted-foreground">{band.slogan}</p>
           </div>
 
           <nav aria-label="Sezioni del sito" className="lg:col-span-3">
             <p className={eyebrowClassName}>Sezioni</p>
-            <ul className="mt-4 space-y-2.5">
-              {navigationOrder.map((id) => (
+            <ul className="mt-2 grid grid-cols-2 gap-x-4 lg:grid-cols-1">
+              {sectionOrder.map((id) => (
                 <li key={id}>
-                  <a href={`#${id}`} className="link-strike text-base">
+                  <a href={`#${id}`} className="flex min-h-12 items-center text-base hover:text-accent-ink">
                     {sections[id].navLabel}
                   </a>
                 </li>
@@ -40,24 +39,19 @@ export function Footer() {
 
           <div className="lg:col-span-3">
             <p className={eyebrowClassName}>Social</p>
-            <ul className="mt-4 space-y-2.5">
+            <ul className="mt-2">
               {band.socials.map((social) => (
                 <li key={social.platform}>
                   <a
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group inline-flex items-center gap-3 text-base"
+                    className="flex min-h-12 items-center gap-3 text-base hover:text-accent-ink"
                   >
-                    <SocialIcon platform={social.platform} className="size-4" />
-                    <span className="link-strike">{social.label}</span>
-                    <span className="font-mono text-[11px] text-muted-foreground">
-                      {social.handle}
-                    </span>
-                    <ArrowUpRight
-                      aria-hidden="true"
-                      className="size-3.5 opacity-0 transition-opacity group-hover:opacity-100"
-                    />
+                    <SocialIcon platform={social.platform} className="size-5" />
+                    <span>{social.label}</span>
+                    <span className="font-mono text-[11px] text-muted-foreground">{social.handle}</span>
+                    <ArrowUpRight aria-hidden="true" className="ml-auto size-4 text-muted-foreground lg:ml-0" />
                     <span className="sr-only">(si apre in una nuova scheda)</span>
                   </a>
                 </li>
@@ -68,21 +62,19 @@ export function Footer() {
 
         <p
           aria-hidden="true"
-          className="text-outline mt-20 select-none font-display text-[clamp(4rem,21vw,23rem)] font-black uppercase leading-[0.75] tracking-[-0.02em] opacity-25 font-stretch-condensed"
+          className="text-outline mt-14 select-none font-display text-[clamp(4rem,26vw,23rem)] uppercase leading-[0.8] opacity-25"
         >
           {band.name}
         </p>
 
-        <div className="mt-10 flex flex-col gap-6 border-t border-border pt-6 md:flex-row md:items-start md:justify-between">
+        <div className="mt-8 flex flex-col gap-4 border-t border-border pt-6 md:flex-row md:items-start md:justify-between">
           <p className={eyebrowClassName}>
             © {year} {band.name}
           </p>
-          <p className="max-w-xl text-xs leading-relaxed text-muted-foreground">
-            {footerContent.disclaimer}
-          </p>
+          <p className="max-w-xl text-xs leading-relaxed text-muted-foreground">{footerContent.disclaimer}</p>
           <a
             href="#top"
-            className={`link-underline inline-flex items-center gap-2 self-start ${eyebrowClassName} hover:text-foreground`}
+            className={`inline-flex min-h-12 items-center gap-2 self-start ${eyebrowClassName} hover:text-foreground md:min-h-0`}
           >
             Torna su <ArrowUp className="size-3.5" aria-hidden="true" />
           </a>

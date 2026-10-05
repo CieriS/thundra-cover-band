@@ -6,27 +6,28 @@ import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
   [
-    "relative inline-flex shrink-0 items-center justify-center gap-2.5 whitespace-nowrap",
-    "font-mono text-[11px] font-medium uppercase tracking-[0.16em]",
-    "transition-[color,background-color,border-color,transform] duration-300 ease-out",
+    "relative inline-flex shrink-0 items-center justify-center gap-2.5 whitespace-nowrap select-none",
+    "font-sans text-[0.8125rem] font-semibold uppercase leading-none tracking-[0.12em]",
+    // Feedback al tocco solo con transform: resta sul compositor a 60fps.
+    "transition-transform duration-150 ease-out active:scale-[0.97]",
     "outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-    "active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50",
+    "disabled:pointer-events-none disabled:opacity-50",
     "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   ],
   {
     variants: {
       variant: {
-        primary: "bg-foreground text-background hover:bg-accent hover:text-accent-foreground",
-        accent: "bg-accent text-accent-foreground hover:bg-foreground hover:text-background",
-        outline:
-          "border border-border bg-transparent text-foreground hover:border-foreground hover:bg-foreground hover:text-background",
+        primary: "bg-foreground text-background hover:bg-foreground/85",
+        accent: "bg-accent text-accent-foreground hover:bg-accent-strong",
+        outline: "border border-foreground/40 bg-background/40 text-foreground hover:border-foreground",
         ghost: "text-foreground hover:bg-surface",
       },
       size: {
-        sm: "h-9 px-4",
-        md: "h-11 px-5",
-        lg: "h-13 px-7",
-        icon: "size-10",
+        // Almeno 48×48 px sui dispositivi touch; più compatto solo su desktop.
+        sm: "min-h-12 px-5 lg:min-h-10 lg:px-4",
+        md: "min-h-12 px-6",
+        lg: "min-h-14 px-7 text-sm",
+        icon: "size-12",
       },
     },
     defaultVariants: {

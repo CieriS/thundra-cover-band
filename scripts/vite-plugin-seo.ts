@@ -7,10 +7,8 @@ interface SeoPluginOptions {
   siteUrl: string;
 }
 
-const THEME_COLORS = [
-  { media: "(prefers-color-scheme: light)", color: "#fcfcfc" },
-  { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
-] as const;
+/** Colore della barra del browser mobile: coincide con lo sfondo del tema. */
+const THEME_COLOR = "#09090b";
 
 function meta(attrs: Record<string, string>): HtmlTagDescriptor {
   return { tag: "meta", attrs, injectTo: "head" };
@@ -43,7 +41,7 @@ export function seoPlugin({ siteUrl }: SeoPluginOptions): Plugin {
           meta({ name: "twitter:card", content: "summary" }),
           meta({ name: "twitter:title", content: title }),
           meta({ name: "twitter:description", content: band.seoDescription }),
-          ...THEME_COLORS.map(({ media, color }) => meta({ name: "theme-color", media, content: color })),
+          meta({ name: "theme-color", content: THEME_COLOR }),
           {
             tag: "script",
             attrs: { type: "application/ld+json" },

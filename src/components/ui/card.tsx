@@ -26,10 +26,7 @@ export function CardTitle({ className, ...props }: ComponentProps<"h3">) {
   return (
     <h3
       data-slot="card-title"
-      className={cn(
-        "font-display text-2xl font-extrabold uppercase leading-none tracking-tight font-stretch-condensed sm:text-3xl",
-        className,
-      )}
+      className={cn("font-display text-3xl uppercase leading-none sm:text-4xl", className)}
       {...props}
     />
   );

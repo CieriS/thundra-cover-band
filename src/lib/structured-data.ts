@@ -6,6 +6,7 @@ export type JsonValue = JsonPrimitive | JsonValue[] | { [key: string]: JsonValue
 
 const OFFER_AVAILABILITY: Record<TourStatus, string> = {
   AVAILABLE: "https://schema.org/InStock",
+  LOW_STOCK: "https://schema.org/LimitedAvailability",
   CONFIRMED: "https://schema.org/PreOrder",
   SOLD_OUT: "https://schema.org/SoldOut",
 };

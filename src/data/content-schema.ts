@@ -6,7 +6,7 @@ import { z } from "zod";
  * il deploy su Vercel e il sito online resta quello precedente.
  */
 
-export const TOUR_STATUSES = ["AVAILABLE", "CONFIRMED", "SOLD_OUT"] as const;
+export const TOUR_STATUSES = ["AVAILABLE", "LOW_STOCK", "CONFIRMED", "SOLD_OUT"] as const;
 
 export const SONG_TAGS = [
   "OPENER",
@@ -29,6 +29,9 @@ const ISO_DATE_PATTERN = /^(\d{4})-(\d{2})-(\d{2})$/;
 const TIME_PATTERN = /^([01]\d|2[0-3]):[0-5]\d$/;
 const DURATION_PATTERN = /^\d{1,2}:[0-5]\d$/;
 const URL_PATTERN = /^https?:\/\/\S+$/;
+const YOUTUBE_ID_PATTERN = /^[\w-]{11}$/;
+const YOUTUBE_URL_PATTERN =
+  /(?:youtu\.be\/|youtube(?:-nocookie)?\.com\/(?:watch\?(?:\S*&)?v=|shorts\/|embed\/|live\/))([\w-]{11})/;
 
 function isRealIsoDate(value: string): boolean {
   const match = ISO_DATE_PATTERN.exec(value);
@@ -40,6 +43,12 @@ function isRealIsoDate(value: string): boolean {
   const date = new Date(Date.UTC(year, month, day));
 
   return date.getUTCFullYear() === year && date.getUTCMonth() === month && date.getUTCDate() === day;
+}
+
+/** Accetta l'ID di un video o un link YouTube (watch, youtu.be, shorts, embed, live). */
+function extractYoutubeId(value: string): string | null {
+  if (YOUTUBE_ID_PATTERN.test(value)) return value;
+  return YOUTUBE_URL_PATTERN.exec(value)?.[1] ?? null;
 }
 
 const required = (label: string) =>
@@ -64,6 +73,13 @@ const year = (label: string, min: number) =>
 const list = <T extends z.ZodType>(item: T, label: string, min = 0) =>
   z.array(item, { error: `${label}: elenco mancante` }).min(min, `${label}: inserisci almeno ${min} elemento`);
 
+/** Elenco facoltativo: vuoto, `null` o assente diventano `[]`. */
+const optionalList = <T extends z.ZodType>(item: T, label: string) =>
+  z
+    .array(item, { error: `${label}: elenco non valido` })
+    .nullish()
+    .transform((value) => value ?? []);
+
 /* ---------------------------------------------------------------- tour.json */
 
 export const tourContentSchema = list(
@@ -75,7 +91,9 @@ export const tourContentSchema = list(
     province: required("Provincia")
       .transform((value) => value.toUpperCase())
       .pipe(z.string().regex(/^[A-Z]{2}$/, "Provincia: usa la sigla di due lettere, es. MI")),
-    status: z.enum(TOUR_STATUSES, { error: "Stato: scegli tra Biglietti disponibili, Confermata e Sold out" }),
+    status: z.enum(TOUR_STATUSES, {
+      error: "Stato: scegli tra Biglietti disponibili, In esaurimento, Confermata e Sold out",
+    }),
     ticketUrl: optionalUrl("Link biglietti"),
     note: optional(),
   }),
@@ -139,6 +157,54 @@ export const bandContentSchema = z.object({
   ),
 });
 
+/* ------------------------------------------------------------- reviews.json */
+
+const rating = z.preprocess(
+  (value) => (value === "" || value === null ? undefined : value),
+  z.coerce
+    .number({ error: "Valutazione: inserisci un numero da 1 a 5" })
+    .int("Valutazione: inserisci un numero intero")
+    .min(1, "Valutazione: minimo 1")
+    .max(5, "Valutazione: massimo 5")
+    .optional(),
+);
+
+export const reviewsContentSchema = list(
+  z.object({
+    quote: required("Recensione: testo").max(280, "Recensione: massimo 280 caratteri"),
+    author: required("Recensione: autore o ruolo"),
+    venue: required("Recensione: locale o evento"),
+    city: required("Recensione: città"),
+    rating,
+  }),
+  "Recensioni",
+);
+
+/* --------------------------------------------------------------- media.json */
+
+const youtubeVideoId = required("Link YouTube").transform((value, ctx) => {
+  const id = extractYoutubeId(value);
+  if (id) return id;
+
+  ctx.addIssue({
+    code: "custom",
+    message: "Link YouTube: incolla il link del video, es. https://www.youtube.com/watch?v=…",
+  });
+  return z.NEVER;
+});
+
+export const mediaContentSchema = z.object({
+  videos: optionalList(z.object({ youtube: youtubeVideoId, title: required("Titolo video") }), "Video"),
+  photos: optionalList(
+    z.object({
+      photo: required("Foto"),
+      alt: required("Foto: descrizione"),
+      caption: optional(),
+    }),
+    "Foto",
+  ),
+});
+
 /* ---------------------------------------------------------- tech-rider.json */
 
 export const techRiderContentSchema = z.object({
@@ -174,19 +240,24 @@ const sectionCopySchema = z.object({
   description: required("Descrizione"),
 });
 
+const imageSchema = (label: string) =>
+  z.object({
+    photo: required(label),
+    alt: required(`${label}: descrizione`),
+  });
+
 export const textsContentSchema = z.object({
   hero: z.object({
     eyebrow: required("Hero: occhiello"),
     availability: required("Hero: disponibilità"),
-    primaryCta: required("Hero: pulsante principale"),
-    secondaryCta: required("Hero: pulsante secondario"),
-    signalLabel: required("Hero: etichetta player"),
-    nextShowLabel: required("Hero: etichetta prossimo show"),
-    featuredSongTitle: optional(),
+    nextShowCta: required("Hero: pulsante prossima data"),
+    bookingCta: required("Hero: pulsante prenota la band"),
   }),
   sections: z.object({
-    about: sectionCopySchema,
     tour: sectionCopySchema,
+    reviews: sectionCopySchema,
+    media: sectionCopySchema,
+    about: sectionCopySchema,
     setlist: sectionCopySchema,
     rider: sectionCopySchema,
     booking: sectionCopySchema,
@@ -208,15 +279,9 @@ export const textsContentSchema = z.object({
     disclaimer: required("Footer: disclaimer"),
   }),
   images: z.object({
-    liveStage: z.object({
-      photo: required("Foto live"),
-      alt: required("Foto live: descrizione"),
-      caption: optional(),
-    }),
-    crowd: z.object({
-      photo: required("Foto pubblico"),
-      alt: required("Foto pubblico: descrizione"),
-    }),
+    hero: imageSchema("Foto hero"),
+    liveStage: imageSchema("Foto live").extend({ caption: optional() }),
+    crowd: imageSchema("Foto pubblico"),
   }),
   techRiderRequest: z.object({
     label: required("Rider: testo pulsante"),

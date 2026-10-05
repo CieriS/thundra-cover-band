@@ -6,17 +6,22 @@
 
 // Import con estensione e attributi JSON: il modulo è caricato anche da vite.config.ts.
 import bandJson from "../../content/band.json" with { type: "json" };
+import mediaJson from "../../content/media.json" with { type: "json" };
+import reviewsJson from "../../content/reviews.json" with { type: "json" };
 import setlistJson from "../../content/setlist.json" with { type: "json" };
 import techRiderJson from "../../content/tech-rider.json" with { type: "json" };
 import textsJson from "../../content/texts.json" with { type: "json" };
 import tourJson from "../../content/tour.json" with { type: "json" };
+import { toResponsiveSources } from "../lib/images.ts";
 import {
   RIDER_ICONS,
   SOCIAL_PLATFORMS,
   SONG_TAGS,
   TOUR_STATUSES,
   bandContentSchema,
+  mediaContentSchema,
   parseContent,
+  reviewsContentSchema,
   setlistContentSchema,
   techRiderContentSchema,
   textsContentSchema,
@@ -33,7 +38,7 @@ export type IsoDate = `${number}-${number}-${number}`;
 /** Durata brano in formato `m:ss`. */
 export type TrackDuration = `${number}:${number}`;
 
-export type NavSectionId = "about" | "tour" | "setlist" | "rider" | "booking";
+export type NavSectionId = "tour" | "reviews" | "media" | "about" | "setlist" | "rider" | "booking";
 
 export type SectionId = "top" | NavSectionId;
 
@@ -55,7 +60,10 @@ export interface SocialLink {
 }
 
 export interface ImageAsset {
+  /** Variante WebP di fallback. */
   src: string;
+  /** Varianti WebP responsive per `srcset`. */
+  srcSet: string;
   alt: string;
   width: number;
   height: number;
@@ -95,11 +103,8 @@ export interface BandInfo {
 export interface HeroContent {
   eyebrow: string;
   availability: string;
-  primaryCta: string;
-  secondaryCta: string;
-  signalLabel: string;
-  nextShowLabel: string;
-  featuredSongTitle: string;
+  nextShowCta: string;
+  bookingCta: string;
 }
 
 export type TourStatus = (typeof TOUR_STATUSES)[number];
@@ -125,6 +130,26 @@ export interface TourCta {
   title: string;
   description: string;
   action: string;
+}
+
+export interface Review {
+  id: string;
+  quote: string;
+  author: string;
+  venue: string;
+  city: string;
+  rating: number | null;
+}
+
+export interface Video {
+  id: string;
+  youtubeId: string;
+  title: string;
+}
+
+export interface MediaContent {
+  videos: readonly Video[];
+  photos: readonly ImageAsset[];
 }
 
 export type SongTag = (typeof SONG_TAGS)[number];
@@ -220,14 +245,6 @@ const SEO_KEYWORDS: readonly string[] = [
 
 const COUNTRY_CODE = "IT";
 
-const SECTION_INDEX: Record<NavSectionId, string> = {
-  about: "01",
-  tour: "02",
-  setlist: "03",
-  rider: "04",
-  booking: "05",
-};
-
 const SOCIAL_LABELS: Record<SocialPlatform, string> = {
   instagram: "Instagram",
   facebook: "Facebook",
@@ -237,11 +254,16 @@ const SOCIAL_LABELS: Record<SocialPlatform, string> = {
 const PORTRAIT_SIZE = { width: 800, height: 1000 } as const;
 const LANDSCAPE_SIZE = { width: 1600, height: 900 } as const;
 
-export const navigationOrder: readonly NavSectionId[] = ["about", "tour", "setlist", "rider", "booking"];
+/** Ordine delle sezioni nella pagina (dopo la hero): tour e prove sociali prima di tutto. */
+export const sectionOrder: readonly NavSectionId[] = ["tour", "reviews", "media", "about", "setlist", "rider", "booking"];
+
+/** Voci della top bar desktop. Su mobile la navigazione è la `BottomNav`. */
+export const navigationOrder: readonly NavSectionId[] = ["tour", "media", "about", "setlist", "rider", "booking"];
 
 export const tourStatusMeta: Record<TourStatus, TourStatusMeta> = {
   AVAILABLE: { label: "Disponibile", actionLabel: "Biglietti" },
-  CONFIRMED: { label: "Upcoming", actionLabel: "Prevendite a breve" },
+  LOW_STOCK: { label: "In esaurimento", actionLabel: "Biglietti" },
+  CONFIRMED: { label: "Confermata", actionLabel: "Prevendite a breve" },
   SOLD_OUT: { label: "Sold Out", actionLabel: "Esaurito" },
 };
 
@@ -273,10 +295,27 @@ const tourContent = parseContent(tourContentSchema, tourJson, "tour.json");
 const setlistContent = parseContent(setlistContentSchema, setlistJson, "setlist.json");
 const techRiderContent = parseContent(techRiderContentSchema, techRiderJson, "tech-rider.json");
 const textsContent = parseContent(textsContentSchema, textsJson, "texts.json");
+const reviewsContent = parseContent(reviewsContentSchema, reviewsJson, "reviews.json");
+const mediaFileContent = parseContent(mediaContentSchema, mediaJson, "media.json");
 
 /** Pages CMS salva i percorsi con "/" iniziale; con `base: "./"` di Vite servono relativi. */
 function toRelativeAsset(path: string): string {
   return path.replace(/^\/+/, "");
+}
+
+/** Immagine di `public/` servita come WebP responsive (varianti generate in build). */
+function toImageAsset(
+  path: string,
+  alt: string,
+  size: { width: number; height: number },
+  caption?: string,
+): ImageAsset {
+  return {
+    ...toResponsiveSources(toRelativeAsset(path)),
+    alt,
+    ...size,
+    ...(caption ? { caption } : {}),
+  };
 }
 
 function slugify(value: string): string {
@@ -304,11 +343,7 @@ export const band: BandInfo = {
   members: bandContent.members.map((member) => ({
     name: member.name,
     role: member.role,
-    image: {
-      src: toRelativeAsset(member.photo),
-      alt: `${member.name}, ${member.role}`,
-      ...PORTRAIT_SIZE,
-    },
+    image: toImageAsset(member.photo, `${member.name}, ${member.role}`, PORTRAIT_SIZE),
   })),
   stats: bandContent.stats,
   socials: bandContent.socials.map((social) => ({ ...social, label: SOCIAL_LABELS[social.platform] })),
@@ -316,26 +351,26 @@ export const band: BandInfo = {
 
 export const hero: HeroContent = textsContent.hero;
 
-export const media: Record<"liveStage" | "crowd", ImageAsset> = {
-  liveStage: {
-    src: toRelativeAsset(textsContent.images.liveStage.photo),
-    alt: textsContent.images.liveStage.alt,
-    caption: textsContent.images.liveStage.caption,
-    ...LANDSCAPE_SIZE,
-  },
-  crowd: {
-    src: toRelativeAsset(textsContent.images.crowd.photo),
-    alt: textsContent.images.crowd.alt,
-    ...LANDSCAPE_SIZE,
-  },
+const { images } = textsContent;
+
+export const media: Record<"hero" | "liveStage" | "crowd", ImageAsset> = {
+  hero: toImageAsset(images.hero.photo, images.hero.alt, LANDSCAPE_SIZE),
+  liveStage: toImageAsset(images.liveStage.photo, images.liveStage.alt, LANDSCAPE_SIZE, images.liveStage.caption),
+  crowd: toImageAsset(images.crowd.photo, images.crowd.alt, LANDSCAPE_SIZE),
 };
 
+function toSectionCopy(id: NavSectionId): SectionCopy {
+  return { index: String(sectionOrder.indexOf(id) + 1).padStart(2, "0"), ...textsContent.sections[id] };
+}
+
 export const sections: Record<NavSectionId, SectionCopy> = {
-  about: { index: SECTION_INDEX.about, ...textsContent.sections.about },
-  tour: { index: SECTION_INDEX.tour, ...textsContent.sections.tour },
-  setlist: { index: SECTION_INDEX.setlist, ...textsContent.sections.setlist },
-  rider: { index: SECTION_INDEX.rider, ...textsContent.sections.rider },
-  booking: { index: SECTION_INDEX.booking, ...textsContent.sections.booking },
+  tour: toSectionCopy("tour"),
+  reviews: toSectionCopy("reviews"),
+  media: toSectionCopy("media"),
+  about: toSectionCopy("about"),
+  setlist: toSectionCopy("setlist"),
+  rider: toSectionCopy("rider"),
+  booking: toSectionCopy("booking"),
 };
 
 /** Tutte le date, ordinate cronologicamente (l'ordine nel pannello non conta). */
@@ -356,6 +391,26 @@ export const tourDates: readonly TourDate[] = [...tourContent]
 export const tourCta: TourCta = textsContent.tourCta;
 
 export const tourEmptyMessage: string = textsContent.tourEmptyMessage;
+
+export const reviews: readonly Review[] = reviewsContent.map((review, index) => ({
+  id: `review-${index}-${slugify(review.venue)}`,
+  quote: review.quote,
+  author: review.author,
+  venue: review.venue,
+  city: review.city,
+  rating: review.rating ?? null,
+}));
+
+export const mediaContent: MediaContent = {
+  videos: mediaFileContent.videos.map((video, index) => ({
+    id: `video-${index}-${video.youtube}`,
+    youtubeId: video.youtube,
+    title: video.title,
+  })),
+  photos: mediaFileContent.photos.map((photo) =>
+    toImageAsset(photo.photo, photo.alt, LANDSCAPE_SIZE, photo.caption),
+  ),
+};
 
 /** Brani ordinati per anno (ordinamento stabile: a parità di anno resta l'ordine del pannello). */
 export const setlist: readonly Song[] = setlistContent

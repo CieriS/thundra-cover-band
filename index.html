@@ -1,38 +1,12 @@
 <!doctype html>
-<html lang="it" class="dark">
+<html lang="it">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <script>
-      // Applica il tema salvato prima del primo paint (evita il flash chiaro/scuro).
-      (function () {
-        try {
-          var stored = localStorage.getItem("theme");
-          var theme =
-            stored === "light" || stored === "dark"
-              ? stored
-              : stored === "system"
-                ? window.matchMedia("(prefers-color-scheme: dark)").matches
-                  ? "dark"
-                  : "light"
-                : "dark";
-          var root = document.documentElement;
-          root.classList.remove("light", "dark");
-          root.classList.add(theme);
-          root.style.colorScheme = theme;
-        } catch (error) {
-          document.documentElement.classList.add("dark");
-        }
-      })();
-    </script>
   </head>
   <body>
-    <noscript>
-      <p style="padding: 2rem; font-family: system-ui, sans-serif">
-        Per visualizzare il sito di Thundra è necessario abilitare JavaScript.
-      </p>
-    </noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

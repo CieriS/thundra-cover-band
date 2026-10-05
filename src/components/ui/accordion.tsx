@@ -31,9 +31,9 @@ export function AccordionTrigger({
       <AccordionPrimitive.Trigger
         data-slot="accordion-trigger"
         className={cn(
-          "group flex flex-1 items-center justify-between gap-4 py-5 text-left outline-none",
-          "font-display text-2xl font-extrabold uppercase leading-none tracking-tight font-stretch-condensed sm:text-3xl",
-          "transition-colors hover:text-accent-ink focus-visible:text-accent-ink",
+          "group flex min-h-14 flex-1 items-center justify-between gap-4 py-4 text-left outline-none",
+          "font-display text-2xl uppercase leading-none sm:text-3xl",
+          "hover:text-accent-ink focus-visible:text-accent-ink",
           className,
         )}
         {...props}
@@ -41,7 +41,7 @@ export function AccordionTrigger({
         {children}
         <span
           aria-hidden="true"
-          className="grid size-9 shrink-0 place-items-center border border-border transition-colors group-hover:border-foreground group-data-[state=open]:bg-foreground group-data-[state=open]:text-background"
+          className="grid size-10 shrink-0 place-items-center border border-border group-hover:border-foreground group-data-[state=open]:bg-foreground group-data-[state=open]:text-background"
         >
           <Plus className="size-4 transition-transform duration-500 group-data-[state=open]:rotate-45" />
         </span>
@@ -50,6 +50,7 @@ export function AccordionTrigger({
   );
 }
 
+/** Apertura con opacity/transform: nessuna animazione dell'altezza (layout). */
 export function AccordionContent({
   className,
   children,
@@ -58,7 +59,7 @@ export function AccordionContent({
   return (
     <AccordionPrimitive.Content
       data-slot="accordion-content"
-      className="overflow-hidden data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down"
+      className="data-[state=open]:animate-fade-down"
       {...props}
     >
       <div className={cn("pb-8", className)}>{children}</div>

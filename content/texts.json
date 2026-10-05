@@ -2,24 +2,33 @@
   "hero": {
     "eyebrow": "Tribute to AC/DC",
     "availability": "Booking 2026/27 aperto",
-    "primaryCta": "Richiedi disponibilità",
-    "secondaryCta": "Prossime date",
-    "signalLabel": "Live signal",
-    "nextShowLabel": "Prossimo show",
-    "featuredSongTitle": "Thunderstruck"
+    "nextShowCta": "Prossima data",
+    "bookingCta": "Prenota la band"
   },
   "sections": {
+    "tour": {
+      "navLabel": "Tour",
+      "eyebrow": "Tour 2026 — 2027",
+      "title": "Prossime date.",
+      "description": "Club, festival e piazze in tutta Italia. Le date con biglietti online si prenotano direttamente da qui."
+    },
+    "reviews": {
+      "navLabel": "Recensioni",
+      "eyebrow": "Dicono di noi",
+      "title": "Chi ci ha già messo sul palco.",
+      "description": "Numeri e parole di locali, festival e organizzatori che hanno già ospitato Thundra."
+    },
+    "media": {
+      "navLabel": "Media",
+      "eyebrow": "Live, foto e video",
+      "title": "Guarda prima di prenotare.",
+      "description": "Estratti dai concerti e scatti dal palco: suono valvolare, nessuna base pre-registrata."
+    },
     "about": {
       "navLabel": "Band",
       "eyebrow": "Manifesto",
       "title": "Volume, sudore e zero compromessi.",
       "description": "Non siamo una cover band da sottofondo. Thundra ricostruisce l'impatto di un concerto degli AC/DC: suono, attitudine e dinamica di palco."
-    },
-    "tour": {
-      "navLabel": "Tour",
-      "eyebrow": "Tour 2026 — 2027",
-      "title": "Prossime date.",
-      "description": "Club, festival e piazze in tutta Italia. Le date contrassegnate come disponibili hanno le prevendite già aperte."
     },
     "setlist": {
       "navLabel": "Setlist",
@@ -35,9 +44,9 @@
     },
     "booking": {
       "navLabel": "Booking",
-      "eyebrow": "Richiesta disponibilità",
+      "eyebrow": "Prenota la band",
       "title": "Porta l'alta tensione sul tuo palco.",
-      "description": "Compila il modulo: generiamo una richiesta formale pronta da inviare via email o da copiare. Rispondiamo entro 48 ore lavorative."
+      "description": "Tre campi, trenta secondi. Rispondiamo entro 48 ore lavorative con disponibilità e preventivo."
     }
   },
   "tourCta": {
@@ -50,11 +59,11 @@
     "steps": [
       {
         "title": "Compila",
-        "description": "Inserisci i dettagli dell'evento: data, città, locale e budget indicativo."
+        "description": "Nome, email, data e città: nient'altro."
       },
       {
-        "title": "Invia o copia",
-        "description": "Apri la richiesta nel tuo client email oppure copia il testo già formattato."
+        "title": "Invia",
+        "description": "La richiesta si apre già pronta nel tuo client email: aggiungi locale e budget, se li conosci."
       },
       {
         "title": "Conferma",
@@ -62,7 +71,7 @@
       }
     ],
     "directContactLabel": "Contatto diretto",
-    "note": "Per festival e grandi eventi indica anche orari di palco e l'eventuale backline condivisa.",
+    "note": "Per festival e grandi eventi indica nell'email anche orari di palco ed eventuale backline condivisa.",
     "privacyNote": "Nessun dato viene salvato: la richiesta viene generata direttamente nel tuo browser."
   },
   "footer": {
@@ -70,9 +79,13 @@
     "disclaimer": "Thundra è una tribute band indipendente. AC/DC e tutti i marchi citati appartengono ai rispettivi proprietari; nessuna affiliazione ufficiale."
   },
   "images": {
+    "hero": {
+      "photo": "/images/mockup/live-stage.svg",
+      "alt": "Foto live segnaposto: la band sul palco tra luci rosse, amplificatori e pubblico"
+    },
     "liveStage": {
       "photo": "/images/mockup/live-stage.svg",
-      "alt": "Foto live segnaposto: la band sul palco tra luci ambra, amplificatori e pubblico",
+      "alt": "Foto live segnaposto: la band sul palco tra luci rosse, amplificatori e pubblico",
       "caption": "Live — foto segnaposto"
     },
     "crowd": {

@@ -50,10 +50,13 @@ content:
         label: Stato
         type: select
         required: true
+        description: Usa "In esaurimento" solo quando i biglietti stanno davvero finendo, perché il sito mostra un avviso di scarsità.
         options:
           values:
             - name: AVAILABLE
               label: Biglietti disponibili
+            - name: LOW_STOCK
+              label: Biglietti in esaurimento
             - name: CONFIRMED
               label: Confermata (prevendite in arrivo)
             - name: SOLD_OUT
@@ -61,7 +64,7 @@ content:
       - name: ticketUrl
         label: Link biglietti
         type: string
-        description: Facoltativo. Mostrato solo se lo stato è "Biglietti disponibili". Deve iniziare con https://
+        description: Facoltativo. Mostrato solo se lo stato è "Biglietti disponibili" o "In esaurimento". Deve iniziare con https://
         pattern:
           regex: "^(https?://\\S+)?$"
           message: Il link deve iniziare con https://
@@ -69,6 +72,77 @@ content:
         label: Nota
         type: string
         description: Facoltativa, es. Halloween Night
+
+  # ------------------------------------------------------------ Recensioni
+  - name: reviews
+    label: Recensioni
+    type: file
+    path: content/reviews.json
+    format: json
+    list: true
+    fields:
+      - name: quote
+        label: Testo della recensione
+        type: text
+        required: true
+        description: Massimo 280 caratteri. Pubblica solo citazioni reali, autorizzate da chi le ha scritte.
+      - name: author
+        label: Autore o ruolo
+        type: string
+        required: true
+        description: Es. Direzione artistica, Booking manager
+      - name: venue
+        label: Locale, festival o evento
+        type: string
+        required: true
+      - name: city
+        label: Città
+        type: string
+        required: true
+      - name: rating
+        label: Valutazione
+        type: number
+        description: Facoltativa, da 1 a 5. Mostrata come stelle.
+
+  # ----------------------------------------------------------------- Media
+  - name: media
+    label: Media (video e foto)
+    type: file
+    path: content/media.json
+    format: json
+    fields:
+      - name: videos
+        label: Video YouTube
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{title}"
+        fields:
+          - name: youtube
+            label: Link YouTube
+            type: string
+            required: true
+            description: Incolla il link del video, es. https://www.youtube.com/watch?v=… Il player si carica solo quando il visitatore preme play.
+          - name: title
+            label: Titolo
+            type: string
+            required: true
+      - name: photos
+        label: Foto dal palco
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{caption}"
+        fields:
+          - name: photo
+            label: Foto
+            type: image
+            required: true
+            description: JPG, PNG o WebP. Su mobile viene ritagliata in verticale (4:5), su desktop in orizzontale (16:9). Il sito la converte in WebP automaticamente.
+          - { name: alt, label: Descrizione della foto (accessibilità), type: string, required: true }
+          - { name: caption, label: Didascalia, type: string }
 
   # ------------------------------------------------------------------ Band
   - name: band
@@ -90,7 +164,7 @@ content:
         type: text
         required: true
       - name: shortBio
-        label: Bio breve (Hero)
+        label: Bio breve (Hero, solo desktop)
         type: text
         required: true
       - name: manifesto
@@ -144,9 +218,9 @@ content:
             label: Foto
             type: image
             required: true
-            description: Foto verticale (proporzione 4:5, es. 800×1000 px)
+            description: Foto verticale (proporzione 4:5, es. 800×1000 px). JPG, PNG o WebP, convertita in WebP automaticamente.
       - name: stats
-        label: Numeri chiave
+        label: Numeri chiave (sezione Recensioni)
         type: object
         list:
           max: 4
@@ -367,28 +441,42 @@ content:
         fields:
           - { name: eyebrow, label: Occhiello, type: string, required: true }
           - { name: availability, label: Disponibilità booking, type: string, required: true }
-          - { name: primaryCta, label: Pulsante principale, type: string, required: true }
-          - { name: secondaryCta, label: Pulsante secondario, type: string, required: true }
-          - { name: signalLabel, label: Etichetta del player, type: string, required: true }
-          - { name: nextShowLabel, label: Etichetta prossimo show, type: string, required: true }
-          - name: featuredSongTitle
-            label: Brano in evidenza nel player
+          - name: nextShowCta
+            label: Pulsante rosso "Prossima data"
             type: string
-            description: Titolo esatto di un brano della setlist.
+            required: true
+            description: Sotto il testo compaiono in automatico data e città del prossimo concerto non esaurito.
+          - { name: bookingCta, label: Pulsante "Prenota la band", type: string, required: true }
       - name: sections
         label: Titoli delle sezioni
         type: object
         fields:
-          - name: about
-            label: Band
+          - name: tour
+            label: Tour
             type: object
             fields:
               - { name: navLabel, label: Voce nel menu, type: string, required: true }
               - { name: eyebrow, label: Occhiello, type: string, required: true }
               - { name: title, label: Titolo, type: string, required: true }
               - { name: description, label: Descrizione, type: text, required: true }
-          - name: tour
-            label: Tour
+          - name: reviews
+            label: Recensioni
+            type: object
+            fields:
+              - { name: navLabel, label: Voce nel menu, type: string, required: true }
+              - { name: eyebrow, label: Occhiello, type: string, required: true }
+              - { name: title, label: Titolo, type: string, required: true }
+              - { name: description, label: Descrizione, type: text, required: true }
+          - name: media
+            label: Media
+            type: object
+            fields:
+              - { name: navLabel, label: Voce nel menu, type: string, required: true }
+              - { name: eyebrow, label: Occhiello, type: string, required: true }
+              - { name: title, label: Titolo, type: string, required: true }
+              - { name: description, label: Descrizione, type: text, required: true }
+          - name: about
+            label: Band
             type: object
             fields:
               - { name: navLabel, label: Voce nel menu, type: string, required: true }
@@ -435,7 +523,7 @@ content:
         type: object
         fields:
           - name: steps
-            label: Passaggi
+            label: Passaggi (solo desktop)
             type: object
             list:
               max: 4
@@ -455,6 +543,16 @@ content:
         label: Immagini
         type: object
         fields:
+          - name: hero
+            label: Foto hero (apertura)
+            type: object
+            fields:
+              - name: photo
+                label: Foto
+                type: image
+                required: true
+                description: La band dal vivo, ad alto impatto. Occupa tutto lo schermo del telefono con il soggetto nella parte alta. JPG, PNG o WebP, convertita in WebP automaticamente.
+              - { name: alt, label: Descrizione della foto (accessibilità), type: string, required: true }
           - name: liveStage
             label: Foto live (sezione Band)
             type: object
@@ -463,7 +561,7 @@ content:
                 label: Foto
                 type: image
                 required: true
-                description: Orizzontale 16:9, es. 1600×900 px
+                description: Orizzontale 16:9, es. 1600×900 px. JPG, PNG o WebP, convertita in WebP automaticamente.
               - { name: alt, label: Descrizione della foto (accessibilità), type: string, required: true }
               - { name: caption, label: Didascalia, type: string }
           - name: crowd
@@ -474,7 +572,7 @@ content:
                 label: Foto
                 type: image
                 required: true
-                description: Orizzontale 16:9, es. 1600×900 px
+                description: Orizzontale 16:9, es. 1600×900 px. JPG, PNG o WebP, convertita in WebP automaticamente.
               - { name: alt, label: Descrizione della foto (accessibilità), type: string, required: true }
       - name: techRiderRequest
         label: Pulsante richiesta rider

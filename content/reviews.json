@@ -1,0 +1,37 @@
+[
+  {
+    "quote": "Sala piena già alle 22 e bar sotto pressione tutta la sera. I clienti ci chiedono ancora quando tornano.",
+    "author": "Direzione artistica",
+    "venue": "Fonderia Live",
+    "city": "Milano",
+    "rating": 5
+  },
+  {
+    "quote": "Puntuali al soundcheck, rider chiaro e zero sorprese. Per un organizzatore vale quanto il concerto.",
+    "author": "Produzione",
+    "venue": "Winter Rock Fest",
+    "city": "Brescia",
+    "rating": 5
+  },
+  {
+    "quote": "Due ore senza un calo di tensione: sul finale cantava tutto il locale.",
+    "author": "Gestione",
+    "venue": "Voltage Club",
+    "city": "Bologna",
+    "rating": 5
+  },
+  {
+    "quote": "Professionali dal primo contatto alla fattura. Li abbiamo già riconfermati per la prossima stagione.",
+    "author": "Booking manager",
+    "venue": "Officine Sonore",
+    "city": "Torino",
+    "rating": 5
+  },
+  {
+    "quote": "Amplificatori valvolari veri e nessuna base: la differenza si sente dal primo accordo.",
+    "author": "Service audio",
+    "venue": "Teatro Ciclope",
+    "city": "Padova",
+    "rating": 5
+  }
+]

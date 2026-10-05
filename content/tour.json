@@ -25,7 +25,7 @@
     "venue": "Voltage Club",
     "city": "Bologna",
     "province": "BO",
-    "status": "AVAILABLE",
+    "status": "LOW_STOCK",
     "ticketUrl": "https://example.com/tickets/thundra-bologna-2026-10-31",
     "note": "Halloween Night"
   },
