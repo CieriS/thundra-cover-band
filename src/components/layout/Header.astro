@@ -33,7 +33,7 @@ const isCurrent = (href: string) => !href.includes('#') && current.startsWith(hr
     </nav>
 
     <!-- Without JavaScript this link jumps to the navigation in the footer. -->
-    <a class="menu-button label lg:hidden" href="#navigazione" data-menu-open aria-haspopup="dialog">
+    <a class="menu-button menu-open label" href="#navigazione" data-menu-open aria-haspopup="dialog">
       <Icon name="menu" size={22} />
       Menu
     </a>
@@ -114,6 +114,12 @@ const isCurrent = (href: string) => !href.includes('#') && current.startsWith(hr
     min-width: 2.75rem;
     min-height: 2.75rem;
     cursor: pointer;
+  }
+
+  @media (min-width: 64rem) {
+    .menu-open {
+      display: none;
+    }
   }
 
   .menu {

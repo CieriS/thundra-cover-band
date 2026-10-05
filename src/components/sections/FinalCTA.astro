@@ -6,7 +6,7 @@ import { site } from '@/config/site';
 ---
 
 <section class="final" aria-labelledby="final-title">
-  <p class="ghost poster" aria-hidden="true">{site.name}</p>
+  <div class="ghost poster" aria-hidden="true" data-text={site.name}></div>
   <div class="wrap grid gap-6">
     <RevealText id="final-title" lines={copy.finalCta.title} class="text-5xl" />
     <p class="max-w-md text-lg font-semibold">{copy.finalCta.text}</p>
@@ -20,6 +20,8 @@ import { site } from '@/config/site';
 <style>
   .final {
     position: relative;
+    /* Slides under the previous section so the diagonal cut shows it, not the page background. */
+    margin-top: calc(var(--slant) * -1);
     padding-block: calc(var(--spacing-section) + var(--slant));
     overflow: hidden;
     background: var(--color-red);
@@ -27,7 +29,14 @@ import { site } from '@/config/site';
     isolation: isolate;
   }
 
-  /* Oversized band name running off both edges, as a graphic layer. */
+  /*
+   * Oversized band name running off both edges, as a graphic layer.
+   * Drawn as generated content: it is decoration, not text to be read.
+   */
+  .ghost::before {
+    content: attr(data-text);
+  }
+
   .ghost {
     position: absolute;
     right: -4vw;

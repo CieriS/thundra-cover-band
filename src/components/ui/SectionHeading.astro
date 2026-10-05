@@ -12,6 +12,8 @@ interface Props {
 }
 
 const { id, eyebrow, title, intro, as = 'h2', size = 'xl', class: className } = Astro.props;
+// A page title (h1) sits above the fold: it is never hidden waiting for the reveal.
+const still = as === 'h1';
 ---
 
 <header class:list={['grid gap-4', className]}>
@@ -19,6 +21,6 @@ const { id, eyebrow, title, intro, as = 'h2', size = 'xl', class: className } = 
     <span class="h-px w-8 bg-red-ink" aria-hidden="true"></span>
     {eyebrow}
   </p>
-  <RevealText id={id} as={as} lines={title} class={size === 'xl' ? 'text-5xl' : 'text-4xl'} />
-  {intro && <p class="max-w-xl text-lg text-mute" data-reveal="fade">{intro}</p>}
+  <RevealText id={id} as={as} lines={title} still={still} class={size === 'xl' ? 'text-5xl' : 'text-4xl'} />
+  {intro && <p class="max-w-xl text-lg text-mute" data-reveal={still ? undefined : 'fade'}>{intro}</p>}
 </header>

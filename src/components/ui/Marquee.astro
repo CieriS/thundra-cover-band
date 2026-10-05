@@ -27,9 +27,7 @@ const track = Array.from({ length: repeat }, () => items).flat();
         {track.map((item) => (
           <li>
             {item}
-            <span class="sep" aria-hidden="true">
-              ✦
-            </span>
+            <span class="sep" aria-hidden="true" />
           </li>
         ))}
       </ul>
@@ -63,11 +61,15 @@ const track = Array.from({ length: repeat }, () => items).flat();
     align-items: center;
   }
 
+  /* Slanted red slash between items. */
+  /* Slanted red slash between items. */
   .sep {
-    margin-inline: 0.45em;
-    color: var(--color-red-ink);
-    font-size: 0.4em;
-    -webkit-text-stroke: 0;
+    flex-shrink: 0;
+    width: 0.14em;
+    height: 0.68em;
+    margin-inline: 0.4em;
+    background: var(--color-red);
+    transform: skewX(-18deg);
   }
 
   @keyframes marquee {

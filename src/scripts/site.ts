@@ -230,6 +230,7 @@ function initHeroVideo() {
   video.play().catch(() => undefined);
 }
 
+(window as Window & { __siteReady?: boolean }).__siteReady = true;
 initReveal();
 initMenu();
 initCountdown();

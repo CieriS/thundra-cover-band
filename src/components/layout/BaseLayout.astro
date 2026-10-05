@@ -61,7 +61,11 @@ const isPreview = process.env['VERCEL_ENV'] === 'preview';
 
     <!-- Motion styles hide content only when this class is present: no JS, no hidden content. -->
     <script is:inline>
+      // Safety net: if the site script never runs, reveal everything after 3 seconds.
       document.documentElement.classList.add('js');
+      setTimeout(function () {
+        if (!window.__siteReady) document.documentElement.classList.remove('js');
+      }, 3000);
     </script>
   </head>
   <body>

@@ -84,8 +84,10 @@ const members = await getMembers();
     margin-top: 3.5rem;
     margin-inline: calc(var(--spacing-gutter) * -1);
     padding-inline: var(--spacing-gutter);
-    padding-bottom: 0.75rem;
+    padding-block: 0.25rem 0.75rem;
     overflow-x: auto;
+    /* Cards waiting for their reveal are shifted down: never show a vertical scrollbar. */
+    overflow-y: hidden;
     scroll-snap-type: x mandatory;
     scroll-padding-inline: var(--spacing-gutter);
     overscroll-behavior-x: contain;

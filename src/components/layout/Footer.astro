@@ -13,8 +13,7 @@ const links = [...nav, { label: 'Archivio date', href: '/archivio/' }];
       <Brand height={40} />
       <p class="label text-mute">{site.subtitle}</p>
       <p class="text-sm text-mute">
-        {site.area.cities.join(', ')}
-        {site.area.note}.
+        {`${site.area.cities.join(', ')} ${site.area.note}.`}
       </p>
     </div>
 
@@ -78,9 +77,9 @@ const links = [...nav, { label: 'Archivio date', href: '/archivio/' }];
   <div class="border-t border-line">
     <div class="wrap grid gap-2 py-6 text-xs text-mute md:flex md:items-center md:justify-between">
       <p>{site.disclaimer}</p>
-      <p class="flex gap-4 whitespace-nowrap">
+      <p class="flex items-center gap-4 whitespace-nowrap">
         <span>© {year} {site.name}</span>
-        <a class="underline underline-offset-4" href="/privacy/">Privacy</a>
+        <a class="footer-link underline underline-offset-4" href="/privacy/">Privacy</a>
       </p>
     </div>
   </div>
@@ -91,6 +90,7 @@ const links = [...nav, { label: 'Archivio date', href: '/archivio/' }];
     display: inline-flex;
     align-items: center;
     gap: 0.6rem;
+    min-width: 2.75rem;
     min-height: 2.75rem;
     color: var(--color-bone);
   }

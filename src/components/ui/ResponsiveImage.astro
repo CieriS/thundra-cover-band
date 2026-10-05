@@ -59,9 +59,14 @@ const usable = widths.filter((width) => width <= src.width);
     background: var(--color-night-800);
   }
 
-  .frame :global(img) {
+  /* The picture fills the frame so that clip-path reveals have a real box to clip. */
+  .frame :global(picture) {
     position: absolute;
     inset: 0;
+    display: block;
+  }
+
+  .frame :global(img) {
     width: 100%;
     height: 100%;
     object-fit: cover;

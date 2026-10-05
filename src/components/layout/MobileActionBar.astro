@@ -14,7 +14,7 @@ interface Props {
 const { afterHero = false } = Astro.props;
 ---
 
-<nav class:list={['action-bar lg:hidden', afterHero && 'after-hero']} aria-label="Azioni rapide">
+<nav class:list={['action-bar', afterHero && 'after-hero']} aria-label="Azioni rapide">
   <a class="action poster" href="/date/">
     <Icon name="calendar" />
     Date
@@ -60,6 +60,12 @@ const { afterHero = false } = Astro.props;
   .action:focus-visible {
     outline-offset: -4px;
     outline-color: var(--color-bone);
+  }
+
+  @media (min-width: 64rem) {
+    .action-bar {
+      display: none;
+    }
   }
 
   @supports (animation-timeline: scroll()) {

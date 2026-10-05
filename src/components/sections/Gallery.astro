@@ -32,8 +32,8 @@ const photos = await Promise.all(
                 data-lightbox
                 data-caption={photo.caption ?? ''}
                 data-alt={photo.alt}
-                aria-label={`${gallery.open}: ${photo.alt}`}
               >
+                <span class="visually-hidden">{gallery.open}: </span>
                 <ResponsiveImage
                   src={photo.src}
                   alt={photo.alt}

@@ -1,1 +1,319 @@
-/* Motion layer. Filled in during the animation phase; the site works without it. */
+/*
+ * Motion layer, added on top of a site that already works without it.
+ *
+ * Rules:
+ * - only transform, opacity, clip-path and stroke-dashoffset are animated;
+ * - hidden start states exist only under `html.js` (set inline in <head>), so
+ *   nothing is ever hidden without JavaScript;
+ * - nothing above the fold waits for JavaScript: the hero uses plain CSS
+ *   animations that never start from opacity 0;
+ * - photosensitivity: no element flashes more than twice within a second,
+ *   glows are confined to small areas, nothing flashes full screen;
+ * - prefers-reduced-motion: no bolts, no glow, only short fades.
+ */
+
+/* ---------- Scroll reveal (class added by the shared IntersectionObserver) ---------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-reveal='fade'] {
+    opacity: 0;
+    transform: translateY(1rem);
+    transition:
+      opacity var(--duration-base) linear,
+      transform var(--duration-slow) var(--ease-out-expo);
+  }
+
+  .js [data-reveal='rise'] {
+    opacity: 0;
+    transform: translateY(2rem);
+    transition:
+      opacity var(--duration-base) linear calc(var(--i, 0) * var(--stagger)),
+      transform var(--duration-slow) var(--ease-out-expo) calc(var(--i, 0) * var(--stagger));
+  }
+
+  .js [data-reveal='fade'].is-in,
+  .js [data-reveal='rise'].is-in {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Headings: each line slides up from behind its own mask, staggered. */
+  .reveal-line {
+    display: block;
+    /* Room for accents and descenders inside the mask. */
+    margin-block: -0.08em;
+    padding-block: 0.08em;
+    overflow: clip;
+  }
+
+  .reveal-line-inner {
+    display: block;
+  }
+
+  .js [data-reveal='lines'] .reveal-line-inner {
+    transform: translateY(115%);
+    transition: transform var(--duration-slow) var(--ease-out-expo) calc(var(--i, 0) * var(--stagger));
+  }
+
+  .js [data-reveal='lines'].is-in .reveal-line-inner {
+    transform: none;
+  }
+
+  /*
+   * Images: diagonal wipe. The clip is on the children, not on the observed
+   * frame: a fully clipped element never intersects, so it would never reveal.
+   */
+  .js [data-reveal='image'] > * {
+    clip-path: polygon(0 0, 0 0, -25% 100%, -25% 100%);
+    transition: clip-path var(--duration-slow) var(--ease-out-expo);
+  }
+
+  .js [data-reveal='image'].is-in > * {
+    clip-path: polygon(0 0, 125% 0, 100% 100%, 0 100%);
+  }
+
+  /* Bolts: the core is drawn, the pre-blurred glow flashes once and settles. */
+  .js [data-reveal='bolt'] .bolt-core,
+  .js [data-reveal='bolt'] .bolt-glow {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+  }
+
+  .js [data-reveal='bolt'].is-in .bolt-core {
+    animation: bolt-draw var(--duration-bolt) var(--ease-snap) forwards;
+  }
+
+  .js [data-reveal='bolt'].is-in .bolt-glow {
+    animation:
+      bolt-draw var(--duration-bolt) var(--ease-snap) forwards,
+      bolt-glow 1100ms linear forwards;
+  }
+}
+
+.reveal-line,
+.reveal-line-inner {
+  display: block;
+}
+
+@keyframes bolt-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* One flash, then a faint steady glow: a single peak, well under 3 per second. */
+@keyframes bolt-glow {
+  0% {
+    opacity: 0;
+  }
+
+  45% {
+    opacity: 0.85;
+  }
+
+  100% {
+    opacity: 0.25;
+  }
+}
+
+/* ---------- Hero: the band mark switches on like a sign, once ---------- */
+
+[data-ignite] {
+  position: relative;
+}
+
+/* Glow drawn once as a gradient; only its opacity is animated. */
+[data-ignite]::before {
+  content: '';
+  position: absolute;
+  inset: -18% -8%;
+  z-index: -1;
+  background: radial-gradient(closest-side, rgb(212 20 10 / 0.5), transparent);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-ignite] {
+    animation: ignite 1100ms linear both;
+  }
+
+  [data-ignite]::before {
+    animation: ignite-glow 1600ms var(--ease-out-expo) both;
+  }
+}
+
+/* Two dips in 1.1s, never down to zero: the mark is painted from the first frame. */
+@keyframes ignite {
+  0% {
+    opacity: 0.4;
+  }
+
+  12% {
+    opacity: 1;
+  }
+
+  24% {
+    opacity: 0.55;
+  }
+
+  40% {
+    opacity: 1;
+  }
+
+  58% {
+    opacity: 0.75;
+  }
+
+  72%,
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes ignite-glow {
+  0% {
+    opacity: 0;
+  }
+
+  40% {
+    opacity: 0.9;
+  }
+
+  100% {
+    opacity: 0.55;
+  }
+}
+
+/* ---------- Date cards: tilt and red glow, fine pointers only ---------- */
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .event {
+    transition: transform var(--duration-base) var(--ease-snap);
+  }
+
+  .event .glow {
+    display: block;
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    /* Shadow drawn once; only opacity changes on hover. */
+    box-shadow: 0 0 2.5rem 0.25rem rgb(212 20 10 / 0.55);
+    opacity: 0;
+    transition: opacity var(--duration-base) linear;
+    pointer-events: none;
+  }
+
+  .event:hover {
+    transform: perspective(60rem) rotateX(1.5deg) rotateY(-2deg) translateY(-4px);
+  }
+
+  .event:hover .glow {
+    opacity: 1;
+  }
+}
+
+/* Touch: a sharp pressed state instead of hover effects. */
+@media (hover: none) {
+  .event:active {
+    border-color: var(--color-red);
+  }
+}
+
+/* ---------- Full-screen menu ---------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  .menu[open] {
+    animation: menu-in var(--duration-base) var(--ease-out-expo);
+  }
+
+  .menu[open] .menu-list li {
+    animation: menu-item var(--duration-slow) var(--ease-out-expo) both;
+    animation-delay: calc(80ms + var(--i, 0) * 50ms);
+  }
+}
+
+@keyframes menu-in {
+  from {
+    clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+  }
+
+  to {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 115%);
+  }
+}
+
+@keyframes menu-item {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+}
+
+/* ---------- Hero background video (optional) ---------- */
+
+[data-hero-video] {
+  opacity: 0;
+  transition: opacity var(--duration-slow) linear;
+}
+
+[data-hero-video].is-ready {
+  opacity: 1;
+}
+
+/* ---------- Scroll-driven enhancements (where supported) ---------- */
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    /* Hero image drifts slower than the page while it scrolls away. */
+    .hero .media {
+      animation: hero-drift linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 0 100svh;
+    }
+
+    /* The oversized band name slides across as the final section passes. */
+    .final .ghost {
+      animation: ghost-slide linear both;
+      animation-timeline: view();
+      animation-range: entry 0% exit 100%;
+    }
+  }
+}
+
+@keyframes hero-drift {
+  to {
+    transform: translateY(12%) scale(1.08);
+  }
+}
+
+@keyframes ghost-slide {
+  from {
+    transform: translateX(18%);
+  }
+
+  to {
+    transform: translateX(-6%);
+  }
+}
+
+/* ---------- Reduced motion: short fades only ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .bolt {
+    display: none;
+  }
+
+  [data-ignite]::before {
+    display: none;
+  }
+
+  .js [data-reveal]:not([data-reveal='image']) {
+    opacity: 0;
+    transition: opacity 200ms linear;
+  }
+
+  .js [data-reveal].is-in {
+    opacity: 1;
+  }
+}

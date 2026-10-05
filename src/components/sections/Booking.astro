@@ -106,7 +106,7 @@ const facts = [
         </Button>
         <Button href={site.contact.phoneHref} variant="outline" block>
           <Icon name="phone" />
-          {booking.callCta} {site.contact.phoneDisplay}
+          {`${booking.callCta} ${site.contact.phoneDisplay}`}
         </Button>
         {
           isTodo(site.contact.email) ? (
@@ -162,7 +162,7 @@ const facts = [
           {booking.form.submit}
         </Button>
         <p class="text-xs text-mute">
-          {booking.form.hint}
+          {booking.form.hint}{' '}
           <a class="underline underline-offset-4" href="/privacy/">Privacy</a>.
         </p>
       </form>
@@ -287,10 +287,6 @@ const facts = [
 
     .panel {
       padding: 2rem;
-    }
-
-    .benefits {
-      grid-template-columns: repeat(3, 1fr);
     }
   }
 </style>

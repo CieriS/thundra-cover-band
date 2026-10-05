@@ -8,12 +8,14 @@ interface Props {
   as?: 'h1' | 'h2' | 'h3' | 'p';
   class?: string;
   id?: string;
+  /** No reveal: for headings above the fold, which must never wait for JavaScript. */
+  still?: boolean;
 }
 
-const { lines, as: Tag = 'h2', class: className, id } = Astro.props;
+const { lines, as: Tag = 'h2', class: className, id, still = false } = Astro.props;
 ---
 
-<Tag id={id} class:list={['poster reveal-lines', className]} data-reveal="lines">
+<Tag id={id} class:list={['poster reveal-lines', className]} data-reveal={still ? undefined : 'lines'}>
   {
     lines.map((line, index) => (
       <>

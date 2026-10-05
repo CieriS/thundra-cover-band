@@ -4,6 +4,7 @@ import type { EventEntry } from '@/lib/content';
 import { dateParts } from '@/lib/dates';
 import { admissionLabel, mapsUrl, placeLabel } from '@/lib/events';
 import Icon from './Icon.astro';
+import ResponsiveImage from './ResponsiveImage.astro';
 
 interface Props {
   event: EventEntry;
@@ -41,6 +42,18 @@ const statusLabel = cancelled ? 'Annullato' : data.status === 'postponed' ? 'Rin
       {data.address && <li>{data.address}</li>}
       {data.note && <li>{data.note}</li>}
     </ul>
+    {
+      data.poster && (
+        <ResponsiveImage
+          class="event-poster"
+          src={data.poster}
+          alt={`Locandina del concerto al ${data.venue}`}
+          ratio="3 / 4"
+          sizes="9rem"
+          widths={[180, 360, 540]}
+        />
+      )
+    }
   </div>
 
   {
@@ -85,6 +98,7 @@ const statusLabel = cancelled ? 'Annullato' : data.status === 'postponed' ? 'Rin
     border-left: 4px solid var(--color-red);
     background: var(--color-night-900);
     scroll-margin-top: 6rem;
+    isolation: isolate;
   }
 
   .date {
@@ -144,6 +158,11 @@ const statusLabel = cancelled ? 'Annullato' : data.status === 'postponed' ? 'Rin
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
+  }
+
+  .body :global(.event-poster) {
+    width: 9rem;
+    margin-top: 0.75rem;
   }
 
   .actions {
