@@ -1,0 +1,29 @@
+# Rebuilds the site every night so that past dates move to the archive on their own.
+# The filter runs at build time: without a rebuild, yesterday's show would stay in "Tour".
+#
+# Setup (once): create a Deploy Hook in the hosting dashboard (Vercel: Project Settings →
+# Git → Deploy Hooks, branch = production branch) and save its URL as the repository
+# secret DEPLOY_HOOK_URL. Without the secret the job does nothing.
+name: Daily rebuild
+
+on:
+  schedule:
+    # 03:15 UTC = 04:15 or 05:15 in Italy, right after midnight in any season.
+    - cron: '15 3 * * *'
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger deploy hook
+        env:
+          DEPLOY_HOOK_URL: ${{ secrets.DEPLOY_HOOK_URL }}
+        run: |
+          if [ -z "$DEPLOY_HOOK_URL" ]; then
+            echo "DEPLOY_HOOK_URL is not set: nothing to do."
+            exit 0
+          fi
+          curl --fail --silent --show-error --request POST "$DEPLOY_HOOK_URL" > /dev/null

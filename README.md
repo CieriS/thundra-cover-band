@@ -1,42 +1,27 @@
-# Thundra — AC/DC Tribute Show
+# Thundra — AC/DC Tribute Band
 
-Sito ufficiale single-page di **Thundra**, tribute band degli AC/DC: date del tour, recensioni, media, manifesto e line-up, setlist, tech rider per promoter e modulo di richiesta disponibilità.
+Sito ufficiale di **Thundra**, tribute band degli AC/DC attiva tra Bologna, Modena e Reggio Emilia.
+Due obiettivi, in quest'ordine: **booking** (convincere gestori e organizzatori a ingaggiare la band)
+e **pubblico** (portare i fan alle date e sui social).
 
-È un'applicazione **React statica** progettata mobile-first per il booking: nessun server, la build produce file HTML/CSS/JS (con la pagina già prerenderizzata) da caricare su qualsiasi hosting.
+Sito statico, mobile-first, solo dark. Nessun server, nessun cookie, nessun tracciamento.
+
+> Tribute band non affiliata agli AC/DC. Tutti i marchi appartengono ai rispettivi proprietari.
 
 ## Stack
 
-| Ambito     | Tecnologia                                                         |
-| ---------- | ------------------------------------------------------------------ |
-| UI         | React 19 + TypeScript (strict), prerender statico in build         |
-| Build      | Vite 8                                                             |
-| Styling    | Tailwind CSS v4 (design token in `src/styles/globals.css`)         |
-| Componenti | Primitive Radix UI in stile shadcn/ui                              |
-| Animazioni | CSS scroll-driven (`reveal`) + framer-motion, solo transform/opacity |
-| Immagini   | WebP responsive generate con sharp (`scripts/vite-plugin-webp.ts`) |
-| Icone      | lucide-react (+ icone social SVG dedicate)                         |
-| Form       | react-hook-form + zod, toast con sonner                            |
-| Font       | Fontsource: Anton (titoli), Geist, Geist Mono                      |
+| Ambito     | Tecnologia                                                                 |
+| ---------- | -------------------------------------------------------------------------- |
+| Framework  | Astro 7, output statico                                                    |
+| Stile      | Tailwind CSS v4, configurazione CSS-first (token in `@theme`)              |
+| Linguaggio | TypeScript strict                                                          |
+| Contenuti  | Content Collections (un file YAML per voce, validato in build)             |
+| Immagini   | `<Picture>` di Astro: AVIF/WebP, `srcset`, `sizes`                         |
+| Font       | Fontsource, self-hosted: Anton (titoli), Archivo Variable (testo)          |
+| Animazioni | CSS, scroll-driven animations, Web Animations API, SVG. Nessuna libreria   |
+| Test       | `bun test` sulla logica pura                                               |
 
-## Design system "Hard Rock"
-
-Tema unico ad alto contrasto, definito come token in `src/styles/globals.css`:
-
-| Token                | Valore    | Uso                                                        |
-| -------------------- | --------- | ---------------------------------------------------------- |
-| `--background`       | `#09090b` | Sfondo principale                                          |
-| `--foreground`       | `#f8fafc` | Testo                                                      |
-| `--accent`           | `#dc2626` | CTA, badge, bottom nav Booking                             |
-| `--accent-ink`       | `#f87171` | Rosso per testo piccolo su nero (contrasto AA)             |
-
-## Esperienza mobile
-
-- **Navigazione**: sotto i 1024 px la top bar è sostituita da una bottom navigation fissa (Home, Tour, Media, Booking) nella zona del pollice; si ritira mentre la tastiera virtuale è aperta. Tutti i target tattili misurano almeno 48×48 px.
-- **Above the fold**: foto live a tutto schermo, CTA rossa "Prossima data" (con data e città del prossimo concerto non esaurito) e CTA secondaria "Prenota la band".
-- **Tour**: tag di urgenza basati solo su dati reali: "In esaurimento" (stato impostato dal pannello), "Ultima data" (ultimo concerto in calendario) e conto alla rovescia per i concerti entro 14 giorni.
-- **Prove sociali**: numeri chiave e carosello orizzontale di recensioni di locali e organizzatori.
-- **Booking**: tre campi (nome, email, data + città) con tastiera virtuale e autocompletamento adatti a ciascun input.
-- **Performance**: HTML prerenderizzato (il primo paint non attende il JS), immagini WebP in lazy loading tranne la hero (priorità alta), embed YouTube caricati solo al tocco, animazioni solo su `transform`/`opacity`.
+JavaScript lato client: un solo file di circa 2 KB gzip, tutto progressive enhancement.
 
 ## Avvio
 
@@ -45,120 +30,221 @@ bun install
 ```
 
 ```bash
-bun dev
+bun run dev
 ```
 
-Apri [http://localhost:5173](http://localhost:5173). Il dev server è esposto anche in rete locale: da smartphone usa l'indirizzo `Network` mostrato nel terminale. Funziona anche con `npm` (`npm install`, `npm run dev`).
+Apri <http://localhost:4322>. Gli script funzionano anche con `npm run <script>`.
 
-| Script              | Descrizione                                            |
-| ------------------- | ------------------------------------------------------ |
-| `bun dev`           | Server di sviluppo con hot reload (WebP generate al volo) |
-| `bun run build`     | Typecheck + build statica prerenderizzata in `dist/`   |
-| `bun run preview`   | Anteprima locale della build di `dist/`                |
-| `bun run lint`      | ESLint                                                 |
-| `bun run typecheck` | Controllo dei tipi TypeScript                          |
+| Script                 | Cosa fa                                                              |
+| ---------------------- | -------------------------------------------------------------------- |
+| `bun run dev`          | Server di sviluppo                                                   |
+| `bun run build`        | Controllo dei tipi (`astro check`) + build statica in `dist/`        |
+| `bun run preview`      | Anteprima locale della build                                         |
+| `bun run typecheck`    | Solo controllo dei tipi                                              |
+| `bun run lint`         | ESLint                                                               |
+| `bun test`             | Test unitari                                                         |
+| `bun run todo`         | Elenca i segnaposto ancora da compilare (`file:riga`)                |
+| `bun run placeholders` | Rigenera immagini segnaposto, grana, anteprima link e PDF segnaposto |
 
-## Pubblicazione
-
-`bun run build` genera la cartella `dist/`, completamente statica:
-
-- `index.html` con la pagina già renderizzata, title, meta Open Graph e dati strutturati JSON-LD
-- `assets/` (JS, CSS, font), `images/` (con le varianti WebP), `favicon.svg`
-- `robots.txt` e `sitemap.xml`
-
-Carica il contenuto di `dist/` su qualsiasi hosting statico (Netlify, Vercel, Cloudflare Pages, GitHub Pages, FTP). I percorsi sono relativi, quindi funziona anche in una sottocartella.
-
-> Il prerender usa la data della build per filtrare le date passate; nel browser la lista si aggiorna subito con la data reale. Conviene comunque ripubblicare periodicamente (ogni modifica dal pannello lo fa in automatico).
-
-### Variabili d'ambiente
-
-Imposta l'URL pubblico prima della build (canonical, Open Graph, sitemap, JSON-LD):
+Prima di considerare finita una modifica:
 
 ```bash
-cp .env.example .env.local
+bun run lint && bun test && bun run build
 ```
 
 ## Struttura
 
 ```
-├── .pages.yml               # configurazione del pannello Pages CMS
-├── content/                 # contenuti modificabili (JSON)
-├── index.html               # shell HTML
-├── vite.config.ts
-├── scripts/
-│   ├── vite-plugin-seo.ts       # meta SEO, JSON-LD, robots.txt, sitemap.xml
-│   ├── vite-plugin-prerender.ts # HTML statico della pagina in build
-│   └── vite-plugin-webp.ts      # varianti WebP responsive delle immagini
-├── public/                  # favicon e immagini mockup
-└── src/
-    ├── main.tsx             # entry client: font, stili, idratazione
-    ├── entry-server.tsx     # entry del prerender
-    ├── App.tsx              # composizione della pagina
-    ├── components/
-    │   ├── layout/          # Navbar (desktop), BottomNav (mobile), Footer
-    │   ├── sections/        # Hero, TourDates, Reviews, Media, About, Setlist, TechRider, BookingForm
-    │   ├── ui/              # Button, Input, Badge, Accordion, ResponsiveImage, LiteYouTube, Reveal…
-    │   └── providers.tsx    # MotionConfig, Toaster
-    ├── data/                # band-data.ts (tipi + caricamento), content-schema.ts (validazione)
-    ├── hooks/               # useActiveSection, useToday
-    ├── lib/                 # booking, date, tour, immagini, mailto, JSON-LD
-    └── styles/globals.css
+src/
+├── assets/
+│   ├── brand/            # logo ufficiale (solo da qui, mai ridisegnato)
+│   └── placeholders/     # immagini segnaposto generate
+├── config/
+│   ├── site.ts           # dati della band: fonte unica di verità
+│   ├── copy.ts           # testi delle sezioni
+│   └── images.ts         # manifest delle immagini e dei segnaposto
+├── content/              # collection: events, members, setlist, gallery, videos
+├── content.config.ts     # schemi delle collection
+├── lib/                  # logica pura e testata (date, eventi, .ics, contatti, JSON-LD)
+├── components/
+│   ├── layout/           # BaseLayout, Header, Footer, MobileActionBar, Brand
+│   ├── sections/         # Hero, NextShow, Tour, Live, Band, Setlist, Booking, Gallery, Social, FinalCTA
+│   └── ui/               # Button, EventCard, ResponsiveImage, VideoFacade, Marquee, RevealText, LightningSVG…
+├── pages/                # /, /date, /archivio, /booking, /privacy, 404, /date/<id>.ics, robots.txt
+├── scripts/site.ts       # l'unico script lato client
+└── styles/
+    ├── global.css        # design token (@theme), base, componenti
+    └── motion.css        # tutte le animazioni
 ```
 
-## Contenuti modificabili (pannello Pages CMS)
+Regole dell'architettura:
 
-Tutti i contenuti del sito stanno in file JSON nella cartella `content/` e si modificano da un pannello web, senza toccare il codice:
+- **Nessun dato nei componenti.** I dati stanno in `src/config/site.ts` e nelle collection, i testi in
+  `src/config/copy.ts`.
+- **Logica pura in `src/lib/`**, senza dipendenze da Astro e coperta da test. Gli unici file di `lib`
+  che leggono le collection sono `content.ts` e `seo.ts`.
+- **Design token in un solo punto**: il blocco `@theme` di `src/styles/global.css` (colori, scala
+  tipografica, spaziature, durate, easing). Le coppie testo/sfondo sono verificate da
+  `src/styles/contrast.test.ts` (WCAG AA).
 
-| File                      | Nel pannello        | Contiene                                                        |
-| ------------------------- | ------------------- | --------------------------------------------------------------- |
-| `content/tour.json`       | Date del tour       | data, apertura porte, locale, città, stato, link biglietti      |
-| `content/reviews.json`    | Recensioni          | citazione, autore o ruolo, locale, città, valutazione           |
-| `content/media.json`      | Media               | link dei video YouTube, foto dal palco                          |
-| `content/band.json`       | Band e contatti     | nome, slogan, bio, manifesto, email, line-up, numeri, social    |
-| `content/setlist.json`    | Setlist             | brani, album, anno, durata, tag tecnici                         |
-| `content/tech-rider.json` | Tech rider          | riepilogo, sezioni tecniche, input list                         |
-| `content/texts.json`      | Testi del sito      | titoli delle sezioni, pulsanti, footer, immagini principali     |
+## Segnaposto
 
-Il pannello è configurato in `.pages.yml`. Comportamenti automatici:
+I dati non ancora noti sono marcati `[DA COMPILARE]` (o `[VERIFICARE]`) e sul sito compaiono in un
+riquadro tratteggiato azzurro, così non passano inosservati. Per l'elenco completo:
 
-- le **date passate spariscono da sole** e le date vengono ordinate cronologicamente;
-- lo stato **"In esaurimento"** mostra un avviso di scarsità: va usato solo quando i biglietti stanno davvero finendo;
-- i brani vengono ordinati per anno e raggruppati per album;
-- per i video basta incollare il link YouTube: il sito ne ricava l'ID;
-- ogni contenuto viene **validato durante la build** (`src/data/content-schema.ts`): se un dato non è valido, il deploy si ferma con un messaggio chiaro e il sito online resta quello precedente.
+```bash
+bun run todo
+```
 
-> Email, social, date, locali, link biglietti e **recensioni** attuali sono **segnaposto**: sostituiscili prima della pubblicazione. Le recensioni devono essere citazioni reali, autorizzate da chi le ha scritte.
+Non inventare mai dati: se un'informazione manca, resta il segnaposto.
 
-### Configurazione iniziale (una volta sola, a cura di chi gestisce il sito)
+## Aggiungere una data
 
-1. **GitHub**: crea un repository (anche privato) e carica il progetto.
-2. **Vercel**: importa il repository da [vercel.com/new](https://vercel.com/new). Vite e bun vengono rilevati in automatico (build `bun run build`, output `dist`). Aggiungi la variabile d'ambiente `VITE_SITE_URL` con l'indirizzo pubblico del sito. Da questo momento ogni modifica al repository pubblica una nuova versione in circa un minuto.
-3. **Pages CMS**: vai su [app.pagescms.org](https://app.pagescms.org), accedi con GitHub, installa la GitHub App sul repository e aprilo: il file `.pages.yml` è già pronto.
-4. **Invita chi aggiorna i contenuti**: nella sezione collaboratori del progetto su Pages CMS inserisci la sua email. Riceverà un link di accesso: **non serve un account GitHub** né una password.
+Crea **un file** in `src/content/events/`, con nome `AAAA-MM-GG-nome-locale.yaml`:
 
-### Aggiornare i contenuti (per chi modifica il sito)
+```yaml
+date: 2027-04-17
+time: "22:00" # facoltativo: senza orario il sito mostra "Orario da confermare"
+venue: Nome del Locale
+city: Bologna
+province: BO
+address: Via Esempio 1 # facoltativo
+mapsUrl: https://maps.app.goo.gl/... # facoltativo: se manca, ricerca per nome e città
+admission: free # facoltativo: free | paid
+price: 10 € # facoltativo, solo con admission: paid
+bookingUrl: https://... # facoltativo: prenotazione tavolo o biglietti
+bookingLabel: Prenota un tavolo # facoltativo
+poster: ../../assets/events/locandina.jpg # facoltativo
+note: Serata speciale # facoltativo
+status: scheduled # facoltativo: scheduled | cancelled | postponed
+```
 
-1. Apri il link ricevuto via email ed entra in Pages CMS.
-2. Scegli la sezione dal menu, ad esempio **Date del tour**.
-3. Aggiungi o modifica una voce: la data si sceglie dal calendario, lo stato da un menu a tendina.
-4. Clicca **Save**. Dopo circa un minuto le modifiche sono online.
+Non serve altro. Dalla build successiva la data compare in home e in `/date`, ottiene il suo file
+`.ics` ("Aggiungi al calendario"), il link "Come arrivare" e i dati strutturati `MusicEvent` per Google.
+Se è la più vicina, diventa "Prossimo concerto" con il conto alla rovescia.
 
-### Immagini
+**Date passate.** Il giorno dopo il concerto la data esce da sola dalle sezioni Tour e finisce in
+`/archivio`. Il filtro avviene **in build** (fuso orario Europe/Rome), quindi serve una build al giorno:
+vedi [Rebuild giornaliera](#rebuild-giornaliera).
 
-Le foto si caricano dal pannello in **JPG, PNG o WebP**: in build ogni immagine di `public/images/` viene convertita automaticamente in WebP a 480, 960 e 1600 px di larghezza (`srcset`), così il telefono scarica solo la dimensione che gli serve.
+Se non ci sono date future, il sito mostra "Nuove date in arrivo" con l'invito a seguire Instagram.
 
-Le immagini in `public/images/mockup/` sono **illustrazioni SVG segnaposto**:
+## Foto
 
-- `live-stage.svg` (16:9): foto hero, foto live nella sezione Band e galleria Media
-- `crowd.svg` (16:9): sfondo della card "La tua città non è in lista?" e galleria Media
-- `members/*.svg` (4:5): ritratti della line-up
+Le immagini vanno in `src/assets/` (mai in `public/`, altrimenti non vengono ottimizzate) in JPG o PNG,
+alla dimensione più grande che hai: le varianti AVIF/WebP le genera la build.
 
-## Booking engine
+| Dove                 | Proporzioni | Lato lungo consigliato | Come si collega                                                  |
+| -------------------- | ----------- | ---------------------- | ---------------------------------------------------------------- |
+| Hero mobile          | 9:16        | 1920 px                | `src/config/images.ts` → `images.hero.mobile`                    |
+| Hero desktop         | 16:9        | 2400 px                | `src/config/images.ts` → `images.hero.desktop`                   |
+| Foto di gruppo       | 3:2         | 1800 px                | `src/config/images.ts` → `images.band`                           |
+| Foto sezione Booking | 3:2         | 1800 px                | `src/config/images.ts` → `images.booking`                        |
+| Griglia Social (×4)  | 1:1         | 1080 px                | `src/config/images.ts` → `images.social`                         |
+| Ritratti dei membri  | 4:5         | 1500 px                | campo `photo` in `src/content/members/<nome>.yaml`               |
+| Galleria             | 3:2         | 1800 px                | campo `image` in `src/content/gallery/<nome>.yaml`               |
+| Copertina video      | 16:9        | 1280 px                | campo `poster` in `src/content/videos/<nome>.yaml`               |
+| Locandina di una data | 3:4        | 1500 px                | campo `poster` in `src/content/events/<data>.yaml`               |
+| Anteprima dei link   | 1200×630    | —                      | sostituisci `public/og.jpg`                                      |
 
-Il modulo non richiede backend:
+In `images.ts` sostituisci l'import del segnaposto con quello della foto e usa un oggetto
+`{ src, alt, placeholder: false }` con un testo alternativo vero. Nelle collection il percorso è
+relativo al file YAML, ad esempio `photo: ../../assets/members/lauro-mingucci.jpg`.
 
-1. Tre campi (nome, email, data + città) con validazione client-side zod ed errori inline accessibili.
-2. **Invia richiesta** apre un link `mailto:` precompilato; le righe per locale e budget si completano direttamente nell'email.
-3. **Copia testo** copia il messaggio negli appunti (Clipboard API) e mostra un toast.
+Per aggiungere una foto alla galleria crea un file in `src/content/gallery/`:
 
-La Clipboard API richiede un contesto sicuro (HTTPS o `localhost`).
+```yaml
+image: ../../assets/gallery/live-07.jpg
+alt: Il cantante al microfono sotto le luci rosse
+caption: Metheglin Pub, ottobre 2026 # facoltativo
+order: 7
+```
+
+### Logo
+
+Metti il file ufficiale in `src/assets/brand/` con nome `logo.svg` (o `.png`, `.webp`, `.avif`).
+Compare da solo in hero, intestazione e footer. Il logo si usa **solo** da quel file: non va ridisegnato
+né imitato in CSS o SVG. Finché manca, il sito mostra il nome della band come testo.
+
+## Video
+
+Solo materiale registrato da Thundra. Crea un file in `src/content/videos/`:
+
+```yaml
+title: Titolo del video
+youtube: https://www.youtube.com/watch?v=XXXXXXXXXXX
+poster: ../../assets/videos/copertina.jpg # facoltativo, 16:9
+order: 1
+```
+
+La home mostra i primi tre. Il player (`youtube-nocookie.com`) viene caricato solo dopo il tocco:
+prima c'è soltanto un'immagine statica, quindi nessun cookie e nessun banner.
+
+### Video di sfondo nell'hero (facoltativo)
+
+In `src/config/site.ts` imposta `hero.video.enabled: true` e metti in `public/video/` quattro file:
+`hero-mobile.webm`, `hero-mobile.mp4` (verticale), `hero-desktop.webm`, `hero-desktop.mp4`
+(orizzontale). Requisiti: loop di 10–15 secondi, senza traccia audio, MP4 H.264 + WebM, circa 2 MB
+al massimo ciascuno. La foto dell'hero resta sempre come poster. Il video non viene caricato con
+"riduci movimento" attivo, con il risparmio dati o su connessioni lente.
+
+## Membri, scaletta, contatti
+
+- **Membri**: un file per persona in `src/content/members/` (`name`, `role`, `order`, `photo`).
+- **Scaletta**: `src/content/setlist/scaletta-tipo.yaml`. Solo titoli dei brani.
+- **Contatti, social, durata dello show, zona**: `src/config/site.ts`.
+- **Scheda tecnica**: sostituisci `public/docs/scheda-tecnica-thundra.pdf` e imposta
+  `techRider.isPlaceholder: false` in `src/config/site.ts`.
+- **Testi**: `src/config/copy.ts`.
+
+## Vincoli su marchi e copyright
+
+- Nessun logo AC/DC, nessuna copertina, nessuna foto della band originale, nessun merchandising.
+- Nessun testo di canzone, nemmeno un verso. I titoli dei brani in scaletta sono ammessi.
+- Nessun audio o video originale degli AC/DC.
+- Il riferimento agli AC/DC è solo descrittivo ("tributo agli AC/DC"), mai presentato come
+  affiliazione. Il disclaimer nel footer non va rimosso.
+- Nessun numero inventato ("100 concerti", "migliaia di fan").
+
+## Animazioni e accessibilità
+
+Tutte le animazioni stanno in `src/styles/motion.css`, sopra un sito che funziona anche senza.
+
+- Si animano solo `transform`, `opacity`, `clip-path` e `stroke-dashoffset`.
+- Gli stati iniziali nascosti esistono solo sotto `html.js`: senza JavaScript niente è nascosto.
+- Un solo `IntersectionObserver` condiviso; ogni elemento viene de-registrato dopo il reveal.
+- Il contenuto sopra la piega non aspetta mai JavaScript.
+- **Fotosensibilità**: nessun elemento lampeggia più di due volte in un secondo, i bagliori sono
+  confinati ad aree piccole, niente flash a tutto schermo.
+- `prefers-reduced-motion: reduce`: niente fulmini né bagliori, solo dissolvenze brevi.
+- Menu e lightbox usano `<dialog>` nativo: focus trap e chiusura con Esc inclusi.
+
+## Deploy
+
+Il sito è una cartella statica (`dist/`). Su **Vercel**:
+
+1. Importa il repository: Astro e bun vengono riconosciuti da soli (build `bun run build`, output `dist`).
+2. L'indirizzo pubblico per canonical, Open Graph, sitemap e JSON-LD viene preso dal dominio di
+   produzione del progetto. Per forzarlo imposta la variabile d'ambiente `SITE_URL`
+   (vedi `.env.example`).
+3. Ogni branch ha la sua anteprima; le anteprime hanno `noindex` e non finiscono su Google.
+
+Su Netlify o Cloudflare Pages: comando `bun run build` (o `npm run build`), cartella `dist`,
+variabile `SITE_URL` obbligatoria.
+
+### Rebuild giornaliera
+
+Le date passate si spostano in archivio solo quando il sito viene ricostruito. Serve una build
+automatica ogni notte.
+
+**Vercel (consigliato)**: Project Settings → Git → Deploy Hooks → crea un hook sul branch di
+produzione e copia l'URL. Poi, su GitHub, salvalo come secret del repository con nome
+`DEPLOY_HOOK_URL` (Settings → Secrets and variables → Actions). Il workflow
+`.github/workflows/daily-rebuild.yml` lo chiama ogni notte alle 03:15 UTC; senza il secret non fa nulla.
+
+**Netlify**: Site configuration → Build & deploy → Build hooks, poi lo stesso secret
+`DEPLOY_HOOK_URL`: il workflow è identico.
+
+**Cloudflare Pages**: Settings → Builds & deployments → Deploy hooks, poi lo stesso secret.
+
+Per provare subito: scheda Actions su GitHub → "Daily rebuild" → Run workflow.
