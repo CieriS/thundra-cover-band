@@ -2,6 +2,7 @@ import type { APIRoute, GetStaticPaths } from 'astro';
 import { getCollection } from 'astro:content';
 import { site } from '@/config/site';
 import type { EventEntry } from '@/lib/content';
+import { eventPath } from '@/lib/events';
 import { buildIcs } from '@/lib/ics';
 
 /** One downloadable calendar file per event: adding a date file is enough. */
@@ -13,7 +14,7 @@ export const GET: APIRoute<{ event: EventEntry }> = ({ props, site: siteUrl }) =
   const base = siteUrl ?? new URL('http://localhost');
   const body = buildIcs(event.data, {
     uid: `${event.id}@${base.hostname}`,
-    url: new URL(`/date/#${event.id}`, base).href,
+    url: new URL(eventPath(event.id), base).href,
     summary: `${site.name} - ${site.subtitle} live @ ${event.data.venue}`,
     durationMinutes: site.show.durationMinutes,
     timeZone: site.timeZone,

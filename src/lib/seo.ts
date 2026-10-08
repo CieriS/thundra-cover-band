@@ -4,7 +4,8 @@ import { site } from '@/config/site';
 import { fill } from './text';
 import type { EventEntry } from './content';
 import { getMembers } from './content';
-import { countdownTarget } from './events';
+import { dateParts } from './dates';
+import { countdownTarget, eventPath, placeLabel } from './events';
 import { musicEvent, musicGroup, utcOffset, webSite, type BandInfo } from './structured-data';
 
 /** Values for the {tokens} of the search texts in copy.seo. */
@@ -16,10 +17,23 @@ export const seoValues = {
 } as const;
 
 /** Title and description of a page, with the tokens filled in. */
-export function seoText(page: { title: string; description?: string }) {
+export function seoText(page: { title: string; description?: string }, extra: Readonly<Record<string, string>> = {}) {
+  const values = { ...seoValues, ...extra };
   return {
-    title: fill(page.title, seoValues),
-    ...(page.description ? { description: fill(page.description, seoValues) } : {}),
+    title: fill(page.title, values),
+    ...(page.description ? { description: fill(page.description, values) } : {}),
+  };
+}
+
+/** Values for the tokens that describe one date: venue, city, place and the date in two lengths. */
+export function eventValues(event: EventEntry) {
+  const date = dateParts(event.data.date);
+  return {
+    venue: event.data.venue,
+    city: event.data.city,
+    place: placeLabel(event.data),
+    dateShort: `${Number(date.day)} ${date.month.toLowerCase()} ${date.year}`,
+    dateLong: date.long,
   };
 }
 
@@ -52,7 +66,7 @@ export async function eventsJsonLd(events: readonly EventEntry[], siteUrl: URL) 
   return events.map((event) =>
     musicEvent(event.data, {
       band,
-      url: new URL(`/date/#${event.id}`, siteUrl).href,
+      url: new URL(eventPath(event.id), siteUrl).href,
       offset: utcOffset(countdownTarget(event.data, site.timeZone), site.timeZone),
       durationMinutes: site.show.durationMinutes,
       description: fill(copy.seo.eventDescription, seoValues),

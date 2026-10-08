@@ -139,6 +139,15 @@ export const copy = {
     title: ['Ci vediamo', 'sotto il palco'],
     text: 'Vieni a sentirci. Oppure portaci nel tuo locale.',
   },
+  /** Page of a single date. Tokens: {name}, {venue}, {place}, {dateLong}. */
+  event: {
+    eyebrow: 'Concerto',
+    titlePrefix: 'Live al',
+    intro: '{name}, tributo agli AC/DC, dal vivo al {venue} di {place}, {dateLong}.',
+    past: 'Questa data è già passata. Le prossime sono qui sotto.',
+    others: 'Altre date',
+    allDates: 'Tutte le date',
+  },
   archive: {
     title: ['Archivio', 'date'],
     intro: 'I palchi su cui siamo già saliti.',
@@ -176,6 +185,12 @@ export const copy = {
       title: 'Accessibilità',
       description:
         'Come è stato reso accessibile il sito di {name}, quali verifiche sono state fatte e come segnalare un problema.',
+    },
+    /** One page per date. Extra tokens: {venue}, {city}, {place}, {dateShort}, {dateLong}. */
+    event: {
+      title: 'Tributo AC/DC al {venue}, {city} - {dateShort}',
+      description:
+        '{name}, tribute band AC/DC, dal vivo al {venue} di {place}, {dateLong}. Orario, ingresso, come arrivare e data da salvare in calendario.',
     },
     notFound: {
       title: 'Pagina non trovata',

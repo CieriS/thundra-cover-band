@@ -2,7 +2,7 @@
 import { copy } from '@/config/copy';
 import type { EventEntry } from '@/lib/content';
 import { dateParts } from '@/lib/dates';
-import { admissionLabel, mapsUrl, placeLabel } from '@/lib/events';
+import { admissionLabel, eventPath, mapsUrl, placeLabel } from '@/lib/events';
 import Icon from './Icon.astro';
 import ResponsiveImage from './ResponsiveImage.astro';
 
@@ -11,9 +11,11 @@ interface Props {
   /** Archive cards have no actions. */
   past?: boolean;
   headingLevel?: 'h2' | 'h3';
+  /** False on the page of the date itself: no link to where you already are. */
+  link?: boolean;
 }
 
-const { event, past = false, headingLevel: Heading = 'h3' } = Astro.props;
+const { event, past = false, headingLevel: Heading = 'h3', link = true } = Astro.props;
 const { data } = event;
 const date = dateParts(data.date);
 const admission = admissionLabel(data);
@@ -34,7 +36,7 @@ const statusLabel = cancelled ? ui.cancelled : data.status === 'postponed' ? ui.
 
   <div class="body">
     <p class="label text-red-ink" aria-hidden="true">{date.weekday}</p>
-    <Heading class="poster venue">{data.venue}</Heading>
+    <Heading class="poster venue">{link ? <a href={eventPath(event.id)}>{data.venue}</a> : data.venue}</Heading>
     <p class="poster city">{placeLabel(data)}</p>
     <ul class="meta">
       {statusLabel && <li class="status">{statusLabel}</li>}
@@ -137,6 +139,18 @@ const statusLabel = cancelled ? ui.cancelled : data.status === 'postponed' ? ui.
     font-size: var(--text-2xl);
     line-height: 0.95;
     overflow-wrap: anywhere;
+  }
+
+  .venue a {
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.12em;
+  }
+
+  .venue a:hover,
+  .venue a:focus-visible {
+    text-decoration-color: var(--color-red);
   }
 
   .city {

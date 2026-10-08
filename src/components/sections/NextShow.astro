@@ -9,7 +9,7 @@ import { site } from '@/config/site';
 import { whatsappShareUrl } from '@/lib/contact';
 import type { EventEntry } from '@/lib/content';
 import { dateParts } from '@/lib/dates';
-import { admissionLabel, countdownTarget, mapsUrl, placeLabel } from '@/lib/events';
+import { admissionLabel, countdownTarget, eventPath, mapsUrl, placeLabel } from '@/lib/events';
 
 interface Props {
   event: EventEntry;
@@ -24,7 +24,7 @@ const ui = copy.ui;
 const invite = [
   copy.nextShow.shareMessage,
   `${date.long}, ${data.venue}, ${placeLabel(data)}`,
-  new URL(`/date/#${event.id}`, Astro.site).href,
+  new URL(eventPath(event.id), Astro.site).href,
 ].join('\n');
 ---
 
@@ -41,7 +41,9 @@ const invite = [
 
       <div class="what">
         <div>
-          <h3 class="poster venue">{data.venue}</h3>
+          <h3 class="poster venue">
+            <a href={eventPath(event.id)}>{data.venue}</a>
+          </h3>
           <p class="poster city">{placeLabel(data)}</p>
           <ul class="meta">
             <li>{data.time ? `${ui.startsAt} ${data.time}` : copy.nextShow.timeUnknown}</li>

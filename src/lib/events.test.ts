@@ -2,6 +2,7 @@ import { describe, expect, test } from 'bun:test';
 import {
   admissionLabel,
   countdownTarget,
+  eventPath,
   eventStart,
   isPast,
   mapsUrl,
@@ -89,6 +90,12 @@ describe('start and countdown target', () => {
     expect(countdownTarget(make('a').data, 'Europe/Rome').toISOString()).toBe(
       '2026-10-30T23:00:00.000Z',
     );
+  });
+});
+
+describe('eventPath', () => {
+  test('is the dates folder plus the file name, with a trailing slash', () => {
+    expect(eventPath('2026-10-31-metheglin-pub')).toBe('/date/2026-10-31-metheglin-pub/');
   });
 });
 

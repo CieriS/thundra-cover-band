@@ -141,7 +141,9 @@ note: Serata speciale # facoltativo
 status: scheduled # facoltativo: scheduled | cancelled | postponed
 ```
 
-Non serve altro. Dalla build successiva la data compare in home e in `/date`, ottiene il suo file
+Non serve altro. Dalla build successiva la data compare in home e in `/date`, ha la **sua pagina**
+(`/date/<nome-del-file>/`, creata da sola: titolo, descrizione e dati per Google compresi), entra
+nella sitemap, ottiene il suo file
 `.ics` ("Aggiungi al calendario"), il link "Come arrivare" e i dati strutturati `MusicEvent` per Google.
 Se è la più vicina, diventa "Prossimo concerto" con il conto alla rovescia.
 
@@ -275,6 +277,19 @@ Il sito è una cartella statica (`dist/`). Su **Vercel**:
 
 Su Netlify o Cloudflare Pages: comando `bun run build` (o `npm run build`), cartella `dist`,
 variabile `SITE_URL` obbligatoria.
+
+### Dominio e sitemap
+
+La sitemap (`/sitemap-index.xml`) si genera da sola a ogni build con tutte le pagine, comprese quelle
+delle singole date, ed è dichiarata in `/robots.txt`. La pagina Archivio ci entra solo quando contiene
+almeno una data.
+
+Indirizzi della sitemap, canonical e anteprime dei link usano il dominio del sito. Quando arriva il
+dominio definitivo:
+
+1. collegalo al progetto su Vercel (Settings → Domains) e impostalo come dominio di produzione;
+2. se serve forzarlo, imposta la variabile d'ambiente `SITE_URL` (es. `https://www.esempio.it`);
+3. in Google Search Console aggiungi la proprietà del dominio e invia `https://<dominio>/sitemap-index.xml`.
 
 ### Rebuild giornaliera
 

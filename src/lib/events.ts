@@ -58,6 +58,11 @@ export function countdownTarget(event: EventData, timeZone: string): Date {
   return zonedTimeToUtc(event.date, event.time ?? '00:00', timeZone);
 }
 
+/** Path of the page of a single date. Always with the trailing slash the site uses. */
+export function eventPath(id: string): string {
+  return `/date/${id}/`;
+}
+
 /** "Lama di Reno (BO)" */
 export function placeLabel(event: Pick<EventData, 'city' | 'province'>): string {
   return `${event.city} (${event.province})`;
