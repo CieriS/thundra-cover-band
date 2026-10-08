@@ -32,6 +32,26 @@ export interface SiteImage {
   placeholder: boolean;
 }
 
+/**
+ * The band logo is used only from src/assets/brand/ and is never redrawn.
+ * Drop `logo.svg` (or .png/.webp/.avif) there and it is picked up on the next build;
+ * until then the band name is shown as plain text.
+ */
+const logoFiles = import.meta.glob<{ default: ImageMetadata }>(
+  '../assets/brand/logo.{svg,png,webp,avif,jpg}',
+  { eager: true },
+);
+export const logo: ImageMetadata | null = Object.values(logoFiles)[0]?.default ?? null;
+
+/** Pieces cut from the same logo file by scripts/build-logo.mjs: name only, and its bolt. */
+const brandPieces = import.meta.glob<{ default: ImageMetadata }>('../assets/brand/{logo-compact,bolt}.png', {
+  eager: true,
+});
+const piece = (name: string) =>
+  Object.entries(brandPieces).find(([path]) => path.endsWith(`/${name}.png`))?.[1].default ?? null;
+export const logoCompact: ImageMetadata | null = piece('logo-compact') ?? logo;
+export const logoBolt: ImageMetadata | null = piece('bolt');
+
 // [DEMO] On this branch the images are stock photos (src/assets/demo/CREDITS.md), shown as if
 // they were final: no "placeholder" tag. They do not portray the band and must be replaced.
 const placeholder = (src: ImageMetadata, alt: string): SiteImage => ({
