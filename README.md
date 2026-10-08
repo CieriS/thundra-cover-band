@@ -400,16 +400,17 @@ l'anteprima.
 | `demo-foto` | `main` + contenuti dimostrativi |
 | `demo-stile-rock` | `demo-foto` + stile da manifesto rock |
 | `demo-stile-estremo` | `demo-stile-rock` + variante spinta, logo nuovo, pagine per data, volantini |
+| `demo-stile-asciutto` | `demo-stile-estremo` con la home accorciata (vedi "Com'è fatta la home") |
 
-Ogni branch contiene per intero il precedente, quindi portare l'ultimo su `main` è un semplice
-avanzamento, senza conflitti:
+La versione piena è fissata anche dal tag `stile-estremo-v1`. Ogni branch contiene per intero il
+precedente, quindi portare su `main` quello scelto è un semplice avanzamento, senza conflitti:
 
 ```bash
-git switch main && git merge --ff-only demo-stile-estremo
+git switch main && git merge --ff-only demo-stile-asciutto
 ```
 
 Prima va deciso cosa fare dei contenuti dimostrativi (vedi "Modalità demo"): con `demo: true` il
-push su `main` non pubblica nulla, perché la build di produzione si ferma. Dopo il passaggio i tre
+push su `main` non pubblica nulla, perché la build di produzione si ferma. Dopo il passaggio i
 branch `demo-*` non servono più e si possono cancellare, in locale e su GitHub.
 
 ### Dominio e sitemap
