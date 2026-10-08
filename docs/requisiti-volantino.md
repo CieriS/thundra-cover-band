@@ -1,7 +1,14 @@
 # Volantini automatici: requisiti
 
-Stato: **solo requisiti, niente è stato realizzato.** Aggiornati l'8 ottobre 2026 con le
-decisioni di Samuele e con i quattro volantini di esempio (in `docs/volantino-esempi/`).
+Stato: **realizzato l'8 ottobre 2026.** Questo documento resta come traccia delle decisioni; le
+istruzioni d'uso sono nel README, sezione "Volantini". Gli esempi di partenza sono in
+`docs/volantino-esempi/`.
+
+Rispetto ai requisiti, per ora:
+
+- le varianti cambiano colori, carattere del titolo e tinta dei fulmini, senza decorazioni a tema;
+- il manifesto delle date esiste solo nel formato 4:5 e mostra fino a quattro date;
+- prezzo e contatto per prenotare non sono campi a sé: vanno nella riga libera.
 
 ## Obiettivo
 
@@ -133,12 +140,11 @@ Loghi dei locali, in `src/assets/venues/`:
 | Osteria Cellulosa | `osteria-cellulosa.jpg` (1500×1500) | Solo il simbolo del riccio, senza la scritta "Cellulosa Osteria" che c'era sul volantino di esempio |
 | Music Station Live Club | `music-station-live-club.jpg` (561×240) | Piccolo e sfocato: va bene a schermo, in stampa A4 esce sgranato |
 
-## Da decidere o da ricevere
+## Da ricevere
 
-1. **Sfondo con i fulmini** senza logo né scritte, ad alta risoluzione: lo genera Samuele con il
-   prompt concordato.
-2. **Logo completo dell'Osteria Cellulosa** (simbolo + scritta). In mancanza, il nome si scrive
-   accanto al simbolo con il carattere del volantino.
-3. **Logo del Music Station** in versione più grande, per la stampa.
-4. **Orario del Metheglin**: il volantino di esempio dice 22:30, sul sito c'è 21:30.
-5. **Date passate**: il volantino resta scaricabile nella pagina in archivio?
+1. **Logo completo dell'Osteria Cellulosa** (simbolo + scritta). Per ora il nome è scritto sotto il
+   simbolo.
+2. **Logo del Music Station** più grande: quello ricevuto è 561×240 e in stampa A4 esce sgranato.
+
+Decisi dopo la prima stesura: orario del Metheglin 21:30; il volantino delle date passate resta
+scaricabile; oltre al volantino per matrimoni ne esiste uno generico della band.

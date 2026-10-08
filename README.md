@@ -116,6 +116,7 @@ Tutto ciò che cambia nel tempo sta in file separati dal codice. Non serve tocca
 | Foto fisse (hero, gruppo, booking, social)         | `src/config/images.ts`                                      |
 | Colori, caratteri, dimensioni, tempi delle animazioni | blocco `@theme` in `src/styles/global.css`               |
 | Logo, favicon, anteprima dei link                  | `src/assets/brand/` + `node scripts/build-logo.mjs`         |
+| Volantini (varianti, loghi dei locali, serate private) | vedi "Volantini"                                       |
 | Scheda tecnica                                     | `public/docs/scheda-tecnica-thundra.pdf`                    |
 
 Restano scritti nelle pagine solo i testi lunghi di `/privacy` e `/accessibilita`.
@@ -152,6 +153,65 @@ Se è la più vicina, diventa "Prossimo concerto" con il conto alla rovescia.
 vedi [Rebuild giornaliera](#rebuild-giornaliera).
 
 Se non ci sono date future, il sito mostra "Nuove date in arrivo" con l'invito a seguire Instagram.
+
+## Volantini
+
+A ogni build il sito genera da solo i volantini, come file statici sotto `/volantini/`. Non c'è
+nulla da impaginare a mano: i dati sono quelli del file della serata.
+
+| Cosa | File | Dove si scarica |
+| --- | --- | --- |
+| Volantino di una serata, A4 da stampare | `/volantini/<data>-a4.pdf` | pagina della serata |
+| Volantino di una serata, A4 immagine | `/volantini/<data>-a4.jpg` | pagina della serata |
+| Volantino di una serata, formato Instagram 4:5 | `/volantini/<data>-instagram.jpg` | pagina della serata |
+| Anteprima del link della serata | `/volantini/<data>-anteprima.jpg` | usata da WhatsApp e social |
+| Manifesto con le prossime date (fino a 4) | `/volantini/date-instagram.jpg` | pagina "Date" |
+| Volantino della band, senza data | `/volantini/thundra-a4.pdf` (anche `.jpg`, `-instagram.jpg`) | pagina "Booking" |
+| Volantino per matrimoni, senza data | `/volantini/matrimoni-a4.pdf` (anche `.jpg`, `-instagram.jpg`) | pagina "Booking" |
+
+`<data>` è il nome del file della serata, per esempio `2026-10-31-metheglin-pub`. L'A4 è a 300 dpi
+(2480×3507 pixel) e porta in basso a destra un codice QR verso la pagina della serata. Anche le date
+passate tengono il loro volantino.
+
+### Personalizzare il volantino di una serata
+
+Campi facoltativi nel file della serata (`src/content/events/`):
+
+```yaml
+title: Halloween Party # nome della serata: compare sul volantino e sul sito
+flyerVariant: halloween # base | halloween | natale | capodanno | epifania | summer | winter | matrimoni
+doorsTime: "20:00" # apertura porte
+flyerNote: Cena e concerto # una riga libera in fondo
+venueLogo: src/assets/venues/metheglin-pub.jpg # logo del locale
+venueLogoTone: light # light | dark: colore del riquadro, solo per loghi con sfondo trasparente
+showVenueName: true # scrive il nome del locale sotto il logo (per loghi che sono solo un simbolo)
+private: true # serata privata: vedi sotto
+```
+
+- **Logo del locale**: metti il file in `src/assets/venues/` e scrivi il percorso in `venueLogo`.
+  I margini vuoti vengono tolti da soli e il riquadro prende il colore di sfondo del logo. Senza
+  logo, al suo posto esce il nome del locale. Per la stampa serve un file largo almeno 1000 pixel.
+- **Dati mancanti**: orario, apertura porte, nome della serata e riga libera compaiono solo se ci
+  sono. Niente "da confermare" stampato.
+- **Varianti**: cambiano il colore della data, il carattere e il colore del nome della serata e la
+  tinta dei fulmini. L'impaginazione è la stessa. Sono definite in `src/lib/flyer/variants.ts`.
+
+### Serate private (matrimoni)
+
+Con `private: true` la data non compare in home, nelle liste, nella sitemap, nei dati per Google e
+non ha una pagina. I suoi volantini vengono generati lo stesso agli indirizzi della tabella sopra,
+che non sono collegati da nessuna pagina: vanno dati a mano a chi serve. Sul volantino non c'è il
+codice QR, perché non esiste una pagina pubblica a cui puntare.
+
+### Cosa si modifica dove
+
+- Parole sui volantini e testi dei due volantini senza data: `src/config/copy.ts`, blocco `flyer`.
+- Telefono e profili social: `src/config/site.ts`.
+- Sfondo con i fulmini: `src/assets/flyer/background.jpg` (quadrato, almeno 2000 pixel).
+- Logo della band: quello di `src/assets/brand/` (vedi "Logo").
+
+Per vedere un volantino mentre lavori: `bun run dev` e apri per esempio
+<http://localhost:4322/volantini/2026-10-31-metheglin-pub-a4.jpg>.
 
 ## Foto
 
