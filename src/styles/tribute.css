@@ -15,38 +15,9 @@
   position: relative;
 }
 
-.motif-horns {
-  position: absolute;
-  top: -0.32em;
-  left: -0.12em;
-  width: 0.62em;
-  font-size: calc(var(--text-mega) * 0.8);
-  rotate: -12deg;
-}
-
 .hero .subtitle {
   font-size: var(--text-2xl);
   box-shadow: 0.2rem 0.2rem 0 var(--color-night-950);
-}
-
-.motif-hazard {
-  position: absolute;
-  top: 4.5rem;
-  right: var(--spacing-gutter);
-  display: grid;
-  justify-items: center;
-  gap: 0.2rem;
-  width: clamp(5.5rem, 16vw, 9rem);
-  padding: 0.5rem 0.4rem 0.4rem;
-  background: var(--color-red);
-  color: var(--color-bone);
-  font-size: clamp(0.8rem, 2.2vw, 1.15rem);
-  text-align: center;
-  rotate: 8deg;
-}
-
-.motif-hazard svg {
-  width: 70%;
 }
 
 /* ---------- Song titles band ---------- */
@@ -138,16 +109,6 @@
 /* ---------- Motion ---------- */
 
 @media (prefers-reduced-motion: no-preference) {
-  /* Horns pop onto the band name after the letters have powered up. */
-  .motif-horns {
-    animation: horns-pop 520ms var(--ease-snap) 900ms both;
-  }
-
-  /* The hazard sign is stamped on, once. */
-  .motif-hazard {
-    animation: stamp 420ms var(--ease-snap) 1300ms both;
-  }
-
   /* The bell tolls three times when the next show scrolls in. */
   .js [data-reveal='fade'].is-in .bell-body {
     animation: toll 1100ms ease-in-out 3;
@@ -170,25 +131,8 @@
     /* The tie swings like a pendulum as the section goes by. */
     .motif-tie {
       animation: swing linear both;
-      animation-timeline: view();
+      animation-timeline: view() !important;
     }
-  }
-}
-
-@keyframes horns-pop {
-  from {
-    transform: translateY(0.2em) scale(0);
-  }
-
-  70% {
-    transform: scale(1.2);
-  }
-}
-
-@keyframes stamp {
-  from {
-    transform: scale(2.2);
-    opacity: 0;
   }
 }
 
@@ -262,31 +206,67 @@
   }
 }
 
-/* ---------- The logo's bolt strikes ---------- */
+/* ---------- Hero: centred, logo in the middle of the storm ---------- */
 
-.bolt-logo {
-  display: block;
+.hero .content {
+  justify-items: center;
+  text-align: center;
 }
 
-.bolt-logo img {
-  display: block;
+.hero .content .title {
+  justify-items: center;
   width: 100%;
-  height: auto;
 }
 
-/* Red glow drawn once behind the bolt; only its opacity is animated. */
-.bolt-logo::after {
-  content: '';
-  position: absolute;
-  inset: -25% -60%;
-  z-index: -1;
-  background: radial-gradient(closest-side, rgb(212 20 10 / 0.6), transparent);
-  opacity: 0;
+.hero .content .title .logo-mark {
+  width: min(100%, 46rem);
+  /* Static glow behind the vector logo. */
+  filter: drop-shadow(0 0 1.1rem rgb(212 20 10 / 0.55));
+}
+
+.hero .content .subtitle {
+  transform-origin: center;
+}
+
+.hero .content .next {
+  width: 100%;
+  text-align: left;
+}
+
+.hero .content .cta {
+  justify-content: center;
+  width: 100%;
+}
+
+/* The logo is the only light source: no letter glow from the generic ignite effect. */
+.hero [data-ignite] {
+  animation: none;
+}
+
+.hero [data-ignite]::before {
+  display: none;
 }
 
 /* In the hero the logo already carries its bolt: no second one next to it. */
 .hero .hero-bolt {
   display: none;
+}
+
+/* ---------- The logo's bolt strikes (decorative bolts in the sections) ---------- */
+
+.bolt-logo {
+  display: block;
+  overflow: visible;
+}
+
+.bolt-logo .bolt-shape {
+  fill: var(--color-red);
+  stroke: #4a0502;
+  stroke-width: 4;
+  stroke-linejoin: round;
+  paint-order: stroke;
+  transform-box: fill-box;
+  transform-origin: center;
 }
 
 /* Above the card, clear of the bell. */
@@ -297,44 +277,26 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  /* It comes down from the top in a quarter of a second, lands with a jolt, glows once. */
-  .js .bolt-logo[data-reveal='bolt'] img {
+  /* It comes down from the top in a quarter of a second and lands with a jolt. */
+  .js .bolt-logo[data-reveal='bolt'] .bolt-shape {
     clip-path: inset(0 0 100% 0);
   }
 
-  .js .bolt-logo[data-reveal='bolt'].is-in img {
+  .js .bolt-logo[data-reveal='bolt'].is-in .bolt-shape {
     animation:
       strike-down 260ms cubic-bezier(0.7, 0, 1, 0.5) forwards,
       strike-jolt 320ms var(--ease-snap) 260ms 1;
-  }
-
-  .js .bolt-logo[data-reveal='bolt'].is-in::after {
-    animation: strike-glow 900ms ease-out 240ms 1 both;
   }
 }
 
 @keyframes strike-down {
   to {
-    clip-path: inset(0);
+    clip-path: inset(0 0 0 0);
   }
 }
 
 @keyframes strike-jolt {
   30% {
-    transform: translateY(6px) scale(1.06);
-  }
-}
-
-@keyframes strike-glow {
-  0% {
-    opacity: 0;
-  }
-
-  20% {
-    opacity: 1;
-  }
-
-  100% {
-    opacity: 0.3;
+    transform: translateY(3%) scale(1.08);
   }
 }

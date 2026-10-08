@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets';
+import creditMark from '@/assets/credit/samuele-cieri.png';
 import Icon from '@/components/ui/Icon.astro';
 import { isTodo, nav, showTodo, site, TODO } from '@/config/site';
 import Brand from './Brand.astro';
@@ -87,6 +89,13 @@ const links = [...nav, { label: 'Archivio date', href: '/archivio/' }];
         <a class="footer-link underline underline-offset-4" href="/accessibilita/">Accessibilità</a>
       </p>
     </div>
+    <div class="wrap pb-6 text-xs text-mute">
+      <a class="footer-link credit" href={site.credit.url} rel="noopener noreferrer">
+        {site.credit.label}
+        <Image src={creditMark} alt="" width={22} height={22} />
+        <span class="underline underline-offset-4">{site.credit.name}</span>
+      </a>
+    </div>
   </div>
 </footer>
 
@@ -98,6 +107,11 @@ const links = [...nav, { label: 'Archivio date', href: '/archivio/' }];
     min-width: 2.75rem;
     min-height: 2.75rem;
     color: var(--color-bone);
+  }
+
+  .credit {
+    gap: 0.45rem;
+    color: var(--color-mute);
   }
 
   a.footer-link:hover {

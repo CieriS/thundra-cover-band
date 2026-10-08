@@ -1,0 +1,144 @@
+---
+/**
+ * The band logo as inline vector paths (src/config/logo-paths.ts, traced from the artwork
+ * supplied by the band by scripts/trace-logo.mjs). Being vector, each part can be animated:
+ * the letters slam in one after the other, the bolt strikes, "AC DC" slides in from the sides.
+ * `compact` shows the name only, for small sizes (header, menu, footer).
+ */
+import { logoPaths } from '@/config/logo-paths';
+import { site } from '@/config/site';
+
+interface Props {
+  compact?: boolean;
+  /** Plays the entrance animation (hero only). */
+  animated?: boolean;
+  /** Height in pixels for fixed-size uses; omit to size it with CSS. */
+  height?: number | undefined;
+  class?: string | undefined;
+}
+
+const { compact = false, animated = false, height, class: className } = Astro.props;
+const { width, name, sub, bolt } = logoPaths;
+const viewHeight = compact ? logoPaths.nameHeight : logoPaths.height;
+// Gradient ids must be unique per instance on the page.
+const id = `lm-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<svg
+  class:list={['logo-mark', animated && 'is-animated', className]}
+  viewBox={`0 0 ${width} ${viewHeight}`}
+  role="img"
+  aria-label={`${site.name} ${compact ? '' : site.subtitle}`.trim()}
+  style={height ? `height:${height}px;width:auto` : undefined}
+  focusable="false"
+>
+  <defs>
+    <linearGradient id={id} x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ff2b1c"></stop>
+      <stop offset="0.55" stop-color="#d4140a"></stop>
+      <stop offset="1" stop-color="#8f0d06"></stop>
+    </linearGradient>
+  </defs>
+  <g fill={`url(#${id})`} fill-rule="evenodd" stroke="#4a0502" stroke-width="4" stroke-linejoin="round" paint-order="stroke">
+    {!compact && bolt && <path class="lm-bolt" d={bolt.d} />}
+    {name.map((shape, i) => <path class="lm-letter" d={shape.d} style={`--i: ${i}`} />)}
+    {
+      !compact &&
+        sub.map((shape, i) => (
+          <path class:list={['lm-sub', i < sub.length / 2 ? 'from-left' : 'from-right']} d={shape.d} stroke-width="2" />
+        ))
+    }
+  </g>
+</svg>
+
+<style>
+  .logo-mark {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .logo-mark path {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* Letters slam down one after the other. */
+    .is-animated .lm-letter {
+      animation: lm-slam 460ms var(--ease-snap) both;
+      animation-delay: calc(120ms + var(--i) * 80ms);
+    }
+
+    /* Then the bolt strikes from under the name and lands with a jolt. */
+    .is-animated .lm-bolt {
+      animation:
+        lm-strike 240ms cubic-bezier(0.7, 0, 1, 0.5) 760ms both,
+        lm-jolt 300ms var(--ease-snap) 1000ms 1;
+    }
+
+    /* "AC" and "DC" close in on the bolt from the two sides. */
+    .is-animated .lm-sub {
+      animation: lm-side 380ms var(--ease-out-expo) 1050ms both;
+    }
+
+    .is-animated .lm-sub.from-right {
+      --from: 60%;
+    }
+
+    /* Pointer over the logo: the bolt strikes again. */
+    @media (hover: hover) and (pointer: fine) {
+      .is-animated:hover .lm-bolt {
+        animation:
+          lm-strike-again 240ms cubic-bezier(0.7, 0, 1, 0.5) both,
+          lm-jolt 300ms var(--ease-snap) 240ms 1;
+      }
+    }
+  }
+
+  @keyframes lm-slam {
+    from {
+      opacity: 0;
+      transform: translateY(-35%) scale(1.25);
+    }
+
+    70% {
+      opacity: 1;
+      transform: translateY(3%) scale(0.98);
+    }
+  }
+
+  @keyframes lm-strike {
+    from {
+      clip-path: inset(0 0 100% 0);
+    }
+
+    to {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+
+  @keyframes lm-strike-again {
+    from {
+      clip-path: inset(0 0 100% 0);
+    }
+
+    to {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+
+  @keyframes lm-jolt {
+    35% {
+      transform: translateY(2%) scale(1.07);
+    }
+  }
+
+  @keyframes lm-side {
+    from {
+      opacity: 0;
+      transform: translateX(var(--from, -60%));
+    }
+  }
+</style>

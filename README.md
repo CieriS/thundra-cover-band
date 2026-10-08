@@ -162,16 +162,27 @@ order: 7
 
 ### Logo
 
-Il logo è quello fornito dalla band: `src/assets/brand/logo-original.webp`. Da quel file
-`scripts/build-logo.mjs` ricava, senza ridisegnare nulla:
+Il logo è ricostruito in vettoriale a partire dall'immagine fornita dalla band
+(`src/assets/brand/logo-original.webp`): `scripts/trace-logo.mjs` ne ricalca i contorni e scrive
+`src/config/logo-paths.ts`, che il componente `LogoMark` disegna come SVG. Essendo vettoriale è
+nitido a ogni dimensione e ogni parte si anima da sola (lettere, fulmine, "AC DC").
 
-- `logo.png` (logo completo, scontornato) per l'hero;
-- `logo-compact.png` (solo il nome) per intestazione, menu e footer;
-- `bolt.png` (il fulmine del logo) per le animazioni;
-- `public/favicon.png`, `public/apple-touch-icon.png` e `public/og.jpg` (anteprima dei link).
+Dallo stesso script escono anche `public/favicon.svg`, `public/favicon.png`,
+`public/apple-touch-icon.png` (il fulmine del logo) e `public/og.jpg` (anteprima dei link).
 
-Per cambiare logo sostituisci il file originale e lancia `node scripts/build-logo.mjs`. Il logo si usa
-**solo** da quel file: non va ridisegnato né imitato in CSS o SVG.
+Per cambiare logo sostituisci il file originale e lancia:
+
+```bash
+node scripts/trace-logo.mjs --preview anteprima.png
+```
+
+Il file `anteprima.png` serve solo a controllare il ricalco. Le forme non vanno ritoccate a mano in
+`logo-paths.ts`: è un file generato.
+
+### Firma
+
+In fondo al footer c'è la firma di chi ha fatto il sito: testo e link in `site.credit`
+(`src/config/site.ts`), icona in `src/assets/credit/`.
 
 ## Video
 

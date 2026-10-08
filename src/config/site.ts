@@ -92,6 +92,13 @@ export const site = {
     lastUpdated: '2026-10-06',
   },
 
+  /** Who built the site: shown at the bottom of the footer. */
+  credit: {
+    label: 'Sito di',
+    name: 'Samuele Cieri',
+    url: 'https://cierisamuele.vercel.app',
+  },
+
   disclaimer:
     'Tribute band non affiliata agli AC/DC. Tutti i marchi appartengono ai rispettivi proprietari.',
 } as const;

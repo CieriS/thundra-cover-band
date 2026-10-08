@@ -1,56 +1,19 @@
 ---
 /**
- * Band mark. Uses the official logo file from src/assets/brand/ when present;
- * otherwise the band name as plain text. The logo is never redrawn here.
+ * Band mark: the vector logo (traced from the band's artwork). `compact` shows the name
+ * only, for small sizes.
  */
-import { Image } from 'astro:assets';
-import { logo as fullLogo, logoCompact } from '@/config/images';
-import { site } from '@/config/site';
+import LogoMark from '@/components/ui/LogoMark.astro';
 
 interface Props {
-  /** Rendered height of the logo in pixels. */
+  /** Rendered height in pixels; omit to size it with CSS. */
   height?: number;
-  /** Large display (hero): intrinsic width in pixels, sized by CSS, loaded with high priority. */
-  pixelWidth?: number;
-  /** Name only, without the lower part of the logo: for small sizes. */
   compact?: boolean;
+  animated?: boolean;
   class?: string;
 }
 
-const { height = 28, pixelWidth, compact = false, class: className } = Astro.props;
-const logo = compact ? logoCompact : fullLogo;
-const width = logo ? Math.round((logo.width / logo.height) * height) : 0;
+const { height, compact = false, animated = false, class: className } = Astro.props;
 ---
 
-{
-  logo ? (
-    pixelWidth ? (
-      <Image
-        class={className}
-        src={logo}
-        alt={site.name}
-        width={pixelWidth}
-        height={Math.round((logo.height / logo.width) * pixelWidth)}
-        widths={[480, 720, pixelWidth]}
-        sizes="(min-width: 40rem) 34rem, 92vw"
-        quality={70}
-        loading="eager"
-        fetchpriority="high"
-      />
-    ) : (
-      <Image
-        class={className}
-        src={logo}
-        alt={site.name}
-        height={height * 2}
-        width={width * 2}
-        style={`height:${height}px;width:auto`}
-        loading="eager"
-      />
-    )
-  ) : (
-    <span class:list={['poster', className]} style={`font-size:${height}px;line-height:1`}>
-      {site.name}
-    </span>
-  )
-}
+<LogoMark height={height} compact={compact} animated={animated} class={className} />

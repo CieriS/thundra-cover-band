@@ -1,26 +1,17 @@
 ---
 /**
  * Decorative motifs that say "AC/DC tribute" at a glance without using anything that
- * belongs to the band: devil horns, a striped school tie, a bell, a cannon and an
- * electrical hazard sign. All generic drawings, original to this site. No logo, no
+ * belongs to the band: a striped school tie, a bell and a cannon. All generic drawings, original to this site. No logo, no
  * lettering, no album artwork is reproduced.
  */
 interface Props {
-  name: 'horns' | 'tie' | 'bell' | 'cannon' | 'hazard';
+  name: 'tie' | 'bell' | 'cannon';
   class?: string;
 }
 
 const { name, class: className } = Astro.props;
 ---
 
-{
-  name === 'horns' && (
-    <svg class:list={['motif motif-horns', className]} viewBox="0 0 120 50" aria-hidden="true" focusable="false">
-      <path d="M34 50C10 44 0 24 6 0c6 16 18 26 38 30z" fill="var(--color-red)" />
-      <path d="M86 50c24-6 34-26 28-50-6 16-18 26-38 30z" fill="var(--color-red)" />
-    </svg>
-  )
-}
 {
   name === 'tie' && (
     <svg class:list={['motif motif-tie', className]} viewBox="0 0 60 210" aria-hidden="true" focusable="false">
@@ -65,16 +56,5 @@ const { name, class: className } = Astro.props;
         <circle cx="50" cy="74" r="7" fill="var(--color-night-950)" />
       </g>
     </svg>
-  )
-}
-{
-  name === 'hazard' && (
-    <span class:list={['motif motif-hazard', className]} aria-hidden="true">
-      <svg viewBox="0 0 100 90" focusable="false">
-        <path d="M50 6 95 84H5z" fill="var(--color-bone)" stroke="var(--color-night-950)" stroke-width="7" stroke-linejoin="round" />
-        <path d="M56 26 38 54h12l-6 22 20-30H52z" fill="var(--color-night-950)" />
-      </svg>
-      <span class="poster">Alta tensione</span>
-    </span>
   )
 }

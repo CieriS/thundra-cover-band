@@ -5,9 +5,9 @@ import Brand from '@/components/layout/Brand.astro';
 import Button from '@/components/ui/Button.astro';
 import Icon from '@/components/ui/Icon.astro';
 import LightningSVG from '@/components/ui/LightningSVG.astro';
-import Motif from '@/components/ui/Motif.astro';
+import Storm from '@/components/ui/Storm.astro';
 import { copy } from '@/config/copy';
-import { images, logo } from '@/config/images';
+import { images } from '@/config/images';
 import { site } from '@/config/site';
 import type { EventEntry } from '@/lib/content';
 import { dateParts } from '@/lib/dates';
@@ -73,25 +73,11 @@ const { video } = site.hero;
     <span class="beam beam-b"></span>
   </div>
   <LightningSVG variant="a" class="hero-bolt" />
-  <Motif name="hazard" />
+  <Storm />
 
   <div class="wrap content">
     <h1 id="hero-title" class="title" data-ignite>
-      {!logo && <Motif name="horns" />}
-      {
-        logo ? (
-          <Brand pixelWidth={1000} class="logo" />
-        ) : (
-          <span class="poster wordmark">
-            <span class="visually-hidden">{site.name}</span>
-            {[...site.name].map((letter, i) => (
-              <span class="letter" aria-hidden="true" style={`--i: ${i}`}>
-                {letter}
-              </span>
-            ))}
-          </span>
-        )
-      }
+      <Brand animated class="logo" />
       <span class="poster subtitle">{site.subtitle}</span>
     </h1>
     <p class="claim">{copy.hero.claim}</p>
@@ -167,11 +153,6 @@ const { video } = site.hero;
     font-size: var(--text-mega);
     line-height: 0.8;
     white-space: nowrap;
-  }
-
-  .title :global(.logo) {
-    width: min(100%, 34rem) !important;
-    height: auto !important;
   }
 
   .subtitle {
