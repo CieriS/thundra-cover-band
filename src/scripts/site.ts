@@ -4,6 +4,7 @@
  */
 import { bookingMessage, italianDate } from '@/lib/contact';
 import { countdown } from '@/lib/dates';
+import { initProtection } from './protect';
 
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const $$ = <T extends Element>(selector: string, root: ParentNode = document) =>
@@ -231,6 +232,7 @@ function initHeroVideo() {
 }
 
 (window as Window & { __siteReady?: boolean }).__siteReady = true;
+initProtection();
 initReveal();
 initMenu();
 initCountdown();

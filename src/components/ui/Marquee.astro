@@ -17,6 +17,10 @@ const track = Array.from({ length: repeat }, () => items).flat();
 ---
 
 <div class:list={['marquee', className]} data-marquee>
+  <label class="pause label">
+    <input type="checkbox" />
+    <span>Ferma lo scorrimento</span>
+  </label>
   {
     [false, true].map((copy) => (
       <ul
@@ -37,9 +41,44 @@ const track = Array.from({ length: repeat }, () => items).flat();
 
 <style>
   .marquee {
+    position: relative;
     display: flex;
     overflow: hidden;
-    user-select: none;
+    padding-bottom: 3rem;
+  }
+
+  /* Moving content needs a way to stop it: a checkbox, so it works without JavaScript. */
+  .pause {
+    position: absolute;
+    right: var(--spacing-gutter);
+    bottom: 0;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 2.75rem;
+    color: var(--color-mute);
+    cursor: pointer;
+  }
+
+  .pause input {
+    width: 1.25rem;
+    height: 1.25rem;
+    accent-color: var(--color-red);
+  }
+
+  .marquee:has(.pause input:checked) .marquee-track {
+    animation-play-state: paused;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pause {
+      display: none;
+    }
+
+    .marquee {
+      padding-bottom: 0;
+    }
   }
 
   .marquee-track {

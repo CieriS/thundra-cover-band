@@ -273,3 +273,27 @@
     padding-bottom: calc(var(--spacing-bar) + env(safe-area-inset-bottom, 0px));
   }
 }
+
+/*
+ * Copy deterrent: text cannot be selected and images cannot be dragged or saved with a
+ * long press. It discourages casual copying, it cannot prevent it (see scripts/protect.ts).
+ * Form fields stay selectable; screen readers and keyboard navigation are not affected.
+ */
+body {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+input,
+textarea,
+select {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+img,
+picture,
+video {
+  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
+}

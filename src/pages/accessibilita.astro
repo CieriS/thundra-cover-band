@@ -1,0 +1,69 @@
+---
+import BaseLayout from '@/components/layout/BaseLayout.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import { site } from '@/config/site';
+import { whatsappUrl } from '@/lib/contact';
+import { dateParts } from '@/lib/dates';
+
+const checked = dateParts(site.accessibility.lastChecked);
+const report = whatsappUrl(site.contact.whatsapp, 'Ciao, vorrei segnalare un problema di accessibilità sul sito: ');
+---
+
+<BaseLayout
+  title="Accessibilità"
+  description={`Come è stato reso accessibile il sito di ${site.name}, quali verifiche sono state fatte e come segnalare un problema.`}
+>
+  <section class="section">
+    <div class="wrap grid gap-8">
+      <SectionHeading id="accessibilita-title" as="h1" eyebrow="Dichiarazione" title={['Accessibilità']} size="lg" />
+
+      <div class="prose-legal max-w-2xl">
+        <p>
+          Vogliamo che chiunque possa trovare una data, guardare un video o chiederci una serata, con
+          qualunque dispositivo e con qualunque tecnologia assistiva.
+        </p>
+
+        <h2>Riferimenti</h2>
+        <p>
+          Il sito è progettato seguendo le Linee guida per l'accessibilità dei contenuti web (WCAG) 2.1,
+          livello AA, cioè lo standard tecnico richiamato dalla norma europea EN 301 549 e dalla legge
+          italiana n. 4 del 2004 ("legge Stanca").
+        </p>
+
+        <h2>Cosa abbiamo fatto</h2>
+        <ul>
+          <li>Tutto il sito si usa da tastiera: collegamento "Vai al contenuto", ordine logico, fuoco sempre visibile.</li>
+          <li>Menu e galleria si chiudono con Esc e riportano il fuoco al punto di partenza.</li>
+          <li>Testi e pulsanti rispettano il contrasto minimo di 4,5:1, anche il rosso su fondo scuro.</li>
+          <li>La pagina si ingrandisce fino al 200% e si adatta fino a 320 pixel di larghezza senza scorrimento orizzontale.</li>
+          <li>Titoli, elenchi, aree della pagina e campi dei moduli sono marcati per i lettori di schermo; le immagini hanno un testo alternativo.</li>
+          <li>Le animazioni si spengono con l'impostazione "riduci movimento" del dispositivo; lo scorrimento delle città si può fermare con il suo pulsante. Niente lampeggia più di tre volte al secondo.</li>
+          <li>I pulsanti e i collegamenti principali misurano almeno 44 per 44 pixel.</li>
+          <li>Il sito funziona anche con JavaScript disattivato.</li>
+        </ul>
+
+        <h2>Stato di conformità</h2>
+        <p>
+          L'ultima verifica è del {checked.long}: controlli automatici su tutte le pagine e prove manuali da
+          tastiera, a schermo piccolo e con movimento ridotto. Non è ancora stata fatta una verifica
+          indipendente con lettori di schermo e utenti con disabilità: per questo consideriamo il sito
+          parzialmente conforme.
+        </p>
+
+        <h2>Limiti che conosciamo</h2>
+        <ul>
+          <li>La selezione del testo e il trascinamento delle immagini sono disattivati. La lettura con sintesi vocale e lettori di schermo non ne risente; i campi dei moduli restano selezionabili.</li>
+          <li>Le mappe, i video e i profili social si aprono su servizi esterni, che hanno le proprie caratteristiche di accessibilità.</li>
+        </ul>
+
+        <h2>Segnalare un problema</h2>
+        <p>
+          Se qualcosa non funziona con il tuo dispositivo o la tua tecnologia assistiva, scrivici su
+          <a href={report} rel="noopener noreferrer">WhatsApp</a> o chiamaci al
+          <a href={site.contact.phoneHref}>{site.contact.phoneDisplay}</a>. Rispondiamo e, se serve, ti diamo
+          le stesse informazioni in un altro formato.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
