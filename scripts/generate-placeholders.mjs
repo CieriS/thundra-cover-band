@@ -78,7 +78,6 @@ const images = [
     `src/assets/placeholders/social-${i + 1}.jpg`,
     { width: 1080, height: 1080, label: `Foto social ${i + 1}`, ratio: '1:1', variant: i + 1 },
   ]),
-  ['public/og.jpg', { width: 1200, height: 630, label: 'Anteprima link (Open Graph)', ratio: '1200×630', variant: 1 }],
 ];
 
 /** Monochrome noise tile with low alpha, repeated in CSS as film grain. */
@@ -98,8 +97,6 @@ async function grain(path, size = 160) {
     .toFile(out(path));
 }
 
-/** Generic bolt mark for the favicon. Not the band logo. */
-const favicon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" fill="${NIGHT}"/><path d="M38 5 13 37h15l-5 22 28-34H35l3-20z" fill="${RED}"/></svg>`;
 
 /** Minimal single-page PDF, written by hand to avoid a PDF dependency. */
 function pdf(lines) {
@@ -128,8 +125,7 @@ function pdf(lines) {
 
 await Promise.all(images.map(([path, spec]) => jpeg(path, spec)));
 await grain('public/grain.png');
-await writeFile(out('public/favicon.svg'), favicon);
-await sharp(Buffer.from(favicon)).resize(180, 180).png().toFile(out('public/apple-touch-icon.png'));
+// Favicon, touch icon and link preview come from the logo: see scripts/build-logo.mjs.
 await writeFile(
   out('public/docs/scheda-tecnica-thundra.pdf'),
   pdf([
@@ -140,4 +136,4 @@ await writeFile(
   ]),
 );
 
-console.log(`Generated ${images.length} images, grain, favicon, touch icon and PDF.`);
+console.log(`Generated ${images.length} images, grain and PDF.`);

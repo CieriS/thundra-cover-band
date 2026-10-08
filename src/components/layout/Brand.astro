@@ -4,30 +4,50 @@
  * otherwise the band name as plain text. The logo is never redrawn here.
  */
 import { Image } from 'astro:assets';
-import { logo } from '@/config/images';
+import { logo as fullLogo, logoCompact } from '@/config/images';
 import { site } from '@/config/site';
 
 interface Props {
   /** Rendered height of the logo in pixels. */
   height?: number;
+  /** Large display (hero): intrinsic width in pixels, sized by CSS, loaded with high priority. */
+  pixelWidth?: number;
+  /** Name only, without the lower part of the logo: for small sizes. */
+  compact?: boolean;
   class?: string;
 }
 
-const { height = 28, class: className } = Astro.props;
+const { height = 28, pixelWidth, compact = false, class: className } = Astro.props;
+const logo = compact ? logoCompact : fullLogo;
 const width = logo ? Math.round((logo.width / logo.height) * height) : 0;
 ---
 
 {
   logo ? (
-    <Image
-      class={className}
-      src={logo}
-      alt={site.name}
-      height={height * 2}
-      width={width * 2}
-      style={`height:${height}px;width:auto`}
-      loading="eager"
-    />
+    pixelWidth ? (
+      <Image
+        class={className}
+        src={logo}
+        alt={site.name}
+        width={pixelWidth}
+        height={Math.round((logo.height / logo.width) * pixelWidth)}
+        widths={[480, 720, pixelWidth]}
+        sizes="(min-width: 40rem) 34rem, 92vw"
+        quality={70}
+        loading="eager"
+        fetchpriority="high"
+      />
+    ) : (
+      <Image
+        class={className}
+        src={logo}
+        alt={site.name}
+        height={height * 2}
+        width={width * 2}
+        style={`height:${height}px;width:auto`}
+        loading="eager"
+      />
+    )
   ) : (
     <span class:list={['poster', className]} style={`font-size:${height}px;line-height:1`}>
       {site.name}

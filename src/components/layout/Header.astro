@@ -11,7 +11,7 @@ const isCurrent = (href: string) => !href.includes('#') && current.startsWith(hr
 <header class="site-header">
   <div class="wrap flex h-14 items-center justify-between gap-4 lg:h-16">
     <a href="/" class="flex min-h-11 items-center" aria-label={`${site.name}, pagina iniziale`}>
-      <Brand height={26} />
+      <Brand height={30} compact />
     </a>
 
     <nav class="hidden lg:block" aria-label="Principale">
@@ -43,7 +43,7 @@ const isCurrent = (href: string) => !href.includes('#') && current.startsWith(hr
 <dialog class="menu" id="menu" aria-label="Menu" data-menu>
   <div class="menu-inner">
     <div class="flex h-14 items-center justify-between">
-      <Brand height={26} />
+      <Brand height={30} compact />
       <button class="menu-button label" type="button" data-menu-close>
         <Icon name="close" size={22} />
         Chiudi

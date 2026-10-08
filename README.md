@@ -162,9 +162,16 @@ order: 7
 
 ### Logo
 
-Metti il file ufficiale in `src/assets/brand/` con nome `logo.svg` (o `.png`, `.webp`, `.avif`).
-Compare da solo in hero, intestazione e footer. Il logo si usa **solo** da quel file: non va ridisegnato
-né imitato in CSS o SVG. Finché manca, il sito mostra il nome della band come testo.
+Il logo è quello fornito dalla band: `src/assets/brand/logo-original.webp`. Da quel file
+`scripts/build-logo.mjs` ricava, senza ridisegnare nulla:
+
+- `logo.png` (logo completo, scontornato) per l'hero;
+- `logo-compact.png` (solo il nome) per intestazione, menu e footer;
+- `bolt.png` (il fulmine del logo) per le animazioni;
+- `public/favicon.png`, `public/apple-touch-icon.png` e `public/og.jpg` (anteprima dei link).
+
+Per cambiare logo sostituisci il file originale e lancia `node scripts/build-logo.mjs`. Il logo si usa
+**solo** da quel file: non va ridisegnato né imitato in CSS o SVG.
 
 ## Video
 
