@@ -1,9 +1,13 @@
 ---
 /**
- * Decorative bolt drawn with stroke-dashoffset when it enters the viewport.
- * Generic shape, unrelated to any logo. The glow is a pre-blurred copy whose
+ * Decorative bolt. When the band logo is available its own bolt is used (the actual
+ * pixels cut from the logo file, never a redrawn copy) and it strikes downwards;
+ * otherwise a generic line bolt is drawn with stroke-dashoffset. The glow is a pre-blurred copy whose
  * opacity is animated: no filter is animated at runtime.
  */
+import { Image } from 'astro:assets';
+import { logoBolt } from '@/config/images';
+
 interface Props {
   variant?: 'a' | 'b' | 'c';
   class?: string;
@@ -18,17 +22,25 @@ const paths = {
 } as const;
 ---
 
-<svg
-  class:list={['bolt', className]}
-  viewBox="0 0 96 252"
-  fill="none"
-  aria-hidden="true"
-  focusable="false"
-  data-reveal="bolt"
->
-  <path class="bolt-glow" d={paths[variant]} pathLength="1"></path>
-  <path class="bolt-core" d={paths[variant]} pathLength="1"></path>
-</svg>
+{
+  logoBolt ? (
+    <span class:list={['bolt bolt-logo', className]} aria-hidden="true" data-reveal="bolt">
+      <Image src={logoBolt} alt="" width={220} loading="lazy" />
+    </span>
+  ) : (
+    <svg
+      class:list={['bolt', className]}
+      viewBox="0 0 96 252"
+      fill="none"
+      aria-hidden="true"
+      focusable="false"
+      data-reveal="bolt"
+    >
+      <path class="bolt-glow" d={paths[variant]} pathLength="1"></path>
+      <path class="bolt-core" d={paths[variant]} pathLength="1"></path>
+    </svg>
+  )
+}
 
 <style>
   .bolt {

@@ -1,0 +1,148 @@
+---
+/**
+ * A guitarist in cap, tie and shorts who walks across the page as it scrolls: the stage
+ * move every hard-rock fan recognises. Original generic silhouette, not a portrait of
+ * anyone. Decorative: hidden from assistive technology.
+ * The walk is driven by scroll (two leg poses alternate); without scroll-driven
+ * animations, or with reduced motion, the figure simply stands in the middle.
+ */
+---
+
+<div class="walker-lane" aria-hidden="true">
+  <div class="walker">
+    <svg class="walker-hop" viewBox="0 0 240 236" focusable="false">
+      <g fill="none" stroke="var(--color-bone)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+        <g class="frame-a">
+          <path d="M136 148 170 170 196 160" />
+          <path d="M106 152 114 190 98 216" />
+          <ellipse cx="205" cy="158" rx="11" ry="6" fill="var(--color-bone)" stroke="none" />
+          <ellipse cx="106" cy="222" rx="14" ry="6" fill="var(--color-bone)" stroke="none" />
+        </g>
+        <g class="frame-b">
+          <path d="M136 148 150 188 138 216" />
+          <path d="M106 152 80 176 60 160" />
+          <ellipse cx="148" cy="222" rx="14" ry="6" fill="var(--color-bone)" stroke="none" />
+          <ellipse cx="53" cy="156" rx="11" ry="6" fill="var(--color-bone)" stroke="none" />
+        </g>
+        <!-- back arm, behind the guitar -->
+        <path d="M104 80 94 104 112 118" stroke-width="11" />
+      </g>
+      <!-- shorts and torso -->
+      <path d="M100 126 140 120 152 152 126 160 121 144 112 162 90 156z" fill="var(--color-bone)" />
+      <path d="M94 72 126 62 140 124 102 132z" fill="var(--color-bone)" />
+      <!-- guitar: body, neck, headstock -->
+      <path d="M130 106 206 62" stroke="var(--color-bone)" stroke-width="7" stroke-linecap="round" />
+      <path d="M202 54 218 44 224 54 208 66z" fill="var(--color-bone)" />
+      <path
+        d="M88 112 104 92 112 106 128 98 136 116 128 138 104 148 86 134z"
+        fill="var(--color-red)"
+        stroke="var(--color-night-950)"
+        stroke-width="3"
+        stroke-linejoin="round"
+      />
+      <!-- front arm on the neck -->
+      <path d="M122 74 150 98 170 86" fill="none" stroke="var(--color-bone)" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" />
+      <!-- tie flying back -->
+      <path d="M116 66 90 92 100 100 124 72z" fill="var(--color-red)" stroke="var(--color-night-950)" stroke-width="2" />
+      <!-- head, hair, cap -->
+      <path d="M100 42q-14 12-8 30 12-8 16-24z" fill="var(--color-bone)" />
+      <circle cx="118" cy="44" r="17" fill="var(--color-bone)" />
+      <path d="M99 40Q118 12 138 34L156 40 154 47 99 46z" fill="var(--color-red)" stroke="var(--color-night-950)" stroke-width="2" />
+    </svg>
+  </div>
+</div>
+
+<style>
+  .walker-lane {
+    position: relative;
+    height: clamp(9rem, 22vw, 15rem);
+    overflow: hidden;
+    background: linear-gradient(to bottom, var(--color-night-950), var(--color-night-800));
+  }
+
+  .walker {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: clamp(8rem, 20vw, 14rem);
+    translate: -50% 0;
+  }
+
+  .walker svg {
+    display: block;
+  }
+
+  .frame-b {
+    opacity: 0;
+  }
+
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .walker {
+        left: 0;
+        translate: none;
+        animation: walk-across linear both;
+        animation-timeline: view();
+        animation-range: entry 20% exit 80%;
+      }
+
+      .walker-hop {
+        animation: walk-hop linear both;
+        animation-timeline: view();
+        animation-range: entry 20% exit 80%;
+      }
+
+      .frame-a {
+        animation: walk-a steps(1, end) both;
+        animation-timeline: view();
+        animation-range: entry 20% exit 80%;
+      }
+
+      .frame-b {
+        animation: walk-b steps(1, end) both;
+        animation-timeline: view();
+        animation-range: entry 20% exit 80%;
+      }
+    }
+  }
+
+  @keyframes walk-across {
+    from {
+      transform: translateX(-110%);
+    }
+
+    to {
+      transform: translateX(100vw);
+    }
+  }
+
+  @keyframes walk-hop {
+    0%, 20%, 40%, 60%, 80%, 100% {
+      transform: translateY(0);
+    }
+
+    10%, 30%, 50%, 70%, 90% {
+      transform: translateY(-7%);
+    }
+  }
+
+  @keyframes walk-a {
+    0%, 20%, 40%, 60%, 80% {
+      opacity: 1;
+    }
+
+    10%, 30%, 50%, 70%, 90% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes walk-b {
+    0%, 20%, 40%, 60%, 80% {
+      opacity: 0;
+    }
+
+    10%, 30%, 50%, 70%, 90% {
+      opacity: 1;
+    }
+  }
+</style>

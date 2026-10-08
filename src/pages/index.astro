@@ -7,6 +7,7 @@ import Gallery from '@/components/sections/Gallery.astro';
 import Hero from '@/components/sections/Hero.astro';
 import HazardStripe from '@/components/ui/HazardStripe.astro';
 import Marquee from '@/components/ui/Marquee.astro';
+import Walker from '@/components/ui/Walker.astro';
 import { site } from '@/config/site';
 import Live from '@/components/sections/Live.astro';
 import NextShow from '@/components/sections/NextShow.astro';
@@ -34,6 +35,7 @@ const jsonLd = [await bandJsonLd(Astro.site!), ...(await eventsJsonLd(upcoming, 
   <Band />
   {songs.length > 0 && <Marquee items={songs} duration={60} class="songs-marquee" />}
   <Setlist />
+  <Walker />
   <HazardStripe />
   <Booking />
   <Gallery />

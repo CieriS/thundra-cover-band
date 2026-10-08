@@ -49,11 +49,6 @@
   width: 70%;
 }
 
-/* The decorative bolt gives way to the sign. */
-.hero .hero-bolt {
-  display: none;
-}
-
 /* ---------- Song titles band ---------- */
 
 .marquee.songs-marquee {
@@ -267,7 +262,79 @@
   }
 }
 
-/* The bell takes the place of the bolt on the next show card. */
-.card .card-bolt {
+/* ---------- The logo's bolt strikes ---------- */
+
+.bolt-logo {
+  display: block;
+}
+
+.bolt-logo img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Red glow drawn once behind the bolt; only its opacity is animated. */
+.bolt-logo::after {
+  content: '';
+  position: absolute;
+  inset: -25% -60%;
+  z-index: -1;
+  background: radial-gradient(closest-side, rgb(212 20 10 / 0.6), transparent);
+  opacity: 0;
+}
+
+/* In the hero the logo already carries its bolt: no second one next to it. */
+.hero .hero-bolt {
   display: none;
+}
+
+/* Above the card, clear of the bell. */
+.card .card-bolt.bolt-logo {
+  top: -4.5rem;
+  right: 7rem;
+  width: 3rem;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* It comes down from the top in a quarter of a second, lands with a jolt, glows once. */
+  .js .bolt-logo[data-reveal='bolt'] img {
+    clip-path: inset(0 0 100% 0);
+  }
+
+  .js .bolt-logo[data-reveal='bolt'].is-in img {
+    animation:
+      strike-down 260ms cubic-bezier(0.7, 0, 1, 0.5) forwards,
+      strike-jolt 320ms var(--ease-snap) 260ms 1;
+  }
+
+  .js .bolt-logo[data-reveal='bolt'].is-in::after {
+    animation: strike-glow 900ms ease-out 240ms 1 both;
+  }
+}
+
+@keyframes strike-down {
+  to {
+    clip-path: inset(0);
+  }
+}
+
+@keyframes strike-jolt {
+  30% {
+    transform: translateY(6px) scale(1.06);
+  }
+}
+
+@keyframes strike-glow {
+  0% {
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.3;
+  }
 }
