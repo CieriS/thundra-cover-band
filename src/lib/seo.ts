@@ -1,9 +1,27 @@
 /** Builds the JSON-LD of the site from config and collections (adapter over structured-data). */
+import { copy } from '@/config/copy';
 import { site } from '@/config/site';
+import { fill } from './text';
 import type { EventEntry } from './content';
 import { getMembers } from './content';
 import { countdownTarget } from './events';
-import { musicEvent, musicGroup, utcOffset, type BandInfo } from './structured-data';
+import { musicEvent, musicGroup, utcOffset, webSite, type BandInfo } from './structured-data';
+
+/** Values for the {tokens} of the search texts in copy.seo. */
+export const seoValues = {
+  name: site.name,
+  cities: site.area.cities.join(', '),
+  area: `${site.area.cities.join(', ')} ${site.area.note}`,
+  duration: site.show.durationLabel,
+} as const;
+
+/** Title and description of a page, with the tokens filled in. */
+export function seoText(page: { title: string; description?: string }) {
+  return {
+    title: fill(page.title, seoValues),
+    ...(page.description ? { description: fill(page.description, seoValues) } : {}),
+  };
+}
 
 async function bandInfo(siteUrl: URL): Promise<BandInfo> {
   const members = await getMembers();
@@ -19,6 +37,11 @@ async function bandInfo(siteUrl: URL): Promise<BandInfo> {
   };
 }
 
+/** The site itself: helps search engines show the right site name. */
+export function siteJsonLd(siteUrl: URL) {
+  return webSite({ name: `${site.name} - ${site.subtitle}`, url: new URL('/', siteUrl).href, language: site.lang });
+}
+
 export async function bandJsonLd(siteUrl: URL) {
   return musicGroup(await bandInfo(siteUrl));
 }
@@ -32,6 +55,7 @@ export async function eventsJsonLd(events: readonly EventEntry[], siteUrl: URL) 
       url: new URL(`/date/#${event.id}`, siteUrl).href,
       offset: utcOffset(countdownTarget(event.data, site.timeZone), site.timeZone),
       durationMinutes: site.show.durationMinutes,
+      description: fill(copy.seo.eventDescription, seoValues),
     }),
   );
 }

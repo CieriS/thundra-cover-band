@@ -1,9 +1,10 @@
 ---
 import BaseLayout from '@/components/layout/BaseLayout.astro';
 import Button from '@/components/ui/Button.astro';
+import { copy } from '@/config/copy';
 ---
 
-<BaseLayout title="Pagina non trovata" noindex>
+<BaseLayout title={copy.seo.notFound.title} noindex>
   <section class="section">
     <div class="wrap grid justify-items-start gap-6">
       <p class="label text-red-ink">Errore 404</p>

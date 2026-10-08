@@ -144,6 +144,45 @@ export const copy = {
     intro: 'I palchi su cui siamo già saliti.',
     empty: 'L’archivio si riempie da solo: ogni data, il giorno dopo il concerto, finisce qui.',
   },
+  /**
+   * Titles and descriptions for search engines and link previews, one per page.
+   * Titles: about 60 characters at most (the band name is added to the inner pages).
+   * Descriptions: 120 to 160 characters. Tokens: {name}, {cities}, {area}, {duration}.
+   */
+  seo: {
+    home: {
+      title: '{name} - Tribute band AC/DC | {cities}',
+    },
+    dates: {
+      title: 'Date live del tributo AC/DC',
+      description:
+        'Tutte le prossime date dal vivo di {name}, tributo agli AC/DC, tra {area}: locale, città, orario e come arrivare.',
+    },
+    booking: {
+      title: 'Tribute band AC/DC per locali ed eventi',
+      description:
+        'Ingaggia {name}, tributo agli AC/DC, per il tuo locale o evento tra {area}: show di {duration} e contatto diretto su WhatsApp.',
+    },
+    archive: {
+      title: 'Archivio date',
+      description: 'Le date passate di {name}, tributo agli AC/DC: i locali e le città in cui abbiamo già suonato.',
+    },
+    privacy: {
+      title: 'Privacy',
+      description:
+        'Informativa sulla privacy del sito di {name}: nessun cookie di profilazione, nessun tracciamento, video caricati solo su richiesta.',
+    },
+    accessibility: {
+      title: 'Accessibilità',
+      description:
+        'Come è stato reso accessibile il sito di {name}, quali verifiche sono state fatte e come segnalare un problema.',
+    },
+    notFound: {
+      title: 'Pagina non trovata',
+    },
+    /** Sentence used in the event data read by Google. */
+    eventDescription: '{name}, tributo agli AC/DC, dal vivo: {duration} con i classici degli AC/DC.',
+  },
   /** Small interface texts shared by several components. */
   ui: {
     skip: 'Vai al contenuto',

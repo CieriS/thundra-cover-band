@@ -15,12 +15,12 @@ import Setlist from '@/components/sections/Setlist.astro';
 import Social from '@/components/sections/Social.astro';
 import Tour from '@/components/sections/Tour.astro';
 import { getEvents, getSetlist } from '@/lib/content';
-import { bandJsonLd, eventsJsonLd } from '@/lib/seo';
+import { bandJsonLd, eventsJsonLd, siteJsonLd } from '@/lib/seo';
 
 const { upcoming, next } = await getEvents();
 // Song titles only (never lyrics), shortened at the first bracket.
 const songs = ((await getSetlist())?.data.songs ?? []).map((song) => song.split(' (')[0] ?? song);
-const jsonLd = [await bandJsonLd(Astro.site!), ...(await eventsJsonLd(upcoming, Astro.site!))];
+const jsonLd = [siteJsonLd(Astro.site!), await bandJsonLd(Astro.site!), ...(await eventsJsonLd(upcoming, Astro.site!))];
 ---
 
 <BaseLayout jsonLd={jsonLd} hasHero>

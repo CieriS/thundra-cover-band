@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '@/components/layout/BaseLayout.astro';
+import { copy } from '@/config/copy';
 import SectionHeading from '@/components/ui/SectionHeading.astro';
 import { site } from '@/config/site';
 import { whatsappUrl } from '@/lib/contact';
@@ -7,11 +8,11 @@ import { dateParts } from '@/lib/dates';
 
 const checked = dateParts(site.accessibility.lastChecked);
 const report = whatsappUrl(site.contact.whatsapp, 'Ciao, vorrei segnalare un problema di accessibilità sul sito: ');
+import { seoText } from '@/lib/seo';
 ---
 
 <BaseLayout
-  title="Accessibilità"
-  description={`Come è stato reso accessibile il sito di ${site.name}, quali verifiche sono state fatte e come segnalare un problema.`}
+  {...seoText(copy.seo.accessibility)}
 >
   <section class="section">
     <div class="wrap grid gap-8">

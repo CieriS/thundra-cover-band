@@ -4,16 +4,16 @@ import Button from '@/components/ui/Button.astro';
 import EventCard from '@/components/ui/EventCard.astro';
 import SectionHeading from '@/components/ui/SectionHeading.astro';
 import { copy } from '@/config/copy';
-import { site } from '@/config/site';
 import { getEvents } from '@/lib/content';
 
 const { past } = await getEvents();
 const years = [...new Set(past.map((event) => event.data.date.slice(0, 4)))];
+import { seoText } from '@/lib/seo';
 ---
 
 <BaseLayout
-  title="Archivio date"
-  description={`Le date passate di ${site.name}, tributo agli AC/DC: i locali e le città in cui abbiamo già suonato.`}
+  {...seoText(copy.seo.archive)}
+  noindex={past.length === 0}
 >
   <section class="section" aria-labelledby="archivio-title">
     <div class="wrap grid gap-10">

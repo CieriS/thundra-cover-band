@@ -1,15 +1,16 @@
 ---
 import BaseLayout from '@/components/layout/BaseLayout.astro';
+import { copy } from '@/config/copy';
 import SectionHeading from '@/components/ui/SectionHeading.astro';
 import { isTodo, showTodo, site, TODO } from '@/config/site';
 import { dateParts } from '@/lib/dates';
 
 const updated = dateParts(site.legal.lastUpdated);
+import { seoText } from '@/lib/seo';
 ---
 
 <BaseLayout
-  title="Privacy"
-  description={`Informativa sulla privacy del sito di ${site.name}: nessun cookie di profilazione, nessun tracciamento, video caricati solo su richiesta.`}
+  {...seoText(copy.seo.privacy)}
 >
   <section class="section">
     <div class="wrap grid gap-8">

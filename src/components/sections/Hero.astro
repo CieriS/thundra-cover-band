@@ -17,6 +17,11 @@ interface Props {
 
 const { next } = Astro.props;
 const nextDate = next ? dateParts(next.data.date) : null;
+// The name as one run of letter spans with no spaces between them: each letter can animate,
+// while search engines and screen readers still read a single word.
+const letters = [...site.name]
+  .map((letter, i) => `<span class="letter" style="--i: ${i}">${letter}</span>`)
+  .join('');
 
 // Art direction: a vertical crop for phones, a horizontal one from 48rem up.
 const DESKTOP = '(min-width: 48rem)';
@@ -77,15 +82,8 @@ const { video } = site.hero;
     <h1 id="hero-title" class="title" data-storm-trigger>
       <span class="mark">
         {logoBolt && <Image class="mark-bolt" src={logoBolt} alt="" width={260} loading="eager" />}
-        <span class="poster wordmark">
-          <span class="visually-hidden">{site.name}</span>
-          {[...site.name].map((letter, i) => (
-            <span class="letter" aria-hidden="true" style={`--i: ${i}`}>
-              {letter}
-            </span>
-          ))}
-        </span>
-      </span>
+        <span class="poster wordmark" set:html={letters} />
+      </span>{' '}
       <span class="poster subtitle">{site.subtitle}</span>
     </h1>
     <p class="claim">

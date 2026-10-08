@@ -1,18 +1,16 @@
 ---
 import BaseLayout from '@/components/layout/BaseLayout.astro';
+import { copy } from '@/config/copy';
 import FinalCTA from '@/components/sections/FinalCTA.astro';
 import Tour from '@/components/sections/Tour.astro';
-import { site } from '@/config/site';
 import { getEvents } from '@/lib/content';
-import { eventsJsonLd } from '@/lib/seo';
+import { eventsJsonLd, seoText } from '@/lib/seo';
 
 const { upcoming } = await getEvents();
-const area = site.area.cities.join(', ');
 ---
 
 <BaseLayout
-  title="Date live"
-  description={`Tutte le prossime date dal vivo di ${site.name}, tributo agli AC/DC, tra ${area} ${site.area.note}: locale, città, orario e come arrivare.`}
+  {...seoText(copy.seo.dates)}
   jsonLd={await eventsJsonLd(upcoming, Astro.site!)}
 >
   <Tour events={upcoming} page />

@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test';
 import type { EventData } from './events';
-import { musicEvent, musicGroup, serializeJsonLd, utcOffset } from './structured-data';
+import { musicEvent, musicGroup, serializeJsonLd, utcOffset, webSite } from './structured-data';
 
 const band = {
   name: 'Band di prova',
@@ -80,6 +80,26 @@ describe('musicEvent', () => {
     const paid = musicEvent({ ...event, admission: 'paid', bookingUrl: 'https://tickets.example/x' }, context);
     expect(paid.offers).toMatchObject({ url: 'https://tickets.example/x' });
     expect(paid.offers).not.toHaveProperty('price');
+  });
+});
+
+describe('description and site', () => {
+  test('the event carries the description only when one is given', () => {
+    expect(musicEvent(event, context)).not.toHaveProperty('description');
+    expect(musicEvent(event, { ...context, description: 'Due ore di show' })).toHaveProperty(
+      'description',
+      'Due ore di show',
+    );
+  });
+
+  test('the site entry has name, address and language', () => {
+    expect(webSite({ name: 'Band', url: 'https://example.com/', language: 'it' })).toEqual({
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: 'Band',
+      url: 'https://example.com/',
+      inLanguage: 'it',
+    });
   });
 });
 

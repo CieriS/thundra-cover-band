@@ -1,18 +1,16 @@
 ---
 import BaseLayout from '@/components/layout/BaseLayout.astro';
+import { copy } from '@/config/copy';
 import Booking from '@/components/sections/Booking.astro';
 import Live from '@/components/sections/Live.astro';
 import Reviews from '@/components/sections/Reviews.astro';
 import Setlist from '@/components/sections/Setlist.astro';
-import { site } from '@/config/site';
-import { bandJsonLd } from '@/lib/seo';
+import { bandJsonLd, seoText } from '@/lib/seo';
 
-const area = site.area.cities.join(', ');
 ---
 
 <BaseLayout
-  title="Booking: porta Thundra nel tuo locale"
-  description={`Ingaggia ${site.name}, tributo agli AC/DC, per il tuo locale o il tuo evento tra ${area} ${site.area.note}: show di ${site.show.durationLabel}, scheda tecnica e contatto diretto su WhatsApp.`}
+  {...seoText(copy.seo.booking)}
   jsonLd={[await bandJsonLd(Astro.site!)]}
 >
   <Booking page />

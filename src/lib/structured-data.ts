@@ -51,6 +51,8 @@ export interface EventContext {
   /** UTC offset of the venue at start time, e.g. "+01:00". */
   offset: string;
   durationMinutes: number;
+  /** One sentence about the show, the same for every date. */
+  description?: string;
 }
 
 /** startDate is a full local date-time when the time is known, a plain date otherwise. */
@@ -71,6 +73,7 @@ export function musicEvent(event: EventData, context: EventContext) {
     '@context': 'https://schema.org',
     '@type': 'MusicEvent',
     name: `${context.band.name} - ${context.band.subtitle} live @ ${event.venue}`,
+    ...(context.description ? { description: context.description } : {}),
     startDate,
     ...(endDate ? { endDate } : {}),
     eventStatus: STATUS[event.status],
@@ -91,6 +94,16 @@ export function musicEvent(event: EventData, context: EventContext) {
     performer: performer(context.band),
     organizer: performer(context.band),
     ...offers,
+  };
+}
+
+export function webSite(site: { name: string; url: string; language: string }) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: site.name,
+    url: site.url,
+    inLanguage: site.language,
   };
 }
 
