@@ -19,6 +19,7 @@ Sito statico, mobile-first, solo dark. Nessun server, nessun cookie, nessun trac
 | Immagini   | `<Picture>` di Astro: AVIF/WebP, `srcset`, `sizes`                         |
 | Font       | Fontsource, self-hosted: Anton (titoli), Archivo Variable (testo)          |
 | Animazioni | CSS, scroll-driven animations, Web Animations API, SVG. Nessuna libreria   |
+| Volantini  | Generati in build: `sharp`, `opentype.js` (testo in tracciati), `qrcode`   |
 | Test       | `bun test` sulla logica pura                                               |
 
 JavaScript lato client: un solo file di circa 2 KB gzip, tutto progressive enhancement.
@@ -57,24 +58,36 @@ bun run lint && bun test && bun run build
 ```
 src/
 ├── assets/
-│   ├── brand/            # logo ufficiale (solo da qui, mai ridisegnato)
+│   ├── brand/            # logo ufficiale (solo da qui, mai ridisegnato) e parti ricavate
+│   ├── credit/           # simbolo della firma nel footer
+│   ├── demo/             # foto di repertorio della versione dimostrativa (vedi "Modalità demo")
+│   ├── flyer/            # sfondo dei volantini
+│   ├── venues/           # loghi dei locali, per i volantini
 │   └── placeholders/     # immagini segnaposto generate
 ├── config/
 │   ├── site.ts           # dati della band: fonte unica di verità
-│   ├── copy.ts           # testi delle sezioni
+│   ├── copy.ts           # tutti i testi
 │   └── images.ts         # manifest delle immagini e dei segnaposto
-├── content/              # collection: events, members, setlist, gallery, videos
+├── content/              # collection: events, members, setlist, gallery, videos, reviews
 ├── content.config.ts     # schemi delle collection
-├── lib/                  # logica pura e testata (date, eventi, .ics, contatti, JSON-LD)
+├── lib/                  # logica pura e testata (date, eventi, .ics, contatti, JSON-LD, testi)
+│   ├── flyer/            # volantini: layout.ts e pdf.ts puri, variants.ts, render.ts (unico I/O)
+│   └── flyers.ts         # elenco dei volantini da generare, dai dati delle serate
 ├── components/
 │   ├── layout/           # BaseLayout, Header, Footer, MobileActionBar, Brand
-│   ├── sections/         # Hero, NextShow, Tour, Live, Band, Setlist, Booking, Gallery, Social, FinalCTA
-│   └── ui/               # Button, EventCard, ResponsiveImage, VideoFacade, Marquee, RevealText, LightningSVG…
-├── pages/                # /, /date, /archivio, /booking, /privacy, 404, /date/<id>.ics, robots.txt
+│   ├── sections/         # Hero, NextShow, Tour, Live, Band, Setlist, Reviews, Booking, Gallery, Social, FinalCTA
+│   └── ui/               # Button, EventCard, Countdown, ResponsiveImage, VideoFacade, Marquee, Motif, Storm, Walker…
+├── pages/                # /, /date, /date/<id>, /date/<id>.ics, /archivio, /booking, /volantini/<file>,
+│                         # /privacy, /accessibilita, 404, robots.txt
 ├── scripts/site.ts       # l'unico script lato client
 └── styles/
     ├── global.css        # design token (@theme), base, componenti
-    └── motion.css        # tutte le animazioni
+    ├── motion.css        # animazioni di base (reveal, fulmini, scroll)
+    ├── rock.css          # stile da manifesto rock: titoli inclinati, strisce, equalizzatore
+    ├── extreme.css       # variante spinta: duotone, parole giganti, sipario, glitch
+    └── tribute.css       # motivi disegnati da zero (cravatta, campana, cannoni)
+scripts/                  # build-logo.mjs, generate-placeholders.mjs, list-todo.mjs
+docs/                     # requisiti dei volantini ed esempi ricevuti
 ```
 
 Regole dell'architettura:
@@ -82,7 +95,10 @@ Regole dell'architettura:
 - **Nessun dato nei componenti.** I dati stanno in `src/config/site.ts` e nelle collection, i testi in
   `src/config/copy.ts`.
 - **Logica pura in `src/lib/`**, senza dipendenze da Astro e coperta da test. Gli unici file di `lib`
-  che leggono le collection sono `content.ts` e `seo.ts`.
+  che leggono le collection sono `content.ts`, `seo.ts` e `flyers.ts`; l'unico che legge file e
+  disegna immagini è `flyer/render.ts`.
+- **Animazioni solo nei file di stile dedicati** (`motion.css`, `rock.css`, `extreme.css`,
+  `tribute.css`), tutti con le stesse regole: vedi "Animazioni e accessibilità".
 - **Design token in un solo punto**: il blocco `@theme` di `src/styles/global.css` (colori, scala
   tipografica, spaziature, durate, easing). Le coppie testo/sfondo sono verificate da
   `src/styles/contrast.test.ts` (WCAG AA).
@@ -97,6 +113,24 @@ bun run todo
 ```
 
 Non inventare mai dati: se un'informazione manca, resta il segnaposto.
+
+## Modalità demo
+
+Finché mancano foto, video e recensioni vere, il sito gira in versione dimostrativa: foto di
+repertorio (`src/assets/demo/`, crediti in `CREDITS.md` nella stessa cartella), recensioni e alcuni
+valori di esempio, mostrati come se fossero veri. Tutto ciò che è dimostrativo è marcato `[DEMO]`
+nei file e compare in `bun run todo`.
+
+L'interruttore è `demo` in `src/config/site.ts`:
+
+- `demo: true`: i segnaposto `[DA COMPILARE]` non vengono mostrati e **la build di produzione su
+  Vercel si ferma apposta** con un errore (controllo in `BaseLayout.astro`). Le anteprime dei
+  branch funzionano.
+- `demo: false`: i segnaposto tornano visibili e la build di produzione passa.
+
+Per uscire dalla demo: sostituisci foto (`src/config/images.ts`, `src/content/gallery/`,
+`src/content/members/`), recensioni (`src/content/reviews/`) e valori marcati in `site.ts`, finché
+`bun run todo` non elenca più righe `[DEMO]`; poi metti `demo: false`.
 
 ## Cosa si modifica dove
 
@@ -337,6 +371,29 @@ Il sito è una cartella statica (`dist/`). Su **Vercel**:
 
 Su Netlify o Cloudflare Pages: comando `bun run build` (o `npm run build`), cartella `dist`,
 variabile `SITE_URL` obbligatoria.
+
+### Branch e pubblicazione
+
+`main` è il branch di produzione: ogni push su `main` pubblica il sito. Gli altri branch hanno solo
+l'anteprima.
+
+| Branch | Contenuto |
+| --- | --- |
+| `main` | sito pubblicato |
+| `demo-foto` | `main` + contenuti dimostrativi |
+| `demo-stile-rock` | `demo-foto` + stile da manifesto rock |
+| `demo-stile-estremo` | `demo-stile-rock` + variante spinta, logo nuovo, pagine per data, volantini |
+
+Ogni branch contiene per intero il precedente, quindi portare l'ultimo su `main` è un semplice
+avanzamento, senza conflitti:
+
+```bash
+git switch main && git merge --ff-only demo-stile-estremo
+```
+
+Prima va deciso cosa fare dei contenuti dimostrativi (vedi "Modalità demo"): con `demo: true` il
+push su `main` non pubblica nulla, perché la build di produzione si ferma. Dopo il passaggio i tre
+branch `demo-*` non servono più e si possono cancellare, in locale e su GitHub.
 
 ### Dominio e sitemap
 
