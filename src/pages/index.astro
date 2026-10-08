@@ -14,10 +14,12 @@ import Reviews from '@/components/sections/Reviews.astro';
 import Setlist from '@/components/sections/Setlist.astro';
 import Social from '@/components/sections/Social.astro';
 import Tour from '@/components/sections/Tour.astro';
-import { getEvents } from '@/lib/content';
+import { getEvents, getSetlist } from '@/lib/content';
 import { bandJsonLd, eventsJsonLd } from '@/lib/seo';
 
 const { upcoming, next } = await getEvents();
+// Song titles only (never lyrics), shortened at the first bracket.
+const songs = ((await getSetlist())?.data.songs ?? []).map((song) => song.split(' (')[0] ?? song);
 const jsonLd = [await bandJsonLd(Astro.site!), ...(await eventsJsonLd(upcoming, Astro.site!))];
 ---
 
@@ -30,6 +32,7 @@ const jsonLd = [await bandJsonLd(Astro.site!), ...(await eventsJsonLd(upcoming, 
   <Marquee items={[site.name, site.subtitle, 'Live']} reverse duration={22} class="band-marquee" />
   <Reviews />
   <Band />
+  {songs.length > 0 && <Marquee items={songs} duration={60} class="songs-marquee" />}
   <Setlist />
   <HazardStripe />
   <Booking />

@@ -1,5 +1,6 @@
 ---
 import LightningSVG from '@/components/ui/LightningSVG.astro';
+import Motif from '@/components/ui/Motif.astro';
 import ResponsiveImage from '@/components/ui/ResponsiveImage.astro';
 import SectionHeading from '@/components/ui/SectionHeading.astro';
 import { copy } from '@/config/copy';
@@ -10,6 +11,7 @@ const members = await getMembers();
 ---
 
 <section id="band" class="section cut-top band" aria-labelledby="band-title">
+  <Motif name="tie" />
   <div class="wrap">
     <div class="intro">
       <div class="grid content-start gap-6">

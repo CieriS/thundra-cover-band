@@ -1,5 +1,6 @@
 ---
 import Button from '@/components/ui/Button.astro';
+import Motif from '@/components/ui/Motif.astro';
 import RevealText from '@/components/ui/RevealText.astro';
 import { copy } from '@/config/copy';
 import { site } from '@/config/site';
@@ -10,6 +11,8 @@ import { site } from '@/config/site';
   <div class="speaker" aria-hidden="true" data-reveal="pulse">
     {[0, 1, 2].map((n) => <span style={`--n: ${n}`} />)}
   </div>
+  <Motif name="cannon" />
+  <Motif name="cannon" class="is-right" />
   <div class="wrap grid gap-6">
     <RevealText id="final-title" lines={copy.finalCta.title} class="text-5xl" />
     <p class="max-w-md text-lg font-semibold">{copy.finalCta.text}</p>

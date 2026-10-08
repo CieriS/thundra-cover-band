@@ -1,0 +1,273 @@
+/*
+ * Tribute motifs (src/components/ui/Motif.astro): the visual vocabulary people associate
+ * with an AC/DC night, drawn from scratch. Devil horns, school tie, bell, cannons, hazard
+ * sign, song titles running on a band. The band's logo, lettering and artwork are never used.
+ * Animations follow the same rules as the other motion files.
+ */
+
+.motif {
+  pointer-events: none;
+}
+
+/* ---------- Hero ---------- */
+
+.hero .title {
+  position: relative;
+}
+
+.motif-horns {
+  position: absolute;
+  top: -0.32em;
+  left: -0.12em;
+  width: 0.62em;
+  font-size: calc(var(--text-mega) * 0.8);
+  rotate: -12deg;
+}
+
+.hero .subtitle {
+  font-size: var(--text-2xl);
+  box-shadow: 0.2rem 0.2rem 0 var(--color-night-950);
+}
+
+.motif-hazard {
+  position: absolute;
+  top: 4.5rem;
+  right: var(--spacing-gutter);
+  display: grid;
+  justify-items: center;
+  gap: 0.2rem;
+  width: clamp(5.5rem, 16vw, 9rem);
+  padding: 0.5rem 0.4rem 0.4rem;
+  background: var(--color-red);
+  color: var(--color-bone);
+  font-size: clamp(0.8rem, 2.2vw, 1.15rem);
+  text-align: center;
+  rotate: 8deg;
+}
+
+.motif-hazard svg {
+  width: 70%;
+}
+
+/* The decorative bolt gives way to the sign. */
+.hero .hero-bolt {
+  display: none;
+}
+
+/* ---------- Song titles band ---------- */
+
+.marquee.songs-marquee {
+  z-index: 3;
+  margin-block: -1rem;
+  padding-block: 0.6rem 3rem;
+  background: var(--color-bone);
+  rotate: 2deg;
+  scale: 1.06;
+}
+
+.marquee.songs-marquee .marquee-track {
+  color: var(--color-night-950);
+  font-size: var(--text-2xl);
+}
+
+.marquee.songs-marquee .pause {
+  right: calc(var(--spacing-gutter) + 5vw);
+  color: var(--color-night-950);
+}
+
+/* ---------- School tie hanging in the band section ---------- */
+
+.motif-tie {
+  position: absolute;
+  top: 0;
+  right: 8%;
+  z-index: 1;
+  width: clamp(2.6rem, 6vw, 4.5rem);
+  transform-origin: 50% 0;
+}
+
+/* ---------- Bell on the next show card ---------- */
+
+.motif-bell {
+  position: absolute;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  width: clamp(3.5rem, 10vw, 6rem);
+}
+
+.bell-body,
+.bell-clapper {
+  transform-box: view-box;
+  transform-origin: 50% 5%;
+}
+
+/* ---------- Cannons in the closing section ---------- */
+
+.motif-cannon {
+  position: absolute;
+  bottom: 0.5rem;
+  left: 2%;
+  z-index: -1;
+  width: clamp(7rem, 20vw, 13rem);
+  opacity: 0.85;
+}
+
+.motif-cannon.is-right {
+  right: 2%;
+  left: auto;
+  scale: -1 1;
+}
+
+.cannon-puff {
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: 0;
+}
+
+/* Kept in the layout (invisible) because its reveal also triggers the cannons. */
+.final .speaker {
+  opacity: 0;
+}
+
+@media (max-width: 47.999rem) {
+  .motif-bell {
+    top: 1rem;
+    bottom: auto;
+  }
+
+  .motif-cannon.is-right {
+    display: none;
+  }
+}
+
+/* ---------- Motion ---------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Horns pop onto the band name after the letters have powered up. */
+  .motif-horns {
+    animation: horns-pop 520ms var(--ease-snap) 900ms both;
+  }
+
+  /* The hazard sign is stamped on, once. */
+  .motif-hazard {
+    animation: stamp 420ms var(--ease-snap) 1300ms both;
+  }
+
+  /* The bell tolls three times when the next show scrolls in. */
+  .js [data-reveal='fade'].is-in .bell-body {
+    animation: toll 1100ms ease-in-out 3;
+  }
+
+  .js [data-reveal='fade'].is-in .bell-clapper {
+    animation: toll-clapper 1100ms ease-in-out 3;
+  }
+
+  /* Cannons recoil and puff once: a salute at the end of the page. */
+  .js [data-reveal='pulse'].is-in ~ .motif-cannon .cannon-body {
+    animation: recoil 700ms var(--ease-out-expo) 300ms 1;
+  }
+
+  .js [data-reveal='pulse'].is-in ~ .motif-cannon .cannon-puff {
+    animation: puff 900ms ease-out 300ms 1;
+  }
+
+  @supports (animation-timeline: view()) {
+    /* The tie swings like a pendulum as the section goes by. */
+    .motif-tie {
+      animation: swing linear both;
+      animation-timeline: view();
+    }
+  }
+}
+
+@keyframes horns-pop {
+  from {
+    transform: translateY(0.2em) scale(0);
+  }
+
+  70% {
+    transform: scale(1.2);
+  }
+}
+
+@keyframes stamp {
+  from {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+@keyframes toll {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+
+  25% {
+    transform: rotate(14deg);
+  }
+
+  75% {
+    transform: rotate(-14deg);
+  }
+}
+
+@keyframes toll-clapper {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+
+  25% {
+    transform: rotate(-10deg);
+  }
+
+  75% {
+    transform: rotate(10deg);
+  }
+}
+
+@keyframes recoil {
+  25% {
+    transform: translateX(-10px);
+  }
+}
+
+@keyframes puff {
+  0% {
+    opacity: 0.9;
+    transform: scale(0.3);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(2.4) translateX(12px);
+  }
+}
+
+@keyframes swing {
+  0% {
+    transform: rotate(-14deg);
+  }
+
+  25% {
+    transform: rotate(12deg);
+  }
+
+  50% {
+    transform: rotate(-9deg);
+  }
+
+  75% {
+    transform: rotate(6deg);
+  }
+
+  100% {
+    transform: rotate(-3deg);
+  }
+}
+
+/* The bell takes the place of the bolt on the next show card. */
+.card .card-bolt {
+  display: none;
+}

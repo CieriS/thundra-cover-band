@@ -5,6 +5,7 @@ import Brand from '@/components/layout/Brand.astro';
 import Button from '@/components/ui/Button.astro';
 import Icon from '@/components/ui/Icon.astro';
 import LightningSVG from '@/components/ui/LightningSVG.astro';
+import Motif from '@/components/ui/Motif.astro';
 import { copy } from '@/config/copy';
 import { images, logo } from '@/config/images';
 import { site } from '@/config/site';
@@ -72,9 +73,11 @@ const { video } = site.hero;
     <span class="beam beam-b"></span>
   </div>
   <LightningSVG variant="a" class="hero-bolt" />
+  <Motif name="hazard" />
 
   <div class="wrap content">
     <h1 id="hero-title" class="title" data-ignite>
+      {!logo && <Motif name="horns" />}
       {
         logo ? (
           <Brand height={120} class="logo" />
