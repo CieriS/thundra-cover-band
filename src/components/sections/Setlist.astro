@@ -1,5 +1,6 @@
 ---
 import SectionHeading from '@/components/ui/SectionHeading.astro';
+import VolumeKnob from '@/components/ui/VolumeKnob.astro';
 import { copy } from '@/config/copy';
 import { getSetlist } from '@/lib/content';
 
@@ -8,8 +9,9 @@ const setlist = await getSetlist();
 
 {
   setlist && (
-    <section id="scaletta" class="section" aria-labelledby="scaletta-title">
+    <section id="scaletta" class="section grille" aria-labelledby="scaletta-title">
       <div class="wrap grid gap-10">
+        <VolumeKnob class="justify-self-end" />
         <SectionHeading
           id="scaletta-title"
           eyebrow={copy.setlist.eyebrow}

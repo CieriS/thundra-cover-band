@@ -67,6 +67,10 @@ const { video } = site.hero;
     }
   </div>
   <div class="shade" aria-hidden="true"></div>
+  <div class="beams" aria-hidden="true">
+    <span class="beam beam-a"></span>
+    <span class="beam beam-b"></span>
+  </div>
   <LightningSVG variant="a" class="hero-bolt" />
 
   <div class="wrap content">
@@ -75,7 +79,14 @@ const { video } = site.hero;
         logo ? (
           <Brand height={120} class="logo" />
         ) : (
-          <span class="poster wordmark">{site.name}</span>
+          <span class="poster wordmark">
+            <span class="visually-hidden">{site.name}</span>
+            {[...site.name].map((letter, i) => (
+              <span class="letter" aria-hidden="true" style={`--i: ${i}`}>
+                {letter}
+              </span>
+            ))}
+          </span>
         )
       }
       <span class="poster subtitle">{site.subtitle}</span>

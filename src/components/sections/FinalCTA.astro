@@ -7,6 +7,9 @@ import { site } from '@/config/site';
 
 <section class="final" aria-labelledby="final-title">
   <div class="ghost poster" aria-hidden="true" data-text={site.name}></div>
+  <div class="speaker" aria-hidden="true" data-reveal="pulse">
+    {[0, 1, 2].map((n) => <span style={`--n: ${n}`} />)}
+  </div>
   <div class="wrap grid gap-6">
     <RevealText id="final-title" lines={copy.finalCta.title} class="text-5xl" />
     <p class="max-w-md text-lg font-semibold">{copy.finalCta.text}</p>

@@ -1,0 +1,12 @@
+---
+/** Decorative equalizer: bounces briefly when it enters the viewport, then rests. */
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<span class:list={['eq', className]} aria-hidden="true" data-reveal="eq">
+  {[0, 1, 2, 3, 4, 5].map((n) => <span style={`--n: ${n}`} />)}
+</span>

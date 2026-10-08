@@ -2,6 +2,7 @@
 @import '@fontsource/anton/latin-400.css';
 @import '@fontsource-variable/archivo/wght.css';
 @import './motion.css';
+@import './rock.css';
 
 /*
  * Design tokens: the single source of truth for colour, type, spacing,

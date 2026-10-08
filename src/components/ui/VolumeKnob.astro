@@ -1,0 +1,33 @@
+---
+/**
+ * Decorative amplifier knob. Where scroll-driven animations are supported the dial
+ * turns from minimum to maximum while the section crosses the viewport.
+ */
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+const ticks = Array.from({ length: 11 }, (_, i) => -135 + i * 27);
+---
+
+<svg class:list={['knob', className]} viewBox="0 0 120 120" fill="none" aria-hidden="true" focusable="false">
+  {
+    ticks.map((angle, i) => (
+      <line
+        x1="60"
+        y1="6"
+        x2="60"
+        y2={i === 10 ? 18 : 13}
+        stroke={i === 10 ? 'var(--color-red-ink)' : 'currentColor'}
+        stroke-width={i === 10 ? 4 : 2}
+        transform={`rotate(${angle} 60 60)`}
+      />
+    ))
+  }
+  <g class="knob-dial">
+    <circle cx="60" cy="60" r="36" fill="var(--color-night-700)" stroke="var(--color-line)" stroke-width="3"></circle>
+    <circle cx="60" cy="60" r="26" fill="var(--color-night-900)"></circle>
+    <line x1="60" y1="28" x2="60" y2="46" stroke="var(--color-bone)" stroke-width="5" stroke-linecap="square"></line>
+  </g>
+</svg>

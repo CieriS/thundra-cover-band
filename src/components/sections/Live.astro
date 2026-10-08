@@ -1,4 +1,5 @@
 ---
+import Equalizer from '@/components/ui/Equalizer.astro';
 import SectionHeading from '@/components/ui/SectionHeading.astro';
 import VideoFacade from '@/components/ui/VideoFacade.astro';
 import { copy } from '@/config/copy';
@@ -12,6 +13,7 @@ const [main, ...others] = videos;
 
 <section id="live" class="section" aria-labelledby="live-title">
   <div class="wrap grid gap-10">
+    <Equalizer />
     <SectionHeading
       id="live-title"
       eyebrow={copy.live.eyebrow}

@@ -1,0 +1,366 @@
+/*
+ * "Rock poster" layer: slanted extruded headings, hazard stripes, amp-grille texture and
+ * a second set of animations (stage beams, letter surge, voltage meter, volume knob,
+ * equalizer, speaker pulse, button sheen).
+ *
+ * Same rules as motion.css: only transform, opacity and clip-path are animated; nothing
+ * is hidden without JavaScript; every automatic animation is finite and shorter than five
+ * seconds, the rest is driven by scroll or pointer; nothing flashes more than twice a second;
+ * prefers-reduced-motion switches all of it off.
+ *
+ * The look is generic hard-rock poster language. It does not reproduce the lettering or
+ * the logo of any band.
+ */
+
+/* ---------- Type: slanted, with a hard red extrusion ---------- */
+
+.reveal-line {
+  transform: skewX(-6deg);
+  transform-origin: left bottom;
+}
+
+.reveal-lines .reveal-line-inner,
+.hero .wordmark {
+  text-shadow:
+    0.03em 0.03em 0 var(--color-red),
+    0.06em 0.06em 0 var(--color-red-deep);
+}
+
+/* On the red closing section the extrusion goes dark instead. */
+.final .reveal-line-inner {
+  text-shadow:
+    0.03em 0.03em 0 var(--color-night-950),
+    0.06em 0.06em 0 var(--color-red-deep);
+}
+
+.hero .wordmark {
+  display: inline-flex;
+  transform: skewX(-6deg);
+  transform-origin: left bottom;
+}
+
+/* ---------- Hazard stripes between sections ---------- */
+
+.hazard {
+  position: relative;
+  z-index: 2;
+  height: 0.85rem;
+  overflow: hidden;
+  background: var(--color-night-950);
+}
+
+.hazard::before {
+  content: '';
+  position: absolute;
+  inset: 0 -4rem;
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--color-red) 0 0.9rem,
+    var(--color-night-950) 0.9rem 1.8rem
+  );
+}
+
+/* ---------- Amp grille texture ---------- */
+
+.grille {
+  background-image: radial-gradient(circle at center, rgb(245 242 234 / 0.07) 0 1px, transparent 1.5px);
+  background-size: 9px 9px;
+}
+
+/* ---------- Ticket-stub perforation on date cards ---------- */
+
+.event .actions {
+  padding-top: 1rem;
+  border-top: 2px dashed var(--color-line);
+}
+
+@media (min-width: 48rem) {
+  .event .actions {
+    padding-top: 0;
+    padding-left: 2rem;
+    border-top: 0;
+    border-left: 2px dashed var(--color-line);
+  }
+}
+
+/* ---------- Stage beams in the hero ---------- */
+
+.beams {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.beam {
+  position: absolute;
+  top: -10%;
+  width: 46vmax;
+  height: 130%;
+  /* A cone of light drawn once; only its rotation and opacity change. */
+  background: linear-gradient(to bottom, rgb(76 201 255 / 0.3), transparent 75%);
+  clip-path: polygon(46% 0, 54% 0, 100% 100%, 0 100%);
+  transform-origin: 50% 0;
+  opacity: 0.55;
+  mix-blend-mode: screen;
+}
+
+.beam-a {
+  left: -8vmax;
+  transform: rotate(-16deg);
+}
+
+.beam-b {
+  right: -8vmax;
+  background: linear-gradient(to bottom, rgb(255 90 74 / 0.32), transparent 75%);
+  transform: rotate(14deg);
+}
+
+/* ---------- Voltage meter: reading progress under the header ---------- */
+
+.voltage {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 45;
+  display: none;
+  width: 100%;
+  height: 3px;
+  pointer-events: none;
+  background: linear-gradient(90deg, var(--color-red), var(--color-volt));
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+/* ---------- Volume knob (turns with scroll) ---------- */
+
+.knob {
+  width: clamp(5rem, 14vw, 9rem);
+  color: var(--color-mute);
+}
+
+.knob-dial {
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: rotate(60deg);
+}
+
+/* ---------- Equalizer bars ---------- */
+
+.eq {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 0.25rem;
+  height: 2.5rem;
+}
+
+.eq span {
+  width: 0.4rem;
+  height: 100%;
+  background: var(--color-red);
+  transform: scaleY(var(--rest, 0.5));
+  transform-origin: bottom;
+}
+
+.eq span:nth-child(1) { --rest: 0.45; }
+.eq span:nth-child(2) { --rest: 0.8; }
+.eq span:nth-child(3) { --rest: 0.6; background: var(--color-volt); }
+.eq span:nth-child(4) { --rest: 1; }
+.eq span:nth-child(5) { --rest: 0.35; }
+.eq span:nth-child(6) { --rest: 0.7; background: var(--color-volt); }
+
+/* ---------- Speaker cone ---------- */
+
+.speaker {
+  position: absolute;
+  top: 50%;
+  right: -6rem;
+  z-index: -1;
+  width: clamp(14rem, 40vw, 28rem);
+  aspect-ratio: 1;
+  translate: 0 -50%;
+  pointer-events: none;
+}
+
+.speaker span {
+  position: absolute;
+  inset: 0;
+  border: 0.6rem solid var(--color-red-deep);
+  border-radius: 50%;
+  opacity: 0.5;
+}
+
+.speaker span:nth-child(2) { inset: 17%; }
+.speaker span:nth-child(3) { inset: 34%; background: var(--color-red-deep); }
+
+/* ---------- Motion ---------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Letter surge: the band name powers up letter by letter, once (about 1.2s in total). */
+  .hero .wordmark .letter {
+    animation: letter-surge 520ms linear both;
+    animation-delay: calc(var(--i) * 85ms);
+  }
+
+  /* One opening sweep of the stage lights (3.6s), then they follow the scroll. */
+  .beam-a {
+    animation: beam-a 3600ms var(--ease-out-expo) both;
+  }
+
+  .beam-b {
+    animation: beam-b 3600ms var(--ease-out-expo) both;
+  }
+
+  /* Equalizer: a short burst when it scrolls into view, then it rests. */
+  .js [data-reveal='eq'].is-in span {
+    animation: eq-bounce 420ms ease-in-out 8 alternate;
+    animation-delay: calc(var(--n) * 70ms);
+  }
+
+  /* Speaker: three pushes of the cone when the closing section arrives. */
+  .js [data-reveal='pulse'].is-in span {
+    animation: cone 900ms var(--ease-out-expo) 3;
+    animation-delay: calc(var(--n) * 90ms);
+  }
+
+  /* Sheen across a button, pointer devices only. */
+  @media (hover: hover) and (pointer: fine) {
+    .btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(100deg, transparent 35%, rgb(255 255 255 / 0.45) 50%, transparent 65%);
+      transform: translateX(-120%);
+      pointer-events: none;
+    }
+
+    .btn:hover::after {
+      transform: translateX(120%);
+      transition: transform 620ms var(--ease-snap);
+    }
+  }
+
+  @supports (animation-timeline: view()) {
+    .voltage {
+      display: block;
+      animation: voltage linear both;
+      animation-timeline: scroll(root block);
+    }
+
+    .knob-dial {
+      animation: knob-turn linear both;
+      animation-timeline: view();
+      animation-range: entry 10% exit 90%;
+    }
+
+    .hazard::before {
+      animation: hazard-slide linear both;
+      animation-timeline: view();
+    }
+
+    .beams {
+      animation: beams-tilt linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 0 90svh;
+    }
+  }
+}
+
+@keyframes letter-surge {
+  0% {
+    opacity: 0.25;
+    transform: translateY(0.08em);
+  }
+
+  35% {
+    opacity: 1;
+  }
+
+  55% {
+    opacity: 0.6;
+  }
+
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes beam-a {
+  from {
+    transform: rotate(-42deg);
+    opacity: 0;
+  }
+}
+
+@keyframes beam-b {
+  from {
+    transform: rotate(40deg);
+    opacity: 0;
+  }
+}
+
+@keyframes beams-tilt {
+  to {
+    transform: scaleX(1.5);
+    opacity: 0.2;
+  }
+}
+
+@keyframes voltage {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes knob-turn {
+  from {
+    transform: rotate(-135deg);
+  }
+
+  to {
+    transform: rotate(135deg);
+  }
+}
+
+@keyframes hazard-slide {
+  from {
+    transform: translateX(-3.6rem);
+  }
+
+  to {
+    transform: translateX(3.6rem);
+  }
+}
+
+@keyframes eq-bounce {
+  from {
+    transform: scaleY(0.2);
+  }
+
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes cone {
+  0% {
+    transform: scale(1);
+  }
+
+  30% {
+    transform: scale(1.07);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .beams,
+  .voltage {
+    display: none;
+  }
+}

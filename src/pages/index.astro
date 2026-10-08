@@ -5,6 +5,7 @@ import Booking from '@/components/sections/Booking.astro';
 import FinalCTA from '@/components/sections/FinalCTA.astro';
 import Gallery from '@/components/sections/Gallery.astro';
 import Hero from '@/components/sections/Hero.astro';
+import HazardStripe from '@/components/ui/HazardStripe.astro';
 import Live from '@/components/sections/Live.astro';
 import NextShow from '@/components/sections/NextShow.astro';
 import Reviews from '@/components/sections/Reviews.astro';
@@ -20,12 +21,14 @@ const jsonLd = [await bandJsonLd(Astro.site!), ...(await eventsJsonLd(upcoming, 
 
 <BaseLayout jsonLd={jsonLd} hasHero>
   <Hero next={next} />
+  <HazardStripe />
   {next && <NextShow event={next} />}
   <Tour events={upcoming} />
   <Live />
   <Reviews />
   <Band />
   <Setlist />
+  <HazardStripe />
   <Booking />
   <Gallery />
   <Social />
