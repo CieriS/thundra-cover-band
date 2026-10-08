@@ -13,8 +13,13 @@ export function today(): string {
   return dayInTimeZone(new Date(), site.timeZone);
 }
 
+/** Every date except the private ones: those get a flyer but no page and no listing. */
+export async function getPublicEvents() {
+  return (await getCollection('events')).filter((event) => !event.data.private);
+}
+
 export async function getEvents() {
-  const { upcoming, past } = splitEvents(await getCollection('events'), today());
+  const { upcoming, past } = splitEvents(await getPublicEvents(), today());
   return { upcoming, past, next: nextEvent(upcoming) };
 }
 

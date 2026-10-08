@@ -1,6 +1,7 @@
 import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
+import { VARIANT_IDS } from './lib/flyer/variants';
 
 const yaml = (folder: string) => glob({ pattern: '*.{yaml,yml}', base: `./src/content/${folder}` });
 
@@ -34,6 +35,22 @@ const events = defineCollection({
       bookingLabel: optionalText,
       poster: image().nullish(),
       note: optionalText,
+      /** Name of the night, e.g. "Halloween Party": shown on the page and on the flyer. */
+      title: optionalText,
+      /** Doors opening time, when it differs from the start. */
+      doorsTime: time.nullish(),
+      /** Logo of the venue for the flyer: path from the project root, e.g. src/assets/venues/x.jpg. */
+      venueLogo: optionalText,
+      /** Colour of the box behind the venue logo. */
+      venueLogoTone: z.enum(['light', 'dark']).default('light'),
+      /** Write the venue name under its logo (for logos that are a symbol only). */
+      showVenueName: z.boolean().default(false),
+      /** Look of the flyer. */
+      flyerVariant: z.enum(VARIANT_IDS).default('base'),
+      /** One free line at the bottom of the flyer. */
+      flyerNote: optionalText,
+      /** Private night (e.g. a wedding): never listed on the site, the flyer is still made. */
+      private: z.boolean().default(false),
       status: z.enum(['scheduled', 'cancelled', 'postponed']).default('scheduled'),
     }),
 });

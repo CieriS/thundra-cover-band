@@ -148,6 +148,37 @@ export const copy = {
     others: 'Altre date',
     allDates: 'Tutte le date',
   },
+  /**
+   * Flyers (volantini). The sheets are images made at build time: these are the words on them
+   * and the labels of the download buttons. Tokens in the sublines: {name}, {duration}.
+   */
+  flyer: {
+    tribute: 'Tribute Band',
+    timePrefix: 'Ore',
+    doorsPrefix: 'Apertura porte ore',
+    contactLabel: 'Booking',
+    tourTitle: 'Date',
+    tourFooter: 'Date in aggiornamento',
+    band: {
+      headline: ['Live', 'nel tuo locale'],
+      subline: 'Tributo agli AC/DC · {duration} di show',
+    },
+    wedding: {
+      headline: ['Il vostro matrimonio', 'a tutto rock'],
+      subline: 'Tributo agli AC/DC · musica dal vivo per la festa',
+    },
+    /** Block on the page of a night. */
+    blockTitle: 'Locandina',
+    blockText: 'Scaricala, stampala, appendila. Oppure condividila così com’è.',
+    alt: 'Locandina del concerto: {venue}, {place}, {dateLong}',
+    pdf: 'A4 da stampare (PDF)',
+    image: 'A4 immagine',
+    instagram: 'Formato Instagram',
+    /** Downloads on the dates page and on the booking page. */
+    tourDownload: 'Scarica il manifesto delle date',
+    bandDownload: 'Scarica il volantino della band (PDF)',
+    weddingDownload: 'Scarica il volantino per matrimoni (PDF)',
+  },
   archive: {
     title: ['Archivio', 'date'],
     intro: 'I palchi su cui siamo già saliti.',

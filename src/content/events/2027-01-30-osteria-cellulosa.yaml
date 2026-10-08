@@ -11,3 +11,7 @@ bookingUrl: # [DA COMPILARE] link per prenotare un tavolo, se esiste
 bookingLabel:
 poster:
 note:
+# Il logo ricevuto è solo il simbolo: il nome del locale viene scritto sotto.
+venueLogo: src/assets/venues/osteria-cellulosa.jpg
+venueLogoTone: light
+showVenueName: true

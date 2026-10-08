@@ -11,3 +11,6 @@ bookingUrl: # [DA COMPILARE] link per prenotare un tavolo, se esiste
 bookingLabel:
 poster:
 note:
+# [DA COMPILARE] logo più grande: questo è 561x240 e in stampa A4 esce sgranato.
+venueLogo: src/assets/venues/music-station-live-club.jpg
+venueLogoTone: dark

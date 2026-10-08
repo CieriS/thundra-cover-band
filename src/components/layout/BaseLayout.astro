@@ -18,14 +18,16 @@ interface Props {
   /** On pages with a hero the mobile action bar appears only after it. */
   hasHero?: boolean;
   noindex?: boolean;
+  /** Image shown when the page is shared (1200x630). Defaults to the logo on dark. */
+  image?: string;
 }
 
-const { title, description = site.description, jsonLd = [], hasHero = false, noindex = false } = Astro.props;
+const { title, description = site.description, jsonLd = [], hasHero = false, noindex = false, image = '/og.jpg' } = Astro.props;
 
 // Inner pages: "Page title | Band". Home: the full title from copy.seo.home.
 const fullTitle = title ? `${title} | ${site.name}` : seoText(copy.seo.home).title;
 const canonical = new URL(Astro.url.pathname, Astro.site);
-const ogImage = new URL('/og.jpg', Astro.site);
+const ogImage = new URL(image, Astro.site);
 // Preview deployments (e.g. a branch on Vercel) must not compete with production.
 const isPreview = process.env['VERCEL_ENV'] === 'preview';
 if (site.demo && process.env['VERCEL_ENV'] === 'production') {

@@ -1,13 +1,12 @@
 import type { APIRoute, GetStaticPaths } from 'astro';
-import { getCollection } from 'astro:content';
 import { site } from '@/config/site';
-import type { EventEntry } from '@/lib/content';
+import { getPublicEvents, type EventEntry } from '@/lib/content';
 import { eventPath } from '@/lib/events';
 import { buildIcs } from '@/lib/ics';
 
 /** One downloadable calendar file per event: adding a date file is enough. */
 export const getStaticPaths: GetStaticPaths = async () =>
-  (await getCollection('events')).map((event) => ({ params: { id: event.id }, props: { event } }));
+  (await getPublicEvents()).map((event) => ({ params: { id: event.id }, props: { event } }));
 
 export const GET: APIRoute<{ event: EventEntry }> = ({ props, site: siteUrl }) => {
   const { event } = props;

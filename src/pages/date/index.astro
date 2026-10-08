@@ -2,11 +2,15 @@
 import BaseLayout from '@/components/layout/BaseLayout.astro';
 import { copy } from '@/config/copy';
 import FinalCTA from '@/components/sections/FinalCTA.astro';
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
 import Tour from '@/components/sections/Tour.astro';
 import { getEvents } from '@/lib/content';
 import { eventsJsonLd, seoText } from '@/lib/seo';
 
 const { upcoming } = await getEvents();
+import { flyerFiles } from '@/lib/flyer/layout';
+import { PROMO_FLYERS } from '@/lib/flyers';
 ---
 
 <BaseLayout
@@ -14,5 +18,15 @@ const { upcoming } = await getEvents();
   jsonLd={await eventsJsonLd(upcoming, Astro.site!)}
 >
   <Tour events={upcoming} page />
+  {
+    upcoming.length > 0 && (
+      <div class="wrap pb-16">
+        <Button href={flyerFiles(PROMO_FLYERS.tour).instagram} variant="outline" download>
+          <Icon name="download" />
+          {copy.flyer.tourDownload}
+        </Button>
+      </div>
+    )
+  }
   <FinalCTA />
 </BaseLayout>

@@ -9,6 +9,8 @@ import { images } from '@/config/images';
 import { isTodo, showTodo, site, TODO } from '@/config/site';
 import { bookingMessage, mailtoUrl, whatsappUrl } from '@/lib/contact';
 import { today } from '@/lib/content';
+import { flyerFiles } from '@/lib/flyer/layout';
+import { PROMO_FLYERS } from '@/lib/flyers';
 
 interface Props {
   /** The dedicated /booking page uses an h1. */
@@ -102,6 +104,16 @@ const facts = [
           {booking.riderCta}
         </a>
         {site.techRider.isPlaceholder && showTodo() && <span class="todo mt-2">{TODO} {booking.riderPlaceholder}</span>}
+      </p>
+      <p class="grid">
+        <a class="rider" href={flyerFiles(PROMO_FLYERS.band).pdf} download>
+          <Icon name="download" />
+          {copy.flyer.bandDownload}
+        </a>
+        <a class="rider" href={flyerFiles(PROMO_FLYERS.wedding).pdf} download>
+          <Icon name="download" />
+          {copy.flyer.weddingDownload}
+        </a>
       </p>
 
       <hr class="border-line" />

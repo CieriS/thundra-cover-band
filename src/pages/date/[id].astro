@@ -5,7 +5,6 @@
  * Past dates keep their page (with a note), so links shared before the show never break.
  */
 import type { GetStaticPaths } from 'astro';
-import { getCollection } from 'astro:content';
 import BaseLayout from '@/components/layout/BaseLayout.astro';
 import FinalCTA from '@/components/sections/FinalCTA.astro';
 import Button from '@/components/ui/Button.astro';
@@ -16,13 +15,14 @@ import SectionHeading from '@/components/ui/SectionHeading.astro';
 import { copy } from '@/config/copy';
 import { site } from '@/config/site';
 import { whatsappShareUrl } from '@/lib/contact';
-import { getEvents, today, type EventEntry } from '@/lib/content';
+import { getEvents, getPublicEvents, today, type EventEntry } from '@/lib/content';
 import { countdownTarget, eventPath, isPast } from '@/lib/events';
+import { flyerFiles } from '@/lib/flyer/layout';
 import { eventsJsonLd, eventValues, seoText, seoValues } from '@/lib/seo';
 import { fill } from '@/lib/text';
 
 export const getStaticPaths: GetStaticPaths = async () =>
-  (await getCollection('events')).map((event) => ({ params: { id: event.id }, props: { event } }));
+  (await getPublicEvents()).map((event) => ({ params: { id: event.id }, props: { event } }));
 
 interface Props {
   event: EventEntry;
@@ -34,10 +34,11 @@ const values = { ...seoValues, ...eventValues(event) };
 const past = isPast(event, today());
 const { upcoming } = await getEvents();
 const others = upcoming.filter((other) => other.id !== event.id).slice(0, 3);
+const flyer = flyerFiles(event.id);
 const invite = [copy.nextShow.shareMessage, `${values.dateLong}, ${data.venue}, ${values.place}`, new URL(eventPath(event.id), Astro.site).href].join('\n');
 ---
 
-<BaseLayout {...seoText(copy.seo.event, eventValues(event))} jsonLd={await eventsJsonLd([event], Astro.site!)}>
+<BaseLayout {...seoText(copy.seo.event, eventValues(event))} jsonLd={await eventsJsonLd([event], Astro.site!)} image={flyer.preview}>
   <section class="section" aria-labelledby="concerto-title">
     <div class="wrap grid gap-8">
       <SectionHeading
@@ -67,6 +68,45 @@ const invite = [copy.nextShow.shareMessage, `${values.dateLong}, ${data.venue}, 
           </div>
         )
       }
+    </div>
+  </section>
+
+  <section class="section poster-block" aria-labelledby="locandina-title">
+    <div class="wrap poster-layout">
+      <div class="poster-head grid gap-3">
+        <h2 id="locandina-title" class="poster text-3xl">{copy.flyer.blockTitle}</h2>
+        <p class="text-mute">{copy.flyer.blockText}</p>
+      </div>
+      <a class="poster-image" href={flyer.a4} download>
+        <img
+          src={flyer.thumbnail}
+          alt={fill(copy.flyer.alt, values)}
+          width="640"
+          height="905"
+          loading="lazy"
+          decoding="async"
+        />
+      </a>
+      <ul class="poster-actions grid gap-3">
+        <li>
+          <Button href={flyer.pdf} download block>
+            <Icon name="download" />
+            {copy.flyer.pdf}
+          </Button>
+        </li>
+        <li>
+          <Button href={flyer.a4} variant="outline" download block>
+            <Icon name="download" />
+            {copy.flyer.image}
+          </Button>
+        </li>
+        <li>
+          <Button href={flyer.instagram} variant="ghost" download block>
+            <Icon name="instagram" />
+            {copy.flyer.instagram}
+          </Button>
+        </li>
+      </ul>
     </div>
   </section>
 
@@ -102,6 +142,54 @@ const invite = [copy.nextShow.shareMessage, `${values.dateLong}, ${data.venue}, 
     border-left: 4px solid var(--color-volt);
     background: var(--color-night-800);
     font-weight: 600;
+  }
+
+  .poster-block {
+    background: var(--color-night-800);
+  }
+
+  .poster-layout {
+    display: grid;
+    gap: 2rem;
+  }
+
+  /* The sheet as a small poster, slightly tilted like the review cards. */
+  .poster-image {
+    display: block;
+    justify-self: center;
+    width: min(100%, 20rem);
+    border: 1px solid var(--color-line);
+    rotate: -1.5deg;
+  }
+
+  .poster-image img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* Wide screens: the sheet on the left, title and downloads next to it. */
+  @media (min-width: 48rem) {
+    .poster-layout {
+      grid-template-columns: auto minmax(0, 24rem);
+      grid-template-rows: auto auto;
+      align-content: center;
+      justify-content: center;
+      column-gap: 4rem;
+    }
+
+    .poster-image {
+      grid-row: 1 / span 2;
+      align-self: center;
+    }
+
+    .poster-head {
+      align-self: end;
+    }
+
+    .poster-actions {
+      align-self: start;
+    }
   }
 
   .others {

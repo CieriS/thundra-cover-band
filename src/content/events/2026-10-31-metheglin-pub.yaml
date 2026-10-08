@@ -10,4 +10,8 @@ price:
 bookingUrl: # [DA COMPILARE] link per prenotare un tavolo, se esiste
 bookingLabel:
 poster:
-note: Halloween Party
+note:
+title: Halloween Party
+flyerVariant: halloween
+venueLogo: src/assets/venues/metheglin-pub.jpg
+venueLogoTone: light

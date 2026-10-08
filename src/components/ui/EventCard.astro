@@ -40,6 +40,7 @@ const statusLabel = cancelled ? ui.cancelled : data.status === 'postponed' ? ui.
     <p class="poster city">{placeLabel(data)}</p>
     <ul class="meta">
       {statusLabel && <li class="status">{statusLabel}</li>}
+      {data.title && <li class="night">{data.title}</li>}
       {!past && <li>{data.time ? `${ui.startsAt} ${data.time}` : copy.nextShow.timeUnknown}</li>}
       {!past && admission && <li>{admission}</li>}
       {data.address && <li>{data.address}</li>}
@@ -166,6 +167,11 @@ const statusLabel = cancelled ? ui.cancelled : data.status === 'postponed' ? ui.
     margin-top: 0.4rem;
     color: var(--color-mute);
     font-size: var(--text-sm);
+  }
+
+  .night {
+    color: var(--color-bone);
+    font-weight: 700;
   }
 
   .status {

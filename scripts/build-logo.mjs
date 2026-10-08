@@ -191,7 +191,8 @@ async function render(list, clean = false) {
   });
 }
 
-const full = await (await render(real)).resize({ width: 1400 }).png({ compressionLevel: 9 }).toBuffer();
+// Native size: the flyers print it large.
+const full = await (await render(real)).png({ compressionLevel: 9 }).toBuffer();
 await sharp(full).toFile(at('src/assets/brand/logo.png'));
 await (await render(name)).resize({ width: 900 }).png({ compressionLevel: 9 }).toFile(at('src/assets/brand/logo-compact.png'));
 await (await render([bolt])).resize({ height: 700 }).png({ compressionLevel: 9 }).toFile(at('src/assets/brand/bolt.png'));
