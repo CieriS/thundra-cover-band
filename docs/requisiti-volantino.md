@@ -1,69 +1,121 @@
-# Volantino automatico per ogni serata: requisiti
+# Volantini automatici: requisiti
 
-Stato: **solo requisiti, niente è stato realizzato.** Raccolti l'8 ottobre 2026.
-Manca ancora il volantino di esempio da cui ricavare l'impaginazione.
+Stato: **solo requisiti, niente è stato realizzato.** Aggiornati l'8 ottobre 2026 con le
+decisioni di Samuele e con i quattro volantini di esempio (in `docs/volantino-esempi/`).
 
 ## Obiettivo
 
-Per ogni data avere un volantino pronto da scaricare e condividere, senza rifarlo a mano ogni
-volta: stessi dati della pagina della serata, più il logo del locale.
+Per ogni data avere un volantino pronto da scaricare, stampare e condividere, senza rifarlo a
+mano ogni volta: nasce dagli stessi dati della pagina della serata, più il logo del locale.
 
-## Cosa deve fare
+## Decisioni prese
 
-1. **Un volantino per ogni data**, generato dai dati già presenti nel file della serata
-   (`src/content/events/`): data, giorno della settimana, orario, locale, città, indirizzo, ingresso.
-2. **Logo del locale** sul volantino, accanto al logo della band.
-3. **Personalizzazione per serata**, tutta facoltativa:
-   - titolo o tema della serata (es. "Halloween Party");
-   - orario di apertura porte, oltre a quello di inizio;
-   - prezzo, formula (es. cena + concerto), consumazione;
-   - telefono o link per prenotare un tavolo;
-   - una riga libera (es. "Dress code: maschera");
-   - foto di sfondo diversa da quella standard.
-4. **Scaricabile dalla pagina della serata** con un pulsante, nei formati che servono davvero:
-   - post Instagram/Facebook verticale 4:5 (1080×1350);
-   - storia 9:16 (1080×1920);
-   - copertina dell'evento Facebook 16:9 (1920×1005);
-   - stampa A4 (PDF, con margini per la tipografia) — da confermare se serve.
-5. **Codice QR** che porta alla pagina della serata (utile soprattutto sulla versione stampata).
-6. **Coerente con il sito**: stessi colori, stesso carattere, logo e fulmine della band.
-7. **Dati mancanti**: se manca l'orario o l'ingresso il volantino non li mostra (niente
-   "da confermare" stampato); se manca il logo del locale esce con il solo nome.
+| Domanda | Decisione |
+|---|---|
+| Chi crea il volantino | Solo chi gestisce il sito. Niente caricamenti da parte dei locali |
+| Formati | A4, scaricabile e stampabile. Usi: post sui social, stampa da appendere, condivisione |
+| Varianti | Otto: base, Halloween, Natale, Capodanno, Epifania, Summer, Winter, Matrimoni |
+| Mostrarlo sul sito come locandina | Da valutare (vedi "Proposte") |
 
-## Tre modi di farlo
+Di conseguenza il volantino lo genera il sito a ogni aggiornamento: il logo del locale si aggiunge
+come file accanto alla data, senza server e senza moduli di caricamento.
 
-| | Come funziona | Pro | Contro |
-|---|---|---|---|
-| **A. Generato dal sito a ogni aggiornamento** (consigliato) | Il logo del locale si aggiunge come file accanto alla data; il sito crea da solo le immagini e mette i pulsanti di download | Nessun server, sempre allineato ai dati, risultato identico per tutti, zero lavoro per data | Il logo lo carica chi aggiorna il sito, non il locale |
-| **B. Personalizzabile nel browser** | Nella pagina della serata il gestore sceglie il proprio logo dal telefono o dal computer e scarica il volantino; il file non lascia il suo dispositivo | Il locale fa da sé, nessun dato inviato | Il volantino personalizzato esiste solo sul dispositivo di chi lo crea; qualità del logo fuori controllo |
-| **C. Caricamento sul sito** | Il locale invia il logo e il sito lo conserva | Tutto centralizzato | Serve un server con accessi e archivio: il sito oggi è statico, costo e manutenzione sproporzionati |
+## Cosa si ricava dagli esempi
 
-Proposta: **A come base**, ed eventualmente **B** in un secondo momento per i locali che vogliono
-fare da sé. **C** sconsigliato.
+### Volantino della serata (A4 verticale)
 
-## Dati nuovi da aggiungere al file della serata (con la soluzione A)
+Tre esempi: Osteria Cellulosa, Music Station Live Club, Metheglin Pub (Halloween).
 
-- `title`: tema della serata;
-- `doorsTime`: apertura porte;
-- `venueLogo`: file del logo del locale;
-- `flyerNote`: riga libera;
-- `flyerBackground`: foto di sfondo alternativa.
+Struttura fissa, dall'alto:
 
-Titolo, apertura porte e riga libera servirebbero anche alla pagina della serata, non solo al volantino.
+1. **Blocco grafico della band** (circa il 70% dell'altezza): fondo scuro con fulmini, logo,
+   scritta "Tribute Band", in basso i profili Instagram e Facebook.
+2. **Fascia nera** con i dati della serata, centrati:
+   - titolo del tema, solo se c'è (es. "Halloween Party", in arancione con carattere a tema);
+   - **data** in rosso, grande, in maiuscolo: "30 GENNAIO 2027";
+   - **orario**, solo se c'è, in bianco accanto alla data: "ORE 22:30" (in quel caso l'anno
+     non compare: "31 OTTOBRE ORE 22:30");
+   - **logo del locale** in un riquadro, bianco o scuro a seconda del logo;
+   - **località** in bianco maiuscolo: "LAMA DI RENO (BO)", "CORNIANO DI BIBBIANO (RE)".
+
+### Manifesto con l'elenco delle date (4:5)
+
+Un esempio: "DATE 2026 / 2027".
+
+- Titolo in oro con gli anni coperti dalle date in programma.
+- Blocco grafico della band al centro.
+- Una riga per data: riquadro con il logo del locale, data in rosso (31-10-2026), nome del locale
+  in bianco, località in azzurro.
+- In fondo: "DATE IN AGGIORNAMENTO".
+
+È un secondo prodotto, non previsto nella prima stesura: **va generato anche questo**, dall'elenco
+delle date future, e rifatto da solo a ogni data aggiunta o passata.
+
+## Requisiti
+
+### Contenuto
+
+1. Volantino della serata per ogni data, dai dati del file in `src/content/events/`.
+2. Manifesto con l'elenco delle date future, aggiornato da solo.
+3. Logo del locale su entrambi; se manca, al suo posto il nome del locale in grande.
+4. Profili social presi dalla configurazione del sito, non scritti nell'immagine.
+5. Un dato mancante non viene stampato (niente "da confermare" sul volantino).
+6. Nessun dato inventato: sul volantino finisce solo ciò che è nel file della serata.
+
+### Personalizzazione per serata (tutta facoltativa)
+
+- variante grafica (una delle otto);
+- titolo o tema della serata;
+- orario di inizio e apertura porte;
+- prezzo o formula (es. cena + concerto), contatto per prenotare;
+- una riga libera;
+- sfondo del riquadro del logo: bianco o scuro.
+
+### Varianti
+
+Stessa struttura per tutte; cambiano colore d'accento, carattere del titolo del tema ed eventuali
+decorazioni. Base, Halloween, Natale, Capodanno, Epifania, Summer, Winter, Matrimoni.
+
+### Formati e uso
+
+- **A4 verticale** in due file: PDF per la stampa e immagine per la condivisione.
+- Stampa: risoluzione da tipografia (2480×3508 pixel), testo lontano dai bordi.
+- Scaricabili dalla pagina della serata; il manifesto delle date dalla pagina "Date".
+
+### Tecnica
+
+- Generati durante la build, come le immagini del sito: nessun server.
+- Il risultato non deve dipendere dai caratteri installati sul computer che fa la build
+  (su Vercel non ci sono): i caratteri vanno incorporati.
+- Un solo modello di impaginazione con le varianti come parametri, non otto modelli separati.
 
 ## Vincoli
 
-- Il logo del locale si usa solo se fornito dal locale stesso, così com'è.
+- Il logo del locale si usa solo se fornito dal locale, così com'è, senza deformarlo.
 - Nessun logo, scritta o grafica degli AC/DC; nessun testo di canzone.
 - Testo leggibile anche sul telefono: dimensioni minime e contrasto come sul sito.
-- I loghi dei locali arrivano in forme e colori diversi: serve un riquadro neutro che li
-  ospiti senza deformarli (anche loghi scuri su fondo scuro).
-- Nessun dato inventato: sul volantino finisce solo ciò che è nel file della serata.
+- I caratteri a tema devono avere una licenza che ne permetta l'uso.
 
-## Da decidere
+## Proposte
 
-1. Chi crea il volantino: chi gestisce il sito (A) o anche il locale da solo (B)?
-2. Quali formati servono davvero? Serve la stampa?
-3. Un solo modello o più varianti (es. una per Halloween, una standard)?
-4. Il volantino deve poter esistere anche per le date passate (archivio)?
-5. Va mostrato sul sito come locandina della serata, oltre che scaricabile?
+1. **Mostrarlo sul sito: sì, ma solo nella pagina della serata**, come locandina con il pulsante
+   per scaricarla. Non nelle liste: peserebbe sul caricamento senza aggiungere informazioni.
+2. **Usarlo come anteprima del link della serata**: condividendo la pagina su WhatsApp o Facebook
+   comparirebbe il volantino al posto del logo generico. È il vantaggio più grande di tutta
+   l'idea, e non costa lavoro in più per ogni data.
+3. **Aggiungere una versione 4:5 per Instagram** oltre all'A4: un A4 nel feed viene tagliato sopra
+   e sotto. Sarebbe la stessa grafica, riadattata in automatico.
+4. **Codice QR** verso la pagina della serata, solo sulla versione da stampare.
+
+## Da decidere o da ricevere
+
+1. **Blocco grafico della band**: gli esempi usano il logo vecchio dentro un'immagine con i
+   fulmini. Si rifà con il logo nuovo? In quel caso serve lo sfondo con i fulmini senza logo, ad
+   alta risoluzione, oppure lo genera il sito nello stile dell'hero.
+2. **Loghi dei locali**: servono i file originali. Dagli esempi si possono solo ritagliare a
+   bassa risoluzione, non adatti alla stampa.
+3. **Variante "Matrimoni"**: i matrimoni sono eventi privati e non hanno una data pubblica. È un
+   volantino promozionale ("Thundra al tuo matrimonio") invece che il volantino di una serata?
+4. **Versione 4:5 e codice QR**: sì o no.
+5. **Date passate**: il volantino resta scaricabile nella pagina in archivio?
+6. **Orario del Metheglin**: il volantino dice 22:30, sul sito è stato messo 21:30.
