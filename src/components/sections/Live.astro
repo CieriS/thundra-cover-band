@@ -11,6 +11,8 @@ const hasRealVideo = videos.some((video) => youtubeId(video.data.youtube));
 const [main, ...others] = videos;
 ---
 
+{/* No real video yet: the section is left out instead of announcing an empty one. */}
+{hasRealVideo && (
 <section id="live" data-word={copy.live.word} class="section" aria-labelledby="live-title">
   <div class="wrap grid gap-10">
     <Equalizer />
@@ -40,6 +42,7 @@ const [main, ...others] = videos;
     }
   </div>
 </section>
+)}
 
 <style>
   .videos {

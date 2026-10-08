@@ -3,7 +3,16 @@ import Button from '@/components/ui/Button.astro';
 import Motif from '@/components/ui/Motif.astro';
 import RevealText from '@/components/ui/RevealText.astro';
 import { copy } from '@/config/copy';
+import Icon from '@/components/ui/Icon.astro';
 import { site } from '@/config/site';
+
+interface Props {
+  /** Home page: the social profiles close the page here instead of in a section of their own. */
+  social?: boolean;
+}
+
+const { social = false } = Astro.props;
+const { instagram, facebook } = site.social;
 ---
 
 <section class="final" aria-labelledby="final-title">
@@ -19,6 +28,22 @@ import { site } from '@/config/site';
       <Button href="/date/" size="lg" variant="outline">{copy.hero.ctaFans}</Button>
       <Button href="/booking/" size="lg" variant="ghost">{copy.hero.ctaBooking}</Button>
     </div>
+    {
+      social && (
+        <div id="social" class="grid gap-3">
+          <p class="max-w-md font-semibold">{copy.social.text}</p>
+          <p class="flex flex-wrap gap-x-6 gap-y-1">
+            {[instagram, facebook].map((profile, index) => (
+              <a class="profile" href={profile.url} rel="noopener noreferrer">
+                <Icon name={index === 0 ? 'instagram' : 'facebook'} />
+                {profile.label}
+                <span class="visually-hidden">: {profile.handle}</span>
+              </a>
+            ))}
+          </p>
+        </div>
+      )
+    }
   </div>
 </section>
 
@@ -32,6 +57,17 @@ import { site } from '@/config/site';
     background: var(--color-red);
     clip-path: polygon(0 var(--slant), 100% 0, 100% 100%, 0 100%);
     isolation: isolate;
+  }
+
+  .profile {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.35em;
   }
 
   /*

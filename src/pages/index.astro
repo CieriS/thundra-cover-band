@@ -12,7 +12,6 @@ import Live from '@/components/sections/Live.astro';
 import NextShow from '@/components/sections/NextShow.astro';
 import Reviews from '@/components/sections/Reviews.astro';
 import Setlist from '@/components/sections/Setlist.astro';
-import Social from '@/components/sections/Social.astro';
 import Tour from '@/components/sections/Tour.astro';
 import { getEvents, getSetlist } from '@/lib/content';
 import { bandJsonLd, eventsJsonLd, siteJsonLd } from '@/lib/seo';
@@ -26,17 +25,15 @@ const jsonLd = [siteJsonLd(Astro.site!), await bandJsonLd(Astro.site!), ...(awai
 <BaseLayout jsonLd={jsonLd} hasHero>
   <Hero next={next} />
   <HazardStripe />
-  {next && <NextShow event={next} />}
-  <Tour events={upcoming} />
-  <Live />
-  <Reviews />
+  {/* One block for the dates: the next one in full, the others as short rows. */}
+  {next ? <NextShow event={next} others={upcoming.slice(1)} /> : <Tour events={upcoming} />}
+  <Booking compact />
   <Band />
+  <Live />
+  <Reviews limit={1} />
   {songs.length > 0 && <Marquee items={songs} duration={60} class="songs-marquee" />}
-  <Setlist />
+  <Setlist limit={6} />
   <Walker />
-  <HazardStripe />
-  <Booking />
-  <Gallery />
-  <Social />
-  <FinalCTA />
+  <Gallery strip />
+  <FinalCTA social />
 </BaseLayout>

@@ -3,7 +3,13 @@ import SectionHeading from '@/components/ui/SectionHeading.astro';
 import { copy } from '@/config/copy';
 import { getReviews } from '@/lib/content';
 
-const reviews = await getReviews();
+interface Props {
+  /** The home page shows only the first reviews; the booking page shows them all. */
+  limit?: number;
+}
+
+const { limit } = Astro.props;
+const reviews = (await getReviews()).slice(0, limit);
 ---
 
 {

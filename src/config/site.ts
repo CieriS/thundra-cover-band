@@ -102,9 +102,9 @@ export const site = {
     'Tribute band non affiliata agli AC/DC. Tutti i marchi appartengono ai rispettivi proprietari.',
 } as const;
 
+/** The "Live" entry (`/#live`) comes back with the first real video: until then the section is not rendered. */
 export const nav = [
   { label: 'Date', href: '/date/' },
-  { label: 'Live', href: '/#live' },
   { label: 'La band', href: '/#band' },
   { label: 'Scaletta', href: '/#scaletta' },
   { label: 'Galleria', href: '/#galleria' },

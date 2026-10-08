@@ -7,6 +7,12 @@ import { copy } from '@/config/copy';
 import { fallbacks, pickFallback } from '@/config/images';
 import { getGallery } from '@/lib/content';
 
+interface Props {
+  /** Home page: one row to swipe instead of the full grid. */
+  strip?: boolean;
+}
+
+const { strip = false } = Astro.props;
 const { gallery } = copy;
 const photos = await Promise.all(
   (await getGallery()).map(async (entry, index) => {
@@ -23,7 +29,7 @@ const photos = await Promise.all(
       <div class="wrap grid gap-10">
         <SectionHeading id="galleria-title" eyebrow={gallery.eyebrow} title={gallery.title} />
 
-        <ul class="grid-photos">
+        <ul class:list={['grid-photos', strip && 'is-strip']}>
           {photos.map((photo, index) => (
             <li>
               {/* Without JavaScript the link opens the full image. */}
@@ -37,8 +43,8 @@ const photos = await Promise.all(
                 <ResponsiveImage
                   src={photo.src}
                   alt={photo.alt}
-                  ratio={index % 5 === 0 ? '3 / 2' : '1 / 1'}
-                  sizes={index % 5 === 0 ? '(min-width: 64rem) 66vw, 100vw' : '(min-width: 64rem) 33vw, 50vw'}
+                  ratio={!strip && index % 5 === 0 ? '3 / 2' : '1 / 1'}
+                  sizes={strip ? '(min-width: 64rem) 22vw, 62vw' : index % 5 === 0 ? '(min-width: 64rem) 66vw, 100vw' : '(min-width: 64rem) 33vw, 50vw'}
                   placeholder={photo.placeholder}
                   reveal
                 />
@@ -82,6 +88,37 @@ const photos = await Promise.all(
 
   .grid-photos li:nth-child(5n + 1) {
     grid-column: span 2;
+  }
+
+  /* Same swipe row as the line-up: page scroll stays vertical, the row scrolls sideways. */
+  .is-strip {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: 62vw;
+    margin-inline: calc(var(--spacing-gutter) * -1);
+    padding-inline: var(--spacing-gutter);
+    padding-bottom: 0.75rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--spacing-gutter);
+    overscroll-behavior-x: contain;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-red) transparent;
+  }
+
+  .is-strip li:nth-child(5n + 1) {
+    grid-column: auto;
+  }
+
+  .is-strip li {
+    scroll-snap-align: start;
+  }
+
+  @media (min-width: 64rem) {
+    .is-strip {
+      grid-auto-columns: 22vw;
+    }
   }
 
   .grid-photos a {

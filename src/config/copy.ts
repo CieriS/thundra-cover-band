@@ -20,6 +20,8 @@ export const copy = {
     calendar: 'Salva la data',
     directions: 'Come arrivare',
     share: 'Invita gli amici',
+    /** Label above the later dates, under the card of the next one (home page). */
+    others: 'Poi',
     /** Text of the WhatsApp invitation; date, venue and link are added automatically. */
     shareMessage: 'Vieni con me a sentire i Thundra, tributo agli AC/DC?',
     today: 'È stasera. Ci vediamo lì.',
@@ -65,6 +67,8 @@ export const copy = {
     eyebrow: 'Scaletta tipo',
     title: ['I pezzi', 'che aspetti'],
     intro: 'Quelli che canti dal primo accordo. E qualche chicca per chi i dischi li ha consumati.',
+    /** Opens the rest of the list on the home page. Token: {count}. */
+    more: 'Vedi gli altri {count} brani',
   },
   booking: {
     word: 'Book',
@@ -75,6 +79,8 @@ export const copy = {
     /** First call to action, right under the intro: on a phone the contact panel is far below. */
     quickCta: 'Chiedi disponibilità su WhatsApp',
     quickNote: 'Risponde la band, senza intermediari. Nessun impegno.',
+    /** Home page: link to the booking page with facts, tech rider and form. */
+    detailsCta: 'Scheda tecnica e contatti',
     benefitsTitle: 'Cosa ottiene il locale',
     benefits: [
       {
@@ -130,9 +136,8 @@ export const copy = {
     previous: 'Foto precedente',
     next: 'Foto successiva',
   },
+  /** Closing block of the home page, next to the links to the profiles. */
   social: {
-    eyebrow: 'Social',
-    title: ['Non perderti', 'la prossima'],
     text: 'Le date nuove escono prima sui social. Seguici e sei a posto.',
   },
   finalCta: {

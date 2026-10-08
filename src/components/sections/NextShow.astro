@@ -13,9 +13,11 @@ import { admissionLabel, countdownTarget, eventPath, mapsUrl, placeLabel } from 
 
 interface Props {
   event: EventEntry;
+  /** Later dates, listed as short rows under the card (home page). */
+  others?: EventEntry[];
 }
 
-const { event } = Astro.props;
+const { event, others } = Astro.props;
 const { data } = event;
 const date = dateParts(data.date);
 const admission = admissionLabel(data);
@@ -86,6 +88,47 @@ const invite = [
       </div>
       <Motif name="bell" />
     </article>
+
+    {
+      others && (
+        <div class="grid gap-4">
+          {others.length > 0 && (
+            <>
+              <h3 class="label text-mute">{copy.nextShow.others}</h3>
+              <ol class="others">
+                {others.map((other) => {
+                  const when = dateParts(other.data.date);
+                  return (
+                    <li data-reveal="rise">
+                      <a href={eventPath(other.id)}>
+                        <time class="poster" datetime={other.data.date}>
+                          {when.day} <span class="text-red-ink">{when.month}</span>
+                        </time>
+                        <span class="where">
+                          <span class="poster text-xl">{other.data.venue}</span>
+                          <span class="text-sm text-mute">{placeLabel(other.data)}</span>
+                        </span>
+                        <Icon name="arrow" />
+                      </a>
+                    </li>
+                  );
+                })}
+              </ol>
+            </>
+          )}
+          <p class="flex flex-wrap gap-x-8 gap-y-2">
+            <a class="more" href="/date/">
+              {copy.tour.all}
+              <Icon name="arrow" />
+            </a>
+            <a class="more" href="/archivio/">
+              {copy.tour.archive}
+              <Icon name="arrow" />
+            </a>
+          </p>
+        </div>
+      )
+    }
   </div>
 </section>
 
@@ -152,6 +195,50 @@ const invite = [
   .actions {
     display: grid;
     gap: 0.6rem;
+  }
+
+  .others {
+    display: grid;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .others a {
+    display: grid;
+    grid-template-columns: 5.5rem 1fr auto;
+    align-items: center;
+    gap: 1rem;
+    min-height: 4.5rem;
+    padding-block: 0.75rem;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .others time {
+    font-size: var(--text-2xl);
+    line-height: 1;
+  }
+
+  .where {
+    display: grid;
+    gap: 0.15rem;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .others a:hover .poster,
+  .others a:focus-visible .poster {
+    color: var(--color-red-ink);
+  }
+
+  .more {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-color: var(--color-red);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.35em;
   }
 
 

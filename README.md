@@ -75,7 +75,7 @@ src/
 │   └── flyers.ts         # elenco dei volantini da generare, dai dati delle serate
 ├── components/
 │   ├── layout/           # BaseLayout, Header, Footer, MobileActionBar, Brand
-│   ├── sections/         # Hero, NextShow, Tour, Live, Band, Setlist, Reviews, Booking, Gallery, Social, FinalCTA
+│   ├── sections/         # Hero, NextShow, Tour, Live, Band, Setlist, Reviews, Booking, Gallery, FinalCTA
 │   └── ui/               # Button, EventCard, Countdown, ResponsiveImage, VideoFacade, Marquee, Motif, Storm, Walker…
 ├── pages/                # /, /date, /date/<id>, /date/<id>.ics, /archivio, /booking, /volantini/<file>,
 │                         # /privacy, /accessibilita, 404, robots.txt
@@ -102,6 +102,24 @@ Regole dell'architettura:
 - **Design token in un solo punto**: il blocco `@theme` di `src/styles/global.css` (colori, scala
   tipografica, spaziature, durate, easing). Le coppie testo/sfondo sono verificate da
   `src/styles/contrast.test.ts` (WCAG AA).
+
+## Com'è fatta la home
+
+La home è volutamente corta (circa dieci schermate su un telefono): dà l'essenziale e rimanda alle
+pagine per il resto. L'ordine è in `src/pages/index.astro`.
+
+| Blocco | In home | Versione completa |
+| --- | --- | --- |
+| Date | la prossima per intero con conto alla rovescia, le altre come righe | `/date/` e pagina di ogni serata |
+| Booking | presentazione, tre vantaggi, pulsante WhatsApp | `/booking/` (dati dello show, scheda tecnica, volantini, modulo) |
+| Recensioni | la prima (campo `order`) | `/booking/` |
+| Scaletta | i primi sei brani, gli altri si aprono con un tocco | `/booking/` |
+| Galleria | una striscia da scorrere di lato | la stessa, a tutto schermo al tocco |
+| Video | la sezione compare solo quando c'è almeno un video vero | `/booking/` |
+| Social | due link nel blocco di chiusura | footer |
+
+Quando arriva il primo video, rimetti la voce "Live" (`/#live`) nel menu: `nav` in
+`src/config/site.ts`.
 
 ## Segnaposto
 
@@ -147,7 +165,7 @@ Tutto ciò che cambia nel tempo sta in file separati dal codice. Non serve tocca
 | Telefono, WhatsApp, email, social, zona, durata    | `src/config/site.ts`                                        |
 | Tutti i testi: titoli, frasi, pulsanti, etichette  | `src/config/copy.ts`                                        |
 | Titoli e descrizioni per Google e anteprime        | `src/config/copy.ts`, blocco `seo`                          |
-| Foto fisse (hero, gruppo, booking, social)         | `src/config/images.ts`                                      |
+| Foto fisse (hero, gruppo, booking)                 | `src/config/images.ts`                                      |
 | Colori, caratteri, dimensioni, tempi delle animazioni | blocco `@theme` in `src/styles/global.css`               |
 | Logo, favicon, anteprima dei link                  | `src/assets/brand/` + `node scripts/build-logo.mjs`         |
 | Volantini (varianti, loghi dei locali, serate private) | vedi "Volantini"                                       |
@@ -258,7 +276,6 @@ alla dimensione più grande che hai: le varianti AVIF/WebP le genera la build.
 | Hero desktop         | 16:9        | 2400 px                | `src/config/images.ts` → `images.hero.desktop`                   |
 | Foto di gruppo       | 3:2         | 1800 px                | `src/config/images.ts` → `images.band`                           |
 | Foto sezione Booking | 3:2         | 1800 px                | `src/config/images.ts` → `images.booking`                        |
-| Griglia Social (×4)  | 1:1         | 1080 px                | `src/config/images.ts` → `images.social`                         |
 | Ritratti dei membri  | 4:5         | 1500 px                | campo `photo` in `src/content/members/<nome>.yaml`               |
 | Galleria             | 3:2         | 1800 px                | campo `image` in `src/content/gallery/<nome>.yaml`               |
 | Copertina video      | 16:9        | 1280 px                | campo `poster` in `src/content/videos/<nome>.yaml`               |

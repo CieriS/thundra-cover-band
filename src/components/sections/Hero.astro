@@ -107,7 +107,7 @@ const { video } = site.hero;
     }
 
     <div class="cta">
-      <Button href="/#tour" size="lg">{copy.hero.ctaFans}</Button>
+      <Button href={next ? '/#prossimo' : '/#tour'} size="lg">{copy.hero.ctaFans}</Button>
       <Button href="/booking/" size="lg" variant="outline">{copy.hero.ctaBooking}</Button>
     </div>
   </div>

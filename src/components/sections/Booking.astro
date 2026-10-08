@@ -15,9 +15,11 @@ import { PROMO_FLYERS } from '@/lib/flyers';
 interface Props {
   /** The dedicated /booking page uses an h1. */
   page?: boolean;
+  /** Home page: pitch, benefits and one call to action; the details live on /booking. */
+  compact?: boolean;
 }
 
-const { page = false } = Astro.props;
+const { page = false, compact = false } = Astro.props;
 const { booking } = copy;
 const message = bookingMessage();
 const Sub = page ? 'h2' : 'h3';
@@ -44,7 +46,7 @@ const facts = [
       />
 
       {/* On a phone the contact panel is several screens below: ask right away. */}
-      <div class="grid gap-2 lg:hidden">
+      <div class:list={['grid gap-2', !compact && 'quick']}>
         <Button href={whatsappUrl(site.contact.whatsapp, message)} size="lg" block rel="noopener noreferrer">
           <Icon name="chat" />
           {booking.quickCta}
@@ -52,6 +54,7 @@ const facts = [
         <p class="text-sm text-mute">{booking.quickNote}</p>
       </div>
 
+      {!compact && (
       <div class="photo">
         <ResponsiveImage
           src={images.booking.src}
@@ -63,6 +66,7 @@ const facts = [
         />
         <LightningSVG variant="b" class="photo-bolt" />
       </div>
+      )}
 
       <div class="grid gap-4">
         <Sub class="poster text-2xl">{booking.benefitsTitle}</Sub>
@@ -78,14 +82,24 @@ const facts = [
         </ul>
       </div>
 
+      {!compact && (
       <div class="grid gap-4">
         <Sub class="poster text-2xl">{booking.reliabilityTitle}</Sub>
         <ul class="checks">
           {booking.reliability.map((item) => <li>{item}</li>)}
         </ul>
       </div>
+      )}
+
+      {compact && (
+        <a class="rider" href="/booking/">
+          {booking.detailsCta}
+          <Icon name="arrow" />
+        </a>
+      )}
     </div>
 
+    {!compact && (
     <aside class="panel" aria-label={booking.contactTitle}>
       <Sub class="poster text-2xl">{booking.factsTitle}</Sub>
       <dl class="facts">
@@ -190,6 +204,7 @@ const facts = [
         </p>
       </form>
     </aside>
+    )}
   </div>
 </section>
 
@@ -201,6 +216,12 @@ const facts = [
   .layout {
     display: grid;
     gap: 3rem;
+  }
+
+  @media (min-width: 64rem) {
+    .quick {
+      display: none;
+    }
   }
 
   .photo {
@@ -302,7 +323,7 @@ const facts = [
   }
 
   @media (min-width: 64rem) {
-    .layout {
+    .layout:has(.panel) {
       grid-template-columns: minmax(0, 1.15fr) minmax(22rem, 0.85fr);
       gap: 4rem;
       align-items: start;

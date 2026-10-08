@@ -19,10 +19,6 @@ import member2 from '@/assets/placeholders/member-2.jpg';
 import member3 from '@/assets/placeholders/member-3.jpg';
 import member4 from '@/assets/placeholders/member-4.jpg';
 import member5 from '@/assets/placeholders/member-5.jpg';
-import social1 from '@/assets/demo/social-1.jpg';
-import social2 from '@/assets/demo/social-2.jpg';
-import social3 from '@/assets/demo/social-3.jpg';
-import social4 from '@/assets/demo/social-4.jpg';
 import videoPoster from '@/assets/demo/video-poster.jpg';
 
 export interface SiteImage {
@@ -67,12 +63,6 @@ export const images = {
   },
   band: placeholder(band, 'La band sul palco di un club, luci rosse e blu, pubblico in primo piano'), // [DA COMPILARE] foto di gruppo 3:2
   booking: placeholder(booking, 'Sala piena di pubblico davanti al palco'), // [DA COMPILARE] foto 3:2
-  social: [
-    placeholder(social1, 'Foto dal profilo social di Thundra'), // [DA COMPILARE] 4 foto 1:1
-    placeholder(social2, 'Foto dal profilo social di Thundra'),
-    placeholder(social3, 'Foto dal profilo social di Thundra'),
-    placeholder(social4, 'Foto dal profilo social di Thundra'),
-  ],
 } as const;
 
 /** Fallbacks for collection entries that have no image yet. */

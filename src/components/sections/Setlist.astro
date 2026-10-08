@@ -3,8 +3,18 @@ import SectionHeading from '@/components/ui/SectionHeading.astro';
 import VolumeKnob from '@/components/ui/VolumeKnob.astro';
 import { copy } from '@/config/copy';
 import { getSetlist } from '@/lib/content';
+import { fill } from '@/lib/text';
 
+interface Props {
+  /** The home page lists the first songs and folds the rest away. */
+  limit?: number;
+}
+
+const { limit } = Astro.props;
 const setlist = await getSetlist();
+const songs = setlist?.data.songs ?? [];
+const shown = limit ? songs.slice(0, limit) : songs;
+const folded = limit ? songs.slice(limit) : [];
 ---
 
 {
@@ -19,12 +29,24 @@ const setlist = await getSetlist();
           intro={copy.setlist.intro}
         />
         <ol class="songs poster">
-          {setlist.data.songs.map((song) => (
+          {shown.map((song) => (
             <li data-reveal="rise">
               <span>{song}</span>
             </li>
           ))}
         </ol>
+        {folded.length > 0 && (
+          <details class="rest">
+            <summary>{fill(copy.setlist.more, { count: String(folded.length) })}</summary>
+            <ol class="songs poster" start={shown.length + 1} style={`counter-reset: song ${shown.length}`}>
+              {folded.map((song) => (
+                <li>
+                  <span>{song}</span>
+                </li>
+              ))}
+            </ol>
+          </details>
+        )}
         {setlist.data.note && <p class="text-sm text-mute">{setlist.data.note}</p>}
       </div>
     </section>
@@ -54,6 +76,22 @@ const setlist = await getSetlist();
     content: counter(song, decimal-leading-zero);
     color: var(--color-red-ink);
     font-size: 0.55em;
+  }
+
+  .rest summary {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-color: var(--color-red);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.35em;
+  }
+
+  .rest[open] summary {
+    margin-bottom: 1rem;
   }
 
   @media (min-width: 48rem) {
