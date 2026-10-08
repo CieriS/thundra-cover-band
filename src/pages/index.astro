@@ -7,6 +7,7 @@ import Gallery from '@/components/sections/Gallery.astro';
 import Hero from '@/components/sections/Hero.astro';
 import Live from '@/components/sections/Live.astro';
 import NextShow from '@/components/sections/NextShow.astro';
+import Reviews from '@/components/sections/Reviews.astro';
 import Setlist from '@/components/sections/Setlist.astro';
 import Social from '@/components/sections/Social.astro';
 import Tour from '@/components/sections/Tour.astro';
@@ -22,6 +23,7 @@ const jsonLd = [await bandJsonLd(Astro.site!), ...(await eventsJsonLd(upcoming, 
   {next && <NextShow event={next} />}
   <Tour events={upcoming} />
   <Live />
+  <Reviews />
   <Band />
   <Setlist />
   <Booking />

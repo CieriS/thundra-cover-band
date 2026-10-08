@@ -81,4 +81,16 @@ const videos = defineCollection({
     }),
 });
 
-export const collections = { events, members, setlist, gallery, videos };
+const reviews = defineCollection({
+  loader: yaml('reviews'),
+  schema: z.object({
+    /** Real, authorised quotes only. */
+    quote: z.string().min(1),
+    author: z.string().min(1),
+    role: z.string().min(1),
+    place: optionalText,
+    order: z.number().int(),
+  }),
+});
+
+export const collections = { events, members, setlist, gallery, videos, reviews };

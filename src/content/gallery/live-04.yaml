@@ -1,4 +1,4 @@
-image: # [DA COMPILARE] foto live 3:2, es. ../../assets/gallery/live-04.jpg
-alt: Thundra dal vivo, foto 4 (immagine segnaposto)
+image: ../../assets/demo/gallery-4.jpg # [DEMO] foto di repertorio, da sostituire
+alt: Chitarrista in controluce tra il fumo del palco
 caption:
 order: 4

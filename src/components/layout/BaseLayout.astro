@@ -27,6 +27,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL('/og.jpg', Astro.site);
 // Preview deployments (e.g. a branch on Vercel) must not compete with production.
 const isPreview = process.env['VERCEL_ENV'] === 'preview';
+if (site.demo && process.env['VERCEL_ENV'] === 'production') {
+  throw new Error('Demo content (stock photos, invented reviews) must not be deployed to production: set site.demo to false after replacing it.');
+}
 ---
 
 <!doctype html>

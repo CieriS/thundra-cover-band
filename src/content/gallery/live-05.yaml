@@ -1,4 +1,4 @@
-image: # [DA COMPILARE] foto live 3:2, es. ../../assets/gallery/live-05.jpg
-alt: Thundra dal vivo, foto 5 (immagine segnaposto)
+image: ../../assets/demo/gallery-5.jpg # [DEMO] foto di repertorio, da sostituire
+alt: Corna al cielo tra il pubblico sotto le luci calde
 caption:
 order: 5

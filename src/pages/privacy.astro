@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '@/components/layout/BaseLayout.astro';
 import SectionHeading from '@/components/ui/SectionHeading.astro';
-import { isTodo, site, TODO } from '@/config/site';
+import { isTodo, showTodo, site, TODO } from '@/config/site';
 import { dateParts } from '@/lib/dates';
 
 const updated = dateParts(site.legal.lastUpdated);
@@ -23,7 +23,7 @@ const updated = dateParts(site.legal.lastUpdated);
 
         <h2>Titolare del trattamento</h2>
         <p>
-          {isTodo(site.legal.owner) ? <span class="todo">{TODO} titolare del trattamento</span> : site.legal.owner}
+          {isTodo(site.legal.owner) ? showTodo() ? <span class="todo">{TODO} titolare del trattamento</span> : site.name : site.legal.owner}
           . Contatto: <a href={site.contact.phoneHref}>{site.contact.phoneDisplay}</a>
           {
             !isTodo(site.contact.email) && (

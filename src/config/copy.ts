@@ -35,6 +35,10 @@ export const copy = {
     play: 'Riproduci il video',
     consent: 'Il video si carica da YouTube solo dopo il tuo tocco.',
   },
+  reviews: {
+    eyebrow: 'Dicono di noi',
+    title: ['Chi c’era', 'lo racconta'],
+  },
   band: {
     eyebrow: 'La band',
     title: ['Cinque.', 'Forte.'],

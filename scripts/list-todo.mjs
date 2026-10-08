@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const FOLDERS = ['src/config', 'src/content'];
-const MARKER = /\[(DA COMPILARE|VERIFICARE)[^\]]*\]/;
+const MARKER = /\[(DA COMPILARE|VERIFICARE|DEMO)[^\]]*\]/;
 // Lines that define or render the marker itself are not placeholders.
 const IGNORE = /export const TODO|marker and is listed/;
 

@@ -6,11 +6,21 @@
 export const TODO = '[DA COMPILARE]';
 
 /** True when a value is missing or still a placeholder. */
+/** Missing values are shown as visible markers, except on the demo branch where they are left out. */
+export function showTodo(): boolean {
+  return !site.demo;
+}
+
 export function isTodo(value: string | null | undefined): boolean {
   return !value || value.includes(TODO);
 }
 
 export const site = {
+  /**
+   * [DEMO] Demo branch: stock photos, invented reviews and sample show facts, presented as real.
+   * The build refuses to run for production while this is true (see BaseLayout).
+   */
+  demo: true,
   name: 'Thundra',
   subtitle: 'AC/DC Tribute Band',
   lang: 'it',
@@ -48,9 +58,9 @@ export const site = {
   show: {
     durationLabel: '2 ore',
     durationMinutes: 120,
-    sets: TODO, // [DA COMPILARE] numero di set (es. "2 set con pausa")
-    ownPa: TODO, // [DA COMPILARE] impianto audio/luci proprio: sì/no e per che capienza
-    experience: TODO, // [DA COMPILARE] esperienza della band (anni, tipo di locali): solo dati reali
+    sets: '2 set con pausa', // [DEMO] valore di esempio, da confermare
+    ownPa: 'Impianto proprio per locali fino a 200 persone', // [DEMO] valore di esempio, da confermare
+    experience: 'Club, pub, feste di paese ed eventi privati', // [DEMO] valore di esempio, da confermare
   },
 
   techRider: {
@@ -69,6 +79,11 @@ export const site = {
       mobile: { webm: '/video/hero-mobile.webm', mp4: '/video/hero-mobile.mp4' },
       desktop: { webm: '/video/hero-desktop.webm', mp4: '/video/hero-desktop.mp4' },
     },
+  },
+
+  accessibility: {
+    /** Date of the last accessibility check (automatic + manual). */
+    lastChecked: '2026-10-08',
   },
 
   legal: {

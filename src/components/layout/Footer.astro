@@ -1,6 +1,6 @@
 ---
 import Icon from '@/components/ui/Icon.astro';
-import { isTodo, nav, site, TODO } from '@/config/site';
+import { isTodo, nav, showTodo, site, TODO } from '@/config/site';
 import Brand from './Brand.astro';
 
 const year = new Date().getFullYear();
@@ -41,7 +41,9 @@ const links = [...nav, { label: 'Archivio date', href: '/archivio/' }];
             {site.contact.phoneDisplay}
           </a>
         </li>
-        <li>
+        {
+          (!isTodo(site.contact.email) || showTodo()) && (
+            <li>
           {
             isTodo(site.contact.email) ? (
               <span class="footer-link">
@@ -55,7 +57,9 @@ const links = [...nav, { label: 'Archivio date', href: '/archivio/' }];
               </a>
             )
           }
-        </li>
+            </li>
+          )
+        }
         <li>
           <a class="footer-link" href={site.social.instagram.url} rel="noopener noreferrer">
             <Icon name="instagram" />
@@ -77,9 +81,10 @@ const links = [...nav, { label: 'Archivio date', href: '/archivio/' }];
   <div class="border-t border-line">
     <div class="wrap grid gap-2 py-6 text-xs text-mute md:flex md:items-center md:justify-between">
       <p>{site.disclaimer}</p>
-      <p class="flex items-center gap-4 whitespace-nowrap">
+      <p class="flex flex-wrap items-center gap-x-4">
         <span>© {year} {site.name}</span>
         <a class="footer-link underline underline-offset-4" href="/privacy/">Privacy</a>
+        <a class="footer-link underline underline-offset-4" href="/accessibilita/">Accessibilità</a>
       </p>
     </div>
   </div>

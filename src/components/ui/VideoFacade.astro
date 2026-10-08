@@ -8,7 +8,7 @@
 import type { ImageMetadata } from 'astro';
 import { copy } from '@/config/copy';
 import { fallbacks } from '@/config/images';
-import { TODO } from '@/config/site';
+import { showTodo, TODO } from '@/config/site';
 import { youtubeEmbedUrl, youtubeId } from '@/lib/contact';
 import Icon from './Icon.astro';
 import ResponsiveImage from './ResponsiveImage.astro';
@@ -33,7 +33,7 @@ const image = poster ?? fallbacks.videoPoster;
       ratio="16 / 9"
       sizes={sizes}
       widths={[480, 800, 1280]}
-      placeholder={!poster}
+      placeholder={!poster && showTodo()}
       reveal
     />
     {
@@ -54,7 +54,7 @@ const image = poster ?? fallbacks.videoPoster;
         </a>
       ) : (
         <div class="soon">
-          <span class="todo">{TODO} video live</span>
+          {showTodo() ? <span class="todo">{TODO} video live</span> : <span class="label soon-label">Presto online</span>}
         </div>
       )
     }
@@ -85,6 +85,12 @@ const image = poster ?? fallbacks.videoPoster;
     inset: 0;
     display: grid;
     place-items: center;
+  }
+
+  .soon-label {
+    padding: 0.5rem 0.9rem;
+    background: var(--color-night-950);
+    color: var(--color-bone);
   }
 
   .play {

@@ -1,0 +1,105 @@
+---
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import { copy } from '@/config/copy';
+import { getReviews } from '@/lib/content';
+
+const reviews = await getReviews();
+---
+
+{
+  reviews.length > 0 && (
+    <section id="recensioni" class="section reviews" aria-labelledby="recensioni-title">
+      <div class="wrap grid gap-10">
+        <SectionHeading id="recensioni-title" eyebrow={copy.reviews.eyebrow} title={copy.reviews.title} />
+        <ul class="list">
+          {reviews.map((review, index) => (
+            <li data-reveal="rise" style={`--i: ${index % 2}`}>
+              <figure>
+                <span class="mark poster" aria-hidden="true">
+                  “
+                </span>
+                <blockquote>
+                  <p>{review.data.quote}</p>
+                </blockquote>
+                <figcaption>
+                  <span class="poster author">{review.data.author}</span>
+                  <span class="label who">
+                    {review.data.role}
+                    {review.data.place && `, ${review.data.place}`}
+                  </span>
+                </figcaption>
+              </figure>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .reviews {
+    background: var(--color-night-900);
+  }
+
+  .list {
+    display: grid;
+    gap: 1rem;
+  }
+
+  figure {
+    position: relative;
+    display: grid;
+    align-content: space-between;
+    gap: 1.5rem;
+    height: 100%;
+    padding: 2.75rem 1.25rem 1.5rem;
+    border: 1px solid var(--color-line);
+    border-top: 4px solid var(--color-red);
+    background: var(--color-night-950);
+  }
+
+  .mark {
+    position: absolute;
+    top: 0.1em;
+    left: 1.1rem;
+    color: var(--color-red-ink);
+    font-size: 5rem;
+    line-height: 1;
+  }
+
+  blockquote {
+    font-size: var(--text-lg);
+    font-weight: 500;
+    line-height: 1.45;
+  }
+
+  figcaption {
+    display: grid;
+    gap: 0.3rem;
+  }
+
+  .author {
+    font-size: var(--text-xl);
+  }
+
+  .who {
+    color: var(--color-volt);
+  }
+
+  @media (min-width: 48rem) {
+    .list {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+
+    figure {
+      padding: 3.25rem 2rem 2rem;
+    }
+
+    /* Staggered columns, poster style. */
+    .list li:nth-child(even) {
+      margin-top: 2.5rem;
+    }
+  }
+</style>

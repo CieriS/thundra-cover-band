@@ -6,7 +6,7 @@ import ResponsiveImage from '@/components/ui/ResponsiveImage.astro';
 import SectionHeading from '@/components/ui/SectionHeading.astro';
 import { copy } from '@/config/copy';
 import { images } from '@/config/images';
-import { isTodo, site, TODO } from '@/config/site';
+import { isTodo, showTodo, site, TODO } from '@/config/site';
 import { bookingMessage, mailtoUrl, whatsappUrl } from '@/lib/contact';
 import { today } from '@/lib/content';
 
@@ -92,7 +92,7 @@ const facts = [
           <Icon name="download" />
           {booking.riderCta}
         </a>
-        {site.techRider.isPlaceholder && <span class="todo mt-2">{TODO} {booking.riderPlaceholder}</span>}
+        {site.techRider.isPlaceholder && showTodo() && <span class="todo mt-2">{TODO} {booking.riderPlaceholder}</span>}
       </p>
 
       <hr class="border-line" />
@@ -110,9 +110,11 @@ const facts = [
         </Button>
         {
           isTodo(site.contact.email) ? (
-            <p class="text-sm">
-              <span class="todo">{TODO} email di contatto</span>
-            </p>
+            showTodo() && (
+              <p class="text-sm">
+                <span class="todo">{TODO} email di contatto</span>
+              </p>
+            )
           ) : (
             <Button
               href={mailtoUrl(site.contact.email, `Richiesta data ${site.name}`, message)}

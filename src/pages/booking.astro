@@ -2,6 +2,7 @@
 import BaseLayout from '@/components/layout/BaseLayout.astro';
 import Booking from '@/components/sections/Booking.astro';
 import Live from '@/components/sections/Live.astro';
+import Reviews from '@/components/sections/Reviews.astro';
 import Setlist from '@/components/sections/Setlist.astro';
 import { site } from '@/config/site';
 import { bandJsonLd } from '@/lib/seo';
@@ -15,6 +16,7 @@ const area = site.area.cities.join(', ');
   jsonLd={[await bandJsonLd(Astro.site!)]}
 >
   <Booking page />
+  <Reviews />
   <Live />
   <Setlist />
 </BaseLayout>

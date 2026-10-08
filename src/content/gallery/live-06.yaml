@@ -1,4 +1,4 @@
-image: # [DA COMPILARE] foto live 3:2, es. ../../assets/gallery/live-06.jpg
-alt: Thundra dal vivo, foto 6 (immagine segnaposto)
+image: ../../assets/demo/gallery-6.jpg # [DEMO] foto di repertorio, da sostituire
+alt: La band sul palco di un club tra luci blu e arancioni
 caption:
 order: 6

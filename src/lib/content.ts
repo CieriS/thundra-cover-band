@@ -34,3 +34,7 @@ export async function getSetlist() {
   const [setlist] = await getCollection('setlist');
   return setlist;
 }
+
+export async function getReviews() {
+  return (await getCollection('reviews')).sort(byOrder);
+}
