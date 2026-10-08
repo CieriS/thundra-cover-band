@@ -19,8 +19,7 @@
   transform-origin: left bottom;
 }
 
-.reveal-lines .reveal-line-inner,
-.hero .wordmark {
+.reveal-lines .reveal-line-inner {
   text-shadow:
     0.03em 0.03em 0 var(--color-red),
     0.06em 0.06em 0 var(--color-red-deep);

@@ -1,9 +1,13 @@
 ---
 /**
- * Branching lightning behind the hero logo, like the band's artwork. The bolts are generated
- * at build time (seeded, so every build draws the same storm), drawn with stroke-dashoffset in
- * two quick strikes when the page opens, then they stay as faint cracks in the sky.
- * Decorative. Two flashes in total, thin lines only: nothing blinks, nothing fills the screen.
+ * Lightning behind the hero title. Two forked bolts come down from the top of the hero,
+ * one on each side of the title: each one comes down in a tenth of a second, flickers once
+ * like real lightning and fades away completely. Nothing stays on screen afterwards.
+ * The shapes are generated at build time from a seed, so every build draws the same storm.
+ * The script strikes again when the visitor comes back to the hero or taps the title
+ * (never more often than every few seconds). Decorative.
+ * Photosensitivity: thin lines only, two brightness peaks per bolt, bolts more than a
+ * second apart, no flash of the whole screen.
  */
 interface Props {
   class?: string;
@@ -25,126 +29,155 @@ function random(seed: number) {
 
 type Point = [number, number];
 
-/** Jagged line between two points by midpoint displacement. */
-function jagged(from: Point, to: Point, roughness: number, next: () => number, depth = 5): Point[] {
+/** Jagged line between two points: midpoints are pushed sideways, less and less at each level. */
+function jagged(from: Point, to: Point, sway: number, next: () => number, depth: number): Point[] {
   if (depth === 0) return [from, to];
-  const mid: Point = [
-    (from[0] + to[0]) / 2 + (next() - 0.5) * roughness,
-    (from[1] + to[1]) / 2 + (next() - 0.5) * roughness,
-  ];
-  return [...jagged(from, mid, roughness / 2, next, depth - 1).slice(0, -1), ...jagged(mid, to, roughness / 2, next, depth - 1)];
+  const dx = to[0] - from[0];
+  const dy = to[1] - from[1];
+  const length = Math.hypot(dx, dy) || 1;
+  const push = (next() - 0.5) * sway;
+  const mid: Point = [(from[0] + to[0]) / 2 + (-dy / length) * push, (from[1] + to[1]) / 2 + (dx / length) * push];
+  return [...jagged(from, mid, sway * 0.55, next, depth - 1).slice(0, -1), ...jagged(mid, to, sway * 0.55, next, depth - 1)];
 }
 
 const toPath = (points: Point[]) => `M${points.map(([x, y]) => `${x.toFixed(1)} ${y.toFixed(1)}`).join('L')}`;
 
-// Each bolt leaves the centre (behind the logo) for a corner or an edge, with a few branches.
-const next = random(20261031);
-const centre: Point = [50, 52];
-const targets: Point[] = [
-  [-4, 4],
-  [104, -2],
-  [-6, 92],
-  [106, 86],
-  [62, -6],
-  [30, 108],
-];
-const bolts = targets.map((target, index) => {
-  const trunk = jagged(centre, target, 16, next);
-  const branches = [0.35, 0.6].map((at) => {
-    const origin = trunk[Math.floor(trunk.length * at)] ?? centre;
-    const end: Point = [origin[0] + (next() - 0.5) * 46, origin[1] + (next() - 0.5) * 46];
-    return toPath(jagged(origin, end, 9, next, 4));
+/** A trunk from the top edge down to `to`, with forks leaving it downwards and outwards. */
+function bolt(from: Point, to: Point, next: () => number) {
+  const trunk = jagged(from, to, 22, next, 6);
+  const angle = Math.atan2(to[1] - from[1], to[0] - from[0]);
+  const forks = [0.28, 0.5, 0.72].map((at, index) => {
+    const origin = trunk[Math.floor(trunk.length * at)] ?? from;
+    const side = index % 2 === 0 ? 1 : -1;
+    const turn = angle + side * (0.45 + next() * 0.5);
+    const reach = 12 + next() * 16;
+    const end: Point = [origin[0] + Math.cos(turn) * reach, origin[1] + Math.sin(turn) * reach];
+    return toPath(jagged(origin, end, 8, next, 4));
   });
-  return { d: [toPath(trunk), ...branches].join(''), strike: index % 2 };
-});
+  return { trunk: toPath(trunk), forks: forks.join('') };
+}
+
+const next = random(20261031);
+const bolts = [bolt([20, -3], [33, 62], next), bolt([82, -3], [67, 55], next)];
 ---
 
-<svg class:list={['storm', className]} viewBox="0 0 100 100" preserveAspectRatio="none" fill="none" aria-hidden="true" focusable="false">
+<div class:list={['storm', className]} aria-hidden="true" data-storm>
   {
-    bolts.map((bolt) => (
-      <g class={`storm-bolt strike-${bolt.strike}`}>
-        <path class="storm-glow" d={bolt.d} pathLength="1" />
-        <path class="storm-core" d={bolt.d} pathLength="1" />
-      </g>
+    bolts.map((shape, index) => (
+      <svg
+        class="storm-bolt"
+        style={`--at: ${500 + index * 1150}ms`}
+        viewBox="0 0 100 100"
+        preserveAspectRatio="none"
+        fill="none"
+        focusable="false"
+      >
+        <path class="halo" d={shape.trunk} />
+        <path class="glow" d={shape.trunk + shape.forks} />
+        <path class="fork" d={shape.forks} />
+        <path class="core" d={shape.trunk} />
+      </svg>
     ))
   }
-</svg>
+</div>
 
 <style>
-  .storm {
+  .storm,
+  .storm-bolt {
     position: absolute;
     inset: 0;
-    z-index: -1;
     width: 100%;
     height: 100%;
     pointer-events: none;
   }
 
+  .storm {
+    z-index: -1;
+  }
+
   .storm path {
     vector-effect: non-scaling-stroke;
     stroke-linejoin: round;
+    stroke-linecap: round;
   }
 
-  .storm-core {
-    stroke: #e8f6ff;
-    stroke-width: 1.4;
+  /* Bright core, thinner forks, and two pre-blurred copies for the glow (the blur is static). */
+  .core {
+    stroke: #f2fbff;
+    stroke-width: 3.2;
   }
 
-  /* Pre-blurred copy for the glow: the blur is static, only opacity changes. */
-  .storm-glow {
+  .fork {
+    stroke: #d9f2ff;
+    stroke-width: 1.6;
+  }
+
+  .glow {
     stroke: var(--color-volt);
     stroke-width: 7;
-    filter: blur(5px);
+    filter: blur(4px);
   }
 
-  /* At rest (and without motion): faint cracks in the sky. */
+  .halo {
+    stroke: var(--color-volt);
+    stroke-width: 22;
+    filter: blur(14px);
+    opacity: 0.45;
+  }
+
+  /* Invisible unless it is striking: no JavaScript, no leftovers on screen. */
   .storm-bolt {
-    opacity: 0.22;
+    opacity: 0;
   }
 
+  /*
+   * Each bolt is its own layer: it is uncovered from the top in a tenth of a second (the
+   * strike coming down), while its opacity does the flicker and the fade.
+   */
   @media (prefers-reduced-motion: no-preference) {
-    .storm-bolt path {
-      stroke-dasharray: 1;
-      animation: storm-draw 260ms cubic-bezier(0.6, 0, 1, 0.6) both;
-    }
-
     .storm-bolt {
-      animation: storm-flash 1100ms ease-out both;
-    }
-
-    .strike-0,
-    .strike-0 path {
-      animation-delay: 820ms;
-    }
-
-    .strike-1,
-    .strike-1 path {
-      animation-delay: 1500ms;
+      animation:
+        storm-strike 120ms cubic-bezier(0.5, 0, 1, 0.6) var(--at) both,
+        storm-flicker 950ms linear var(--at) both;
     }
   }
 
-  @keyframes storm-draw {
+  @media (prefers-reduced-motion: reduce) {
+    .storm {
+      display: none;
+    }
+  }
+
+  @keyframes storm-strike {
     from {
-      stroke-dashoffset: 1;
+      clip-path: inset(0 0 100% 0);
     }
 
     to {
-      stroke-dashoffset: 0;
+      clip-path: inset(0 0 0 0);
     }
   }
 
-  /* One peak per strike, then it settles: two peaks in the whole sequence. */
-  @keyframes storm-flash {
+  /* Strike, dip, second pulse, fade out: two brightness peaks in under a second. */
+  @keyframes storm-flicker {
     0% {
-      opacity: 0;
-    }
-
-    18% {
       opacity: 1;
     }
 
+    20% {
+      opacity: 1;
+    }
+
+    30% {
+      opacity: 0.2;
+    }
+
+    40% {
+      opacity: 0.9;
+    }
+
     100% {
-      opacity: 0.22;
+      opacity: 0;
     }
   }
 </style>

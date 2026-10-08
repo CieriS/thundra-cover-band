@@ -232,7 +232,41 @@ function initHeroVideo() {
 }
 
 (window as Window & { __siteReady?: boolean }).__siteReady = true;
+/**
+ * The hero lightning plays once in CSS. This strikes again when the visitor scrolls back to
+ * the hero or taps the title, never more often than every four seconds: repeated taps
+ * must not turn it into a strobe.
+ */
+function initStorm() {
+  const storm = document.querySelector<HTMLElement>('[data-storm]');
+  const hero = storm?.closest('section');
+  if (!storm || !hero || reduceMotion.matches || typeof storm.getAnimations !== 'function') return;
+  let last = performance.now();
+  const strike = () => {
+    if (performance.now() - last < 4000) return;
+    last = performance.now();
+    for (const animation of storm.getAnimations({ subtree: true })) {
+      animation.cancel();
+      animation.play();
+    }
+  };
+  document.querySelector('[data-storm-trigger]')?.addEventListener('pointerdown', strike);
+  let away = false;
+  new IntersectionObserver(
+    ([entry]) => {
+      if (!entry) return;
+      if (!entry.isIntersecting) away = true;
+      else if (away) {
+        away = false;
+        strike();
+      }
+    },
+    { threshold: 0.6 },
+  ).observe(hero);
+}
+
 initProtection();
+initStorm();
 initReveal();
 initMenu();
 initCountdown();

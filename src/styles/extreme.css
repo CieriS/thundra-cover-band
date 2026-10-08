@@ -1,5 +1,5 @@
 /*
- * "Extreme" layer, on top of rock.css: spiky display type with a chromatic split, giant
+ * "Extreme" layer, on top of rock.css: slanted display type with a chromatic split, giant
  * outlined words sliding behind the sections, red duotone photos that develop into colour
  * while scrolling, tilted cards, taped reviews, a slanted red marquee band, an opening
  * curtain and a glitch on every heading.
@@ -7,9 +7,9 @@
  * Same safety rules as the other motion files: finite automatic animations under five
  * seconds, no flashing (the glitch moves the text, it does not blink it), nothing hidden
  * without JavaScript, everything off with prefers-reduced-motion.
- * The typeface is a generic metal display face, not the lettering of any band.
+ * Headings use the same condensed display face as the rest of the site: one typeface for
+ * everything, which sits well next to the angular lettering of the band logo.
  */
-@import '@fontsource/metal-mania/latin-400.css';
 
 html {
   scrollbar-color: var(--color-red) var(--color-night-950);
@@ -22,39 +22,19 @@ main {
 
 /* ---------- Type ---------- */
 
-.reveal-lines,
-.hero .wordmark,
-.final .ghost,
-.event .day,
-.card .day {
-  font-family: 'Metal Mania', var(--font-display);
-  letter-spacing: 0.02em;
-}
-
-.reveal-lines {
-  line-height: 1;
-}
-
-.reveal-lines.text-5xl {
-  font-size: calc(var(--text-5xl) * 0.74);
-}
-
-.reveal-lines.text-4xl {
-  font-size: calc(var(--text-4xl) * 0.8);
-}
-
-.hero .wordmark {
-  font-size: calc(var(--text-mega) * 0.8);
-  line-height: 1;
-}
-
 /* Chromatic split on top of the red extrusion. */
-.reveal-lines .reveal-line-inner,
-.hero .wordmark {
+.reveal-lines .reveal-line-inner {
   text-shadow:
     -0.035em 0 0 var(--color-volt),
     0.035em 0.03em 0 var(--color-red),
     0.07em 0.06em 0 var(--color-red-deep);
+}
+
+/* The hero name sits on a red bolt: a dark extrusion keeps it readable. */
+.hero .wordmark {
+  text-shadow:
+    0.03em 0.035em 0 var(--color-night-950),
+    0.06em 0.07em 0 rgb(4 6 12 / 0.55);
 }
 
 .reveal-line {
@@ -83,7 +63,7 @@ main {
   left: 0;
   z-index: 0;
   color: transparent;
-  font-family: 'Metal Mania', var(--font-display);
+  font-family: var(--font-display);
   font-size: clamp(9rem, 34vw, 30rem);
   line-height: 0.9;
   text-transform: uppercase;

@@ -183,17 +183,21 @@ order: 7
 
 ### Logo
 
-Il logo è quello fornito dalla band: `src/assets/brand/logo-original.webp`. Da quel file
-`scripts/build-logo.mjs` ricava, senza ridisegnare nulla:
+Il logo è quello fornito dalla band: `src/assets/brand/logo-original.jpg` (rosso pieno su fondo
+bianco). Da quel file `scripts/build-logo.mjs` toglie lo sfondo e separa le parti, senza ridisegnare
+nulla:
 
-- `logo.png` (logo completo, scontornato) per l'hero;
 - `logo-compact.png` (solo il nome) per intestazione, menu e footer;
-- `bolt.png` (il fulmine del logo) per le animazioni;
-- `public/favicon.png`, `public/apple-touch-icon.png` e `public/og.jpg` (anteprima dei link).
+- `bolt.png` (il fulmine) per il titolo dell'hero, le animazioni e l'icona del sito;
+- `logo.png` (logo completo su trasparente), usato per l'anteprima dei link;
+- `public/favicon.png` e `public/apple-touch-icon.png`: il fulmine su fondo scuro. Il logo intero
+  a 16 pixel non si legge, per questo l'icona è solo il fulmine;
+- `public/og.jpg`: il logo su fondo scuro, per le anteprime su WhatsApp e social.
 
-Per cambiare logo sostituisci il file originale e lancia `node scripts/build-logo.mjs`. Se il nuovo
-file è già un PNG trasparente o un SVG, basta metterlo come `logo.png`/`logo.svg` (e
-`logo-compact.*` per la versione piccola) senza passare dallo script.
+Per cambiare logo sostituisci il file originale e lancia `node scripts/build-logo.mjs`.
+
+Il titolo dell'hero non è l'immagine del logo: è il nome della band nel carattere dei titoli del
+sito, attraversato dal fulmine del logo.
 
 ### Firma
 

@@ -1,13 +1,11 @@
 ---
 import type { ImageMetadata } from 'astro';
-import { getImage } from 'astro:assets';
-import Brand from '@/components/layout/Brand.astro';
+import { getImage, Image } from 'astro:assets';
 import Button from '@/components/ui/Button.astro';
 import Icon from '@/components/ui/Icon.astro';
-import LightningSVG from '@/components/ui/LightningSVG.astro';
 import Storm from '@/components/ui/Storm.astro';
 import { copy } from '@/config/copy';
-import { images } from '@/config/images';
+import { images, logoBolt } from '@/config/images';
 import { site } from '@/config/site';
 import type { EventEntry } from '@/lib/content';
 import { dateParts } from '@/lib/dates';
@@ -72,12 +70,22 @@ const { video } = site.hero;
     <span class="beam beam-a"></span>
     <span class="beam beam-b"></span>
   </div>
-  <LightningSVG variant="a" class="hero-bolt" />
   <Storm />
 
   <div class="wrap content">
-    <h1 id="hero-title" class="title" data-ignite>
-      <Brand pixelWidth={1000} class="logo" />
+    {/* The band name set in the page's own display type, struck by the bolt of the band logo. */}
+    <h1 id="hero-title" class="title" data-storm-trigger>
+      <span class="mark">
+        {logoBolt && <Image class="mark-bolt" src={logoBolt} alt="" width={260} loading="eager" />}
+        <span class="poster wordmark">
+          <span class="visually-hidden">{site.name}</span>
+          {[...site.name].map((letter, i) => (
+            <span class="letter" aria-hidden="true" style={`--i: ${i}`}>
+              {letter}
+            </span>
+          ))}
+        </span>
+      </span>
       <span class="poster subtitle">{site.subtitle}</span>
     </h1>
     <p class="claim">
@@ -221,14 +229,6 @@ const { video } = site.hero;
     gap: 0.75rem;
   }
 
-  .hero :global(.hero-bolt) {
-    position: absolute;
-    top: 4%;
-    right: 6%;
-    z-index: -1;
-    width: clamp(4rem, 16vw, 11rem);
-    opacity: 0.9;
-  }
 
   @media (min-width: 40rem) {
     .cta {

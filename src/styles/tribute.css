@@ -15,11 +15,6 @@
   position: relative;
 }
 
-.hero .subtitle {
-  font-size: var(--text-2xl);
-  box-shadow: 0.2rem 0.2rem 0 var(--color-night-950);
-}
-
 /* ---------- Song titles band ---------- */
 
 .marquee.songs-marquee {
@@ -218,7 +213,7 @@
   }
 }
 
-/* ---------- Hero: centred, logo in the middle of the storm ---------- */
+/* ---------- Hero: centred title, the band name struck by the logo's bolt ---------- */
 
 .hero .content {
   justify-items: center;
@@ -230,12 +225,35 @@
   width: 100%;
 }
 
-.hero .content .title .logo {
-  width: min(100%, 46rem);
-  height: auto;
+.hero .mark {
+  position: relative;
+  display: inline-grid;
+  justify-items: center;
+  /* Room for the bolt, which runs through the name from above it to below it. */
+  padding-block: 0.4em 0.5em;
+  font-size: clamp(5.25rem, 23vw, 17rem);
+}
+
+.hero .content .wordmark {
+  font-size: 1em;
+  line-height: 0.85;
+}
+
+/* The bolt of the band logo, behind the name: it starts inside the letters and comes out below. */
+.hero .mark-bolt {
+  position: absolute;
+  top: -0.42em;
+  left: 50%;
+  z-index: -1;
+  width: auto;
+  max-width: none;
+  height: 2.05em;
+  translate: -46% 0;
 }
 
 .hero .content .subtitle {
+  position: relative;
+  margin-top: 0.15rem;
   transform-origin: center;
 }
 
@@ -249,18 +267,23 @@
   width: 100%;
 }
 
-/* The logo is the only light source: no letter glow from the generic ignite effect. */
-.hero [data-ignite] {
-  animation: none;
+@media (prefers-reduced-motion: no-preference) {
+  /* After the letters have powered up, the bolt comes down through the name. */
+  .hero .mark-bolt {
+    animation:
+      strike-down 240ms cubic-bezier(0.7, 0, 1, 0.5) 780ms both,
+      strike-jolt 320ms var(--ease-snap) 1020ms 1;
+  }
 }
 
-.hero [data-ignite]::before {
-  display: none;
-}
+@keyframes strike-down {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
 
-/* In the hero the logo already carries its bolt: no second one next to it. */
-.hero .hero-bolt {
-  display: none;
+  to {
+    clip-path: inset(0 0 0 0);
+  }
 }
 
 /* ---------- The logo's bolt strikes (decorative bolts in the sections) ---------- */
@@ -285,12 +308,6 @@
     animation:
       strike-down 260ms cubic-bezier(0.7, 0, 1, 0.5) forwards,
       strike-jolt 320ms var(--ease-snap) 260ms 1;
-  }
-}
-
-@keyframes strike-down {
-  to {
-    clip-path: inset(0 0 0 0);
   }
 }
 
