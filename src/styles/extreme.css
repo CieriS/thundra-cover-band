@@ -1,0 +1,335 @@
+/*
+ * "Extreme" layer, on top of rock.css: spiky display type with a chromatic split, giant
+ * outlined words sliding behind the sections, red duotone photos that develop into colour
+ * while scrolling, tilted cards, taped reviews, a slanted red marquee band, an opening
+ * curtain and a glitch on every heading.
+ *
+ * Same safety rules as the other motion files: finite automatic animations under five
+ * seconds, no flashing (the glitch moves the text, it does not blink it), nothing hidden
+ * without JavaScript, everything off with prefers-reduced-motion.
+ * The typeface is a generic metal display face, not the lettering of any band.
+ */
+@import '@fontsource/metal-mania/latin-400.css';
+
+html {
+  scrollbar-color: var(--color-red) var(--color-night-950);
+}
+
+/* Rotated and scaled bands may stick out sideways: never let them widen the page. */
+main {
+  overflow-x: clip;
+}
+
+/* ---------- Type ---------- */
+
+.reveal-lines,
+.hero .wordmark,
+.final .ghost,
+.event .day,
+.card .day {
+  font-family: 'Metal Mania', var(--font-display);
+  letter-spacing: 0.02em;
+}
+
+.reveal-lines {
+  line-height: 1;
+}
+
+.reveal-lines.text-5xl {
+  font-size: calc(var(--text-5xl) * 0.74);
+}
+
+.reveal-lines.text-4xl {
+  font-size: calc(var(--text-4xl) * 0.8);
+}
+
+.hero .wordmark {
+  font-size: calc(var(--text-mega) * 0.8);
+  line-height: 1;
+}
+
+/* Chromatic split on top of the red extrusion. */
+.reveal-lines .reveal-line-inner,
+.hero .wordmark {
+  text-shadow:
+    -0.035em 0 0 var(--color-volt),
+    0.035em 0.03em 0 var(--color-red),
+    0.07em 0.06em 0 var(--color-red-deep);
+}
+
+.reveal-line {
+  /* The wider shadows need more room inside the mask. */
+  margin-inline: -0.06em;
+  padding-inline: 0.06em;
+}
+
+/* ---------- Giant outlined words behind the sections ---------- */
+
+.section {
+  overflow-x: clip;
+}
+
+.section > .wrap,
+.section > .marquee {
+  position: relative;
+  z-index: 1;
+}
+
+#tour::before,
+#live::before,
+#band::before,
+#scaletta::before,
+#booking::before,
+#galleria::before,
+#recensioni::before {
+  position: absolute;
+  top: 1.5rem;
+  left: 0;
+  z-index: 0;
+  color: transparent;
+  font-family: 'Metal Mania', var(--font-display);
+  font-size: clamp(9rem, 34vw, 30rem);
+  line-height: 0.9;
+  white-space: nowrap;
+  -webkit-text-stroke: 2px var(--color-line);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+#tour::before { content: 'TOUR TOUR'; }
+#live::before { content: 'LIVE LIVE'; }
+#band::before { content: 'BAND BAND'; }
+#scaletta::before { content: 'LOUD LOUD'; }
+#booking::before { content: 'BOOK BOOK'; }
+#galleria::before { content: 'FOTO FOTO'; }
+#recensioni::before { content: 'ROCK ROCK'; }
+
+/* ---------- Red duotone photos ---------- */
+
+.frame::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--color-red);
+  mix-blend-mode: multiply;
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.frame img {
+  filter: grayscale(1) contrast(1.15);
+}
+
+/* Without scroll-driven animations the photo shows its colours on hover or focus. */
+a:hover .frame::after,
+a:focus-visible .frame::after,
+.frame:hover::after {
+  opacity: 0;
+}
+
+a:hover .frame img,
+a:focus-visible .frame img,
+.frame:hover img {
+  filter: none;
+}
+
+/* ---------- Tilted date cards ---------- */
+
+#tour ol > li:nth-child(odd) {
+  rotate: -1.2deg;
+}
+
+#tour ol > li:nth-child(even) {
+  rotate: 1deg;
+}
+
+/* ---------- Taped reviews ---------- */
+
+#recensioni figure {
+  rotate: -1.5deg;
+}
+
+#recensioni li:nth-child(even) figure {
+  rotate: 1.2deg;
+}
+
+#recensioni figure::after {
+  content: '';
+  position: absolute;
+  top: -0.9rem;
+  left: 50%;
+  width: 6.5rem;
+  height: 1.6rem;
+  background: rgb(245 242 234 / 0.82);
+  translate: -50% 0;
+  rotate: -4deg;
+}
+
+/* ---------- Slanted red marquee band ---------- */
+
+.band-marquee {
+  z-index: 3;
+  margin-block: -1rem;
+  padding-block: 0.6rem 3rem;
+  background: var(--color-red);
+  rotate: -2deg;
+  scale: 1.06;
+}
+
+.marquee.band-marquee .marquee-track {
+  color: var(--color-bone);
+  font-size: var(--text-3xl);
+}
+
+.marquee.band-marquee .sep {
+  background: var(--color-night-950);
+}
+
+.marquee.band-marquee .pause {
+  right: calc(var(--spacing-gutter) + 5vw);
+  color: var(--color-bone);
+}
+
+/* ---------- Opening curtain ---------- */
+
+.curtain {
+  display: none;
+}
+
+/* ---------- Motion ---------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Two red panels slide away once, 0.7s. Pure CSS: it never waits for JavaScript. */
+  .curtain {
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+    display: block;
+    pointer-events: none;
+    animation: curtain-off 1ms linear 750ms forwards;
+  }
+
+  .curtain span {
+    position: absolute;
+    inset: 0;
+    background: var(--color-red);
+    clip-path: polygon(0 0, 58% 0, 42% 100%, 0 100%);
+    animation: curtain-left 700ms var(--ease-out-expo) forwards;
+  }
+
+  .curtain span + span {
+    background: var(--color-night-950);
+    clip-path: polygon(58% 0, 100% 0, 100% 100%, 42% 100%);
+    animation-name: curtain-right;
+  }
+
+  /* Glitch: the heading jolts sideways three times in a third of a second. No blinking. */
+  .js [data-reveal='lines'].is-in .reveal-line {
+    animation: glitch 340ms steps(1, end) 1;
+    animation-delay: calc(var(--duration-slow) * 0.55);
+  }
+
+  @supports (animation-timeline: view()) {
+    #tour::before,
+    #live::before,
+    #band::before,
+    #scaletta::before,
+    #booking::before,
+    #galleria::before,
+    #recensioni::before {
+      animation: word-slide linear both;
+      animation-timeline: view();
+    }
+
+    /* Photos develop from red duotone to full colour while they cross the screen. */
+    .frame::after {
+      animation: develop-tint linear both;
+      animation-timeline: view();
+      animation-range: entry 30% cover 45%;
+    }
+
+    .frame img {
+      animation: develop-photo linear both;
+      animation-timeline: view();
+      animation-range: entry 30% cover 45%;
+    }
+
+    /* Cards straighten up as they reach the middle of the screen. */
+    #tour ol > li,
+    #recensioni figure {
+      animation: straighten linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 50%;
+    }
+  }
+}
+
+@keyframes curtain-left {
+  to {
+    transform: translateX(-105%);
+  }
+}
+
+@keyframes curtain-right {
+  to {
+    transform: translateX(105%);
+  }
+}
+
+@keyframes curtain-off {
+  to {
+    visibility: hidden;
+  }
+}
+
+@keyframes glitch {
+  0% {
+    transform: skewX(-6deg) translateX(-0.5rem);
+  }
+
+  33% {
+    transform: skewX(-14deg) translateX(0.4rem);
+  }
+
+  66% {
+    transform: skewX(-2deg) translateX(-0.2rem);
+  }
+
+  100% {
+    transform: skewX(-6deg);
+  }
+}
+
+@keyframes word-slide {
+  from {
+    transform: translateX(12%);
+  }
+
+  to {
+    transform: translateX(-38%);
+  }
+}
+
+@keyframes develop-tint {
+  to {
+    opacity: 0;
+  }
+}
+
+/* filter is not animated: the grey image cross-fades by swapping at the end of the range. */
+@keyframes develop-photo {
+  0%,
+  99% {
+    filter: grayscale(1) contrast(1.15);
+  }
+
+  100% {
+    filter: none;
+  }
+}
+
+@keyframes straighten {
+  to {
+    rotate: 0deg;
+  }
+}

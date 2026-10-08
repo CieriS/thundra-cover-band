@@ -6,6 +6,8 @@ import FinalCTA from '@/components/sections/FinalCTA.astro';
 import Gallery from '@/components/sections/Gallery.astro';
 import Hero from '@/components/sections/Hero.astro';
 import HazardStripe from '@/components/ui/HazardStripe.astro';
+import Marquee from '@/components/ui/Marquee.astro';
+import { site } from '@/config/site';
 import Live from '@/components/sections/Live.astro';
 import NextShow from '@/components/sections/NextShow.astro';
 import Reviews from '@/components/sections/Reviews.astro';
@@ -25,6 +27,7 @@ const jsonLd = [await bandJsonLd(Astro.site!), ...(await eventsJsonLd(upcoming, 
   {next && <NextShow event={next} />}
   <Tour events={upcoming} />
   <Live />
+  <Marquee items={[site.name, site.subtitle, 'Live']} reverse duration={22} class="band-marquee" />
   <Reviews />
   <Band />
   <Setlist />
