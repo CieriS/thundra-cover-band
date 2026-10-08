@@ -112,6 +112,7 @@ Tutto ciò che cambia nel tempo sta in file separati dal codice. Non serve tocca
 | Recensioni                                         | `src/content/reviews/` (un file per recensione)             |
 | Telefono, WhatsApp, email, social, zona, durata    | `src/config/site.ts`                                        |
 | Tutti i testi: titoli, frasi, pulsanti, etichette  | `src/config/copy.ts`                                        |
+| Titoli e descrizioni per Google e anteprime        | `src/config/copy.ts`, blocco `seo`                          |
 | Foto fisse (hero, gruppo, booking, social)         | `src/config/images.ts`                                      |
 | Colori, caratteri, dimensioni, tempi delle animazioni | blocco `@theme` in `src/styles/global.css`               |
 | Logo, favicon, anteprima dei link                  | `src/assets/brand/` + `node scripts/build-logo.mjs`         |
@@ -195,6 +196,10 @@ nulla:
 - `public/og.jpg`: il logo su fondo scuro, per le anteprime su WhatsApp e social.
 
 Per cambiare logo sostituisci il file originale e lancia `node scripts/build-logo.mjs`.
+
+Lo script aggiunge anche la finitura "vissuta" (graffi, crepe, macchie): è generata da un seme
+fisso, quindi a ogni esecuzione esce identica. Le icone restano pulite, perché a 16 pixel i graffi
+diventano rumore. Produce inoltre `distress.webp`, la maschera che graffia il titolo dell'hero.
 
 Il titolo dell'hero non è l'immagine del logo: è il nome della band nel carattere dei titoli del
 sito, attraversato dal fulmine del logo.
