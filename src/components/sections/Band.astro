@@ -10,7 +10,7 @@ import { getMembers } from '@/lib/content';
 const members = await getMembers();
 ---
 
-<section id="band" class="section cut-top band" aria-labelledby="band-title">
+<section id="band" data-word={copy.band.word} class="section cut-top band" aria-labelledby="band-title">
   <Motif name="tie" />
   <div class="wrap">
     <div class="intro">
@@ -33,7 +33,7 @@ const members = await getMembers();
       </div>
     </div>
 
-    <ul class="members" aria-label="Formazione">
+    <ul class="members" aria-label={copy.band.lineup}>
       {
         members.map((member, index) => (
           <li data-reveal="rise" style={`--i: ${index}`}>

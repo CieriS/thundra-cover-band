@@ -94,7 +94,6 @@ export const site = {
 
   /** Who built the site: shown at the bottom of the footer. */
   credit: {
-    label: 'Sito di',
     name: 'Samuele Cieri',
     url: 'https://cierisamuele.vercel.app',
   },

@@ -1,4 +1,6 @@
 ---
+import { copy } from '@/config/copy';
+
 /** Pure CSS marquee. The second copy is hidden from assistive technology. */
 interface Props {
   items: readonly string[];
@@ -17,9 +19,13 @@ const track = Array.from({ length: repeat }, () => items).flat();
 ---
 
 <div class:list={['marquee', className]} data-marquee>
-  <label class="pause label">
-    <input type="checkbox" />
-    <span>Ferma lo scorrimento</span>
+  <label class="pause">
+    <input class="visually-hidden" type="checkbox" />
+    <span class="pause-box" aria-hidden="true">
+      <svg class="icon-pause" viewBox="0 0 24 24" width="18" height="18"><path d="M7 5h3.5v14H7zM13.500 5H17v14h-3.500z" fill="currentColor" /></svg>
+      <svg class="icon-play" viewBox="0 0 24 24" width="18" height="18"><path d="M8 5v14l11-7z" fill="currentColor" /></svg>
+    </span>
+    <span class="visually-hidden">{copy.ui.pauseMarquee}</span>
   </label>
   {
     [false, true].map((copy) => (
@@ -44,27 +50,47 @@ const track = Array.from({ length: repeat }, () => items).flat();
     position: relative;
     display: flex;
     overflow: hidden;
-    padding-bottom: 3rem;
   }
 
-  /* Moving content needs a way to stop it: a checkbox, so it works without JavaScript. */
+  /*
+   * Moving content needs a way to stop it (WCAG 2.2.2): a checkbox, so it works without
+   * JavaScript, drawn as a small pause/play button in the corner.
+   */
   .pause {
     position: absolute;
-    right: var(--spacing-gutter);
-    bottom: 0;
+    top: 50%;
+    right: 0.5rem;
     z-index: 1;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    min-height: 2.75rem;
-    color: var(--color-mute);
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    translate: 0 -50%;
     cursor: pointer;
   }
 
-  .pause input {
-    width: 1.25rem;
-    height: 1.25rem;
-    accent-color: var(--color-red);
+  .pause-box {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border: 1px solid var(--color-line);
+    background: var(--color-night-950);
+    color: var(--color-bone);
+  }
+
+  .icon-play,
+  .pause:has(input:checked) .icon-pause {
+    display: none;
+  }
+
+  .pause:has(input:checked) .icon-play {
+    display: block;
+  }
+
+  .pause:has(input:focus-visible) .pause-box {
+    outline: 3px solid var(--color-volt);
+    outline-offset: 2px;
   }
 
   .marquee:has(.pause input:checked) .marquee-track {
@@ -74,10 +100,6 @@ const track = Array.from({ length: repeat }, () => items).flat();
   @media (prefers-reduced-motion: reduce) {
     .pause {
       display: none;
-    }
-
-    .marquee {
-      padding-bottom: 0;
     }
   }
 

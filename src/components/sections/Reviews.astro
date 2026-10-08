@@ -8,7 +8,7 @@ const reviews = await getReviews();
 
 {
   reviews.length > 0 && (
-    <section id="recensioni" class="section reviews" aria-labelledby="recensioni-title">
+    <section id="recensioni" data-word={copy.reviews.word} class="section reviews" aria-labelledby="recensioni-title">
       <div class="wrap grid gap-10">
         <SectionHeading id="recensioni-title" eyebrow={copy.reviews.eyebrow} title={copy.reviews.title} />
         <ul class="list">

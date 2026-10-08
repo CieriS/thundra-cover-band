@@ -98,6 +98,27 @@ bun run todo
 
 Non inventare mai dati: se un'informazione manca, resta il segnaposto.
 
+## Cosa si modifica dove
+
+Tutto ciò che cambia nel tempo sta in file separati dal codice. Non serve toccare i componenti.
+
+| Voglio cambiare…                                   | File                                                        |
+| -------------------------------------------------- | ----------------------------------------------------------- |
+| Date dei concerti                                  | `src/content/events/` (un file per data)                    |
+| Brani in scaletta (e la striscia dei titoli)       | `src/content/setlist/scaletta-tipo.yaml`                    |
+| Membri della band, ruoli, ordine, foto             | `src/content/members/` (un file per persona)                |
+| Foto della galleria                                | `src/content/gallery/` (un file per foto)                   |
+| Video                                              | `src/content/videos/` (un file per video)                   |
+| Recensioni                                         | `src/content/reviews/` (un file per recensione)             |
+| Telefono, WhatsApp, email, social, zona, durata    | `src/config/site.ts`                                        |
+| Tutti i testi: titoli, frasi, pulsanti, etichette  | `src/config/copy.ts`                                        |
+| Foto fisse (hero, gruppo, booking, social)         | `src/config/images.ts`                                      |
+| Colori, caratteri, dimensioni, tempi delle animazioni | blocco `@theme` in `src/styles/global.css`               |
+| Logo, favicon, anteprima dei link                  | `src/assets/brand/` + `node scripts/build-logo.mjs`         |
+| Scheda tecnica                                     | `public/docs/scheda-tecnica-thundra.pdf`                    |
+
+Restano scritti nelle pagine solo i testi lunghi di `/privacy` e `/accessibilita`.
+
 ## Aggiungere una data
 
 Crea **un file** in `src/content/events/`, con nome `AAAA-MM-GG-nome-locale.yaml`:
@@ -162,27 +183,23 @@ order: 7
 
 ### Logo
 
-Il logo è ricostruito in vettoriale a partire dall'immagine fornita dalla band
-(`src/assets/brand/logo-original.webp`): `scripts/trace-logo.mjs` ne ricalca i contorni e scrive
-`src/config/logo-paths.ts`, che il componente `LogoMark` disegna come SVG. Essendo vettoriale è
-nitido a ogni dimensione e ogni parte si anima da sola (lettere, fulmine, "AC DC").
+Il logo è quello fornito dalla band: `src/assets/brand/logo-original.webp`. Da quel file
+`scripts/build-logo.mjs` ricava, senza ridisegnare nulla:
 
-Dallo stesso script escono anche `public/favicon.svg`, `public/favicon.png`,
-`public/apple-touch-icon.png` (il fulmine del logo) e `public/og.jpg` (anteprima dei link).
+- `logo.png` (logo completo, scontornato) per l'hero;
+- `logo-compact.png` (solo il nome) per intestazione, menu e footer;
+- `bolt.png` (il fulmine del logo) per le animazioni;
+- `public/favicon.png`, `public/apple-touch-icon.png` e `public/og.jpg` (anteprima dei link).
 
-Per cambiare logo sostituisci il file originale e lancia:
-
-```bash
-node scripts/trace-logo.mjs --preview anteprima.png
-```
-
-Il file `anteprima.png` serve solo a controllare il ricalco. Le forme non vanno ritoccate a mano in
-`logo-paths.ts`: è un file generato.
+Per cambiare logo sostituisci il file originale e lancia `node scripts/build-logo.mjs`. Se il nuovo
+file è già un PNG trasparente o un SVG, basta metterlo come `logo.png`/`logo.svg` (e
+`logo-compact.*` per la versione piccola) senza passare dallo script.
 
 ### Firma
 
-In fondo al footer c'è la firma di chi ha fatto il sito: testo e link in `site.credit`
-(`src/config/site.ts`), icona in `src/assets/credit/`.
+In fondo al footer c'è la firma di chi ha fatto il sito: un piccolo simbolo monocromatico che prende
+il colore del testo attorno. Nome e link in `site.credit` (`src/config/site.ts`), simbolo in
+`src/assets/credit/`.
 
 ## Video
 

@@ -18,7 +18,8 @@ const { data } = event;
 const date = dateParts(data.date);
 const admission = admissionLabel(data);
 const cancelled = data.status === 'cancelled';
-const statusLabel = cancelled ? 'Annullato' : data.status === 'postponed' ? 'Rinviato' : null;
+const ui = copy.ui;
+const statusLabel = cancelled ? ui.cancelled : data.status === 'postponed' ? ui.postponed : null;
 ---
 
 <article class:list={['event', past && 'is-past', cancelled && 'is-cancelled']} id={event.id}>
@@ -37,7 +38,7 @@ const statusLabel = cancelled ? 'Annullato' : data.status === 'postponed' ? 'Rin
     <p class="poster city">{placeLabel(data)}</p>
     <ul class="meta">
       {statusLabel && <li class="status">{statusLabel}</li>}
-      {!past && <li>{data.time ? `Inizio ore ${data.time}` : copy.nextShow.timeUnknown}</li>}
+      {!past && <li>{data.time ? `${ui.startsAt} ${data.time}` : copy.nextShow.timeUnknown}</li>}
       {!past && admission && <li>{admission}</li>}
       {data.address && <li>{data.address}</li>}
       {data.note && <li>{data.note}</li>}
@@ -69,15 +70,15 @@ const statusLabel = cancelled ? 'Annullato' : data.status === 'postponed' ? 'Rin
           <a href={mapsUrl(data)} target="_blank" rel="noopener noreferrer">
             <Icon name="pin" />
             {copy.nextShow.directions}
-            <span class="visually-hidden"> (apre Google Maps in una nuova scheda)</span>
+            <span class="visually-hidden"> {ui.opensMaps}</span>
           </a>
         </li>
         {data.bookingUrl && (
           <li>
             <a class="is-primary" href={data.bookingUrl} target="_blank" rel="noopener noreferrer">
               <Icon name="ticket" />
-              {data.bookingLabel ?? 'Prenota'}
-              <span class="visually-hidden"> (apre una nuova scheda)</span>
+              {data.bookingLabel ?? ui.book}
+              <span class="visually-hidden"> {ui.opensNewTab}</span>
             </a>
           </li>
         )}

@@ -6,6 +6,7 @@
  * where supported; elsewhere it is simply always visible.
  */
 import Icon from '@/components/ui/Icon.astro';
+import { copy } from '@/config/copy';
 
 interface Props {
   afterHero?: boolean;
@@ -14,14 +15,14 @@ interface Props {
 const { afterHero = false } = Astro.props;
 ---
 
-<nav class:list={['action-bar', afterHero && 'after-hero']} aria-label="Azioni rapide">
+<nav class:list={['action-bar', afterHero && 'after-hero']} aria-label={copy.ui.quickActions}>
   <a class="action poster" href="/date/">
     <Icon name="calendar" />
-    Date
+    {copy.ui.barDates}
   </a>
   <a class="action is-primary poster" href="/booking/">
     <Icon name="chat" />
-    Booking
+    {copy.ui.barBooking}
   </a>
 </nav>
 

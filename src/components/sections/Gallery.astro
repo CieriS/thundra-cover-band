@@ -19,7 +19,7 @@ const photos = await Promise.all(
 
 {
   photos.length > 0 && (
-    <section id="galleria" class="section" aria-labelledby="galleria-title">
+    <section id="galleria" data-word={copy.gallery.word} class="section" aria-labelledby="galleria-title">
       <div class="wrap grid gap-10">
         <SectionHeading id="galleria-title" eyebrow={gallery.eyebrow} title={gallery.title} />
 

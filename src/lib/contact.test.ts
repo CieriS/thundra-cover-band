@@ -3,6 +3,7 @@ import {
   bookingMessage,
   italianDate,
   mailtoUrl,
+  whatsappShareUrl,
   whatsappUrl,
   youtubeEmbedUrl,
   youtubeId,
@@ -37,6 +38,18 @@ describe('whatsappUrl', () => {
 
   test('rejects an empty number', () => {
     expect(() => whatsappUrl('', 'ciao')).toThrow();
+  });
+});
+
+describe('whatsappShareUrl', () => {
+  test('has no recipient and encodes text, line breaks and links', () => {
+    expect(whatsappShareUrl('Vieni?\nhttps://example.com/date/#x')).toBe(
+      'https://wa.me/?text=Vieni%3F%0Ahttps%3A%2F%2Fexample.com%2Fdate%2F%23x',
+    );
+  });
+
+  test('an empty text still gives a valid link', () => {
+    expect(whatsappShareUrl('')).toBe('https://wa.me/?text=');
   });
 });
 

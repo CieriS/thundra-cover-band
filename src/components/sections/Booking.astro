@@ -29,7 +29,7 @@ const facts = [
 ];
 ---
 
-<section id="booking" class:list={['section booking', !page && 'cut-top']} aria-labelledby="booking-title">
+<section id="booking" data-word={copy.booking.word} class:list={['section booking', !page && 'cut-top']} aria-labelledby="booking-title">
   <div class="wrap layout">
     <div class="grid content-start gap-10">
       <SectionHeading
@@ -40,6 +40,15 @@ const facts = [
         intro={booking.intro}
         size="lg"
       />
+
+      {/* On a phone the contact panel is several screens below: ask right away. */}
+      <div class="grid gap-2 lg:hidden">
+        <Button href={whatsappUrl(site.contact.whatsapp, message)} size="lg" block rel="noopener noreferrer">
+          <Icon name="chat" />
+          {booking.quickCta}
+        </Button>
+        <p class="text-sm text-mute">{booking.quickNote}</p>
+      </div>
 
       <div class="photo">
         <ResponsiveImage

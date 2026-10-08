@@ -31,6 +31,11 @@ export function whatsappUrl(number: string, text: string): string {
   return `https://wa.me/${digits}?text=${encodeURIComponent(text)}`;
 }
 
+/** WhatsApp link that lets the visitor pick who to send the text to (no recipient). */
+export function whatsappShareUrl(text: string): string {
+  return `https://wa.me/?text=${encodeURIComponent(text)}`;
+}
+
 /** mailto link with subject and body. */
 export function mailtoUrl(email: string, subject: string, body: string): string {
   return `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;

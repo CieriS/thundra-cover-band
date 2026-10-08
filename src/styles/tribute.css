@@ -1,7 +1,7 @@
 /*
  * Tribute motifs (src/components/ui/Motif.astro): the visual vocabulary people associate
- * with an AC/DC night, drawn from scratch. Devil horns, school tie, bell, cannons, hazard
- * sign, song titles running on a band. The band's logo, lettering and artwork are never used.
+ * with an AC/DC night, drawn from scratch. School tie, bell, cannons, song titles
+ * running on a band. The band's logo, lettering and artwork are never used.
  * Animations follow the same rules as the other motion files.
  */
 
@@ -25,7 +25,7 @@
 .marquee.songs-marquee {
   z-index: 3;
   margin-block: -1rem;
-  padding-block: 0.6rem 3rem;
+  padding-block: 0.6rem;
   background: var(--color-bone);
   rotate: 2deg;
   scale: 1.06;
@@ -36,9 +36,9 @@
   font-size: var(--text-2xl);
 }
 
+/* Keep the pause button inside the screen: the band is scaled and rotated. */
 .marquee.songs-marquee .pause {
-  right: calc(var(--spacing-gutter) + 5vw);
-  color: var(--color-night-950);
+  right: calc(0.5rem + 3vw);
 }
 
 /* ---------- School tie hanging in the band section ---------- */
@@ -69,17 +69,24 @@
 
 /* ---------- Cannons in the closing section ---------- */
 
+.cannons {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Phones first: two small cannons in the empty band above the title, facing each other. */
 .motif-cannon {
   position: absolute;
-  bottom: 0.5rem;
-  left: 2%;
-  z-index: -1;
-  width: clamp(7rem, 20vw, 13rem);
+  top: calc(var(--slant) + 1rem);
+  left: var(--spacing-gutter);
+  width: 5.5rem;
   opacity: 0.85;
 }
 
 .motif-cannon.is-right {
-  right: 2%;
+  right: var(--spacing-gutter);
   left: auto;
   scale: -1 1;
 }
@@ -90,19 +97,24 @@
   opacity: 0;
 }
 
-/* Kept in the layout (invisible) because its reveal also triggers the cannons. */
-.final .speaker {
-  opacity: 0;
-}
-
-@media (max-width: 47.999rem) {
-  .motif-bell {
-    top: 1rem;
-    bottom: auto;
+@media (min-width: 64rem) {
+  .motif-cannon {
+    top: auto;
+    bottom: 0.5rem;
+    left: 2%;
+    width: clamp(9rem, 16vw, 13rem);
   }
 
   .motif-cannon.is-right {
-    display: none;
+    right: 2%;
+  }
+}
+
+/* Bell: top right of the red date block on phones, bottom right of the card on wide screens. */
+@media (max-width: 55.999rem) {
+  .motif-bell {
+    top: 1rem;
+    bottom: auto;
   }
 }
 
@@ -119,11 +131,11 @@
   }
 
   /* Cannons recoil and puff once: a salute at the end of the page. */
-  .js [data-reveal='pulse'].is-in ~ .motif-cannon .cannon-body {
+  .js [data-reveal='pulse'].is-in .cannon-body {
     animation: recoil 700ms var(--ease-out-expo) 300ms 1;
   }
 
-  .js [data-reveal='pulse'].is-in ~ .motif-cannon .cannon-puff {
+  .js [data-reveal='pulse'].is-in .cannon-puff {
     animation: puff 900ms ease-out 300ms 1;
   }
 
@@ -218,10 +230,9 @@
   width: 100%;
 }
 
-.hero .content .title .logo-mark {
+.hero .content .title .logo {
   width: min(100%, 46rem);
-  /* Static glow behind the vector logo. */
-  filter: drop-shadow(0 0 1.1rem rgb(212 20 10 / 0.55));
+  height: auto;
 }
 
 .hero .content .subtitle {
@@ -256,33 +267,21 @@
 
 .bolt-logo {
   display: block;
-  overflow: visible;
 }
 
-.bolt-logo .bolt-shape {
-  fill: var(--color-red);
-  stroke: #4a0502;
-  stroke-width: 4;
-  stroke-linejoin: round;
-  paint-order: stroke;
-  transform-box: fill-box;
-  transform-origin: center;
-}
-
-/* Above the card, clear of the bell. */
-.card .card-bolt.bolt-logo {
-  top: -4.5rem;
-  right: 7rem;
-  width: 3rem;
+.bolt-logo img {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 @media (prefers-reduced-motion: no-preference) {
   /* It comes down from the top in a quarter of a second and lands with a jolt. */
-  .js .bolt-logo[data-reveal='bolt'] .bolt-shape {
+  .js .bolt-logo[data-reveal='bolt'] img {
     clip-path: inset(0 0 100% 0);
   }
 
-  .js .bolt-logo[data-reveal='bolt'].is-in .bolt-shape {
+  .js .bolt-logo[data-reveal='bolt'].is-in img {
     animation:
       strike-down 260ms cubic-bezier(0.7, 0, 1, 0.5) forwards,
       strike-jolt 320ms var(--ease-snap) 260ms 1;

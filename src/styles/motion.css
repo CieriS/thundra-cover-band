@@ -68,7 +68,7 @@
    */
   .js [data-reveal='image'] > * {
     clip-path: polygon(0 0, 0 0, -25% 100%, -25% 100%);
-    transition: clip-path var(--duration-slow) var(--ease-out-expo);
+    transition: clip-path 560ms var(--ease-out-expo);
   }
 
   .js [data-reveal='image'].is-in > * {

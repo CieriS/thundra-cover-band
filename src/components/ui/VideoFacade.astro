@@ -54,7 +54,7 @@ const image = poster ?? fallbacks.videoPoster;
         </a>
       ) : (
         <div class="soon">
-          {showTodo() ? <span class="todo">{TODO} video live</span> : <span class="label soon-label">Presto online</span>}
+          {showTodo() ? <span class="todo">{TODO} video live</span> : <span class="label soon-label">{copy.live.soon}</span>}
         </div>
       )
     }

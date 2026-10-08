@@ -3,6 +3,7 @@ import antonUrl from '@fontsource/anton/files/anton-latin-400-normal.woff2?url';
 import Footer from './Footer.astro';
 import Header from './Header.astro';
 import MobileActionBar from './MobileActionBar.astro';
+import { copy } from '@/config/copy';
 import { site } from '@/config/site';
 import { serializeJsonLd } from '@/lib/structured-data';
 import '@/styles/global.css';
@@ -72,7 +73,7 @@ if (site.demo && process.env['VERCEL_ENV'] === 'production') {
     </script>
   </head>
   <body>
-    <a class="skip-link" href="#contenuto">Vai al contenuto</a>
+    <a class="skip-link" href="#contenuto">{copy.ui.skip}</a>
     <div class="curtain" aria-hidden="true"><span></span><span></span></div>
     <div class="voltage" aria-hidden="true"></div>
     <Header />

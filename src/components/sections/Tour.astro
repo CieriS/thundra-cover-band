@@ -19,7 +19,7 @@ const { events, page = false } = Astro.props;
 const cities = events.length > 0 ? uniqueCities(events) : [...site.area.cities];
 ---
 
-<section id="tour" class="section tour" aria-labelledby="tour-title">
+<section id="tour" data-word={copy.tour.word} class="section tour" aria-labelledby="tour-title">
   <div class="wrap">
     <SectionHeading
       id="tour-title"

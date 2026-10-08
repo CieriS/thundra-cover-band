@@ -77,10 +77,13 @@ const { video } = site.hero;
 
   <div class="wrap content">
     <h1 id="hero-title" class="title" data-ignite>
-      <Brand animated class="logo" />
+      <Brand pixelWidth={1000} class="logo" />
       <span class="poster subtitle">{site.subtitle}</span>
     </h1>
-    <p class="claim">{copy.hero.claim}</p>
+    <p class="claim">
+      {copy.hero.claim}
+      <span class="area">{`${copy.hero.areaPrefix} ${site.area.cities.join(', ')} ${site.area.note}.`}</span>
+    </p>
 
     {
       next && nextDate && (
@@ -162,6 +165,15 @@ const { video } = site.hero;
     line-height: 1;
     transform: rotate(-2deg);
     transform-origin: left center;
+  }
+
+  .area {
+    display: block;
+    margin-top: 0.4rem;
+    color: var(--color-mute);
+    font-size: var(--text-base);
+    font-weight: 400;
+    line-height: 1.4;
   }
 
   .claim {

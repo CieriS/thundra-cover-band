@@ -1,6 +1,7 @@
 ---
 import Button from '@/components/ui/Button.astro';
 import Icon from '@/components/ui/Icon.astro';
+import { copy } from '@/config/copy';
 import { nav, site } from '@/config/site';
 import Brand from './Brand.astro';
 
@@ -35,21 +36,21 @@ const isCurrent = (href: string) => !href.includes('#') && current.startsWith(hr
     <!-- Without JavaScript this link jumps to the navigation in the footer. -->
     <a class="menu-button menu-open label" href="#navigazione" data-menu-open aria-haspopup="dialog">
       <Icon name="menu" size={22} />
-      Menu
+      {copy.ui.menu}
     </a>
   </div>
 </header>
 
-<dialog class="menu" id="menu" aria-label="Menu" data-menu>
+<dialog class="menu" id="menu" aria-label={copy.ui.menu} data-menu>
   <div class="menu-inner">
     <div class="flex h-14 items-center justify-between">
       <Brand height={30} compact />
       <button class="menu-button label" type="button" data-menu-close>
         <Icon name="close" size={22} />
-        Chiudi
+        {copy.ui.close}
       </button>
     </div>
-    <nav aria-label="Menu">
+    <nav aria-label={copy.ui.menu}>
       <ul class="menu-list">
         {
           nav.map((item, index) => (

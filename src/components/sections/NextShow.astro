@@ -2,11 +2,11 @@
 import Button from '@/components/ui/Button.astro';
 import Countdown from '@/components/ui/Countdown.astro';
 import Icon from '@/components/ui/Icon.astro';
-import LightningSVG from '@/components/ui/LightningSVG.astro';
 import Motif from '@/components/ui/Motif.astro';
 import SectionHeading from '@/components/ui/SectionHeading.astro';
 import { copy } from '@/config/copy';
 import { site } from '@/config/site';
+import { whatsappShareUrl } from '@/lib/contact';
 import type { EventEntry } from '@/lib/content';
 import { dateParts } from '@/lib/dates';
 import { admissionLabel, countdownTarget, mapsUrl, placeLabel } from '@/lib/events';
@@ -19,6 +19,13 @@ const { event } = Astro.props;
 const { data } = event;
 const date = dateParts(data.date);
 const admission = admissionLabel(data);
+const ui = copy.ui;
+// Invitation ready to send to friends: message, when, where and the link to the date.
+const invite = [
+  copy.nextShow.shareMessage,
+  `${date.long}, ${data.venue}, ${placeLabel(data)}`,
+  new URL(`/date/#${event.id}`, Astro.site).href,
+].join('\n');
 ---
 
 <section id="prossimo" class="section" aria-labelledby="prossimo-title">
@@ -37,7 +44,7 @@ const admission = admissionLabel(data);
           <h3 class="poster venue">{data.venue}</h3>
           <p class="poster city">{placeLabel(data)}</p>
           <ul class="meta">
-            <li>{data.time ? `Inizio ore ${data.time}` : copy.nextShow.timeUnknown}</li>
+            <li>{data.time ? `${ui.startsAt} ${data.time}` : copy.nextShow.timeUnknown}</li>
             {admission && <li>{admission}</li>}
             {data.address && <li>{data.address}</li>}
           </ul>
@@ -56,19 +63,23 @@ const admission = admissionLabel(data);
           <Button href={mapsUrl(data)} variant="outline" target="_blank" rel="noopener noreferrer">
             <Icon name="pin" />
             {copy.nextShow.directions}
-            <span class="visually-hidden"> (apre Google Maps in una nuova scheda)</span>
+            <span class="visually-hidden"> {ui.opensMaps}</span>
+          </Button>
+          <Button href={whatsappShareUrl(invite)} variant="ghost" target="_blank" rel="noopener noreferrer">
+            <Icon name="chat" />
+            {copy.nextShow.share}
+            <span class="visually-hidden"> {ui.opensNewTab}</span>
           </Button>
           {
             data.bookingUrl && (
               <Button href={data.bookingUrl} variant="volt" target="_blank" rel="noopener noreferrer">
                 <Icon name="ticket" />
-                {data.bookingLabel ?? 'Prenota'}
+                {data.bookingLabel ?? ui.book}
               </Button>
             )
           }
         </div>
       </div>
-      <LightningSVG variant="b" class="card-bolt" />
       <Motif name="bell" />
     </article>
   </div>
@@ -139,12 +150,6 @@ const admission = admissionLabel(data);
     gap: 0.6rem;
   }
 
-  .card :global(.card-bolt) {
-    position: absolute;
-    top: -2.5rem;
-    right: 1rem;
-    width: 3.5rem;
-  }
 
   @media (min-width: 40rem) {
     .actions {

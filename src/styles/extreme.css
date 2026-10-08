@@ -75,13 +75,9 @@ main {
   z-index: 1;
 }
 
-#tour::before,
-#live::before,
-#band::before,
-#scaletta::before,
-#booking::before,
-#galleria::before,
-#recensioni::before {
+.section[data-word]::before {
+  /* The word comes from the section's data-word attribute (src/config/copy.ts), twice. */
+  content: attr(data-word) ' ' attr(data-word);
   position: absolute;
   top: 1.5rem;
   left: 0;
@@ -90,19 +86,12 @@ main {
   font-family: 'Metal Mania', var(--font-display);
   font-size: clamp(9rem, 34vw, 30rem);
   line-height: 0.9;
+  text-transform: uppercase;
   white-space: nowrap;
   -webkit-text-stroke: 2px var(--color-line);
   opacity: 0.55;
   pointer-events: none;
 }
-
-#tour::before { content: 'TOUR TOUR'; }
-#live::before { content: 'LIVE LIVE'; }
-#band::before { content: 'BAND BAND'; }
-#scaletta::before { content: 'LOUD LOUD'; }
-#booking::before { content: 'BOOK BOOK'; }
-#galleria::before { content: 'FOTO FOTO'; }
-#recensioni::before { content: 'ROCK ROCK'; }
 
 /* ---------- Red duotone photos ---------- */
 
@@ -165,31 +154,6 @@ a:focus-visible .frame img,
   rotate: -4deg;
 }
 
-/* ---------- Slanted red marquee band ---------- */
-
-.band-marquee {
-  z-index: 3;
-  margin-block: -1rem;
-  padding-block: 0.6rem 3rem;
-  background: var(--color-red);
-  rotate: -2deg;
-  scale: 1.06;
-}
-
-.marquee.band-marquee .marquee-track {
-  color: var(--color-bone);
-  font-size: var(--text-3xl);
-}
-
-.marquee.band-marquee .sep {
-  background: var(--color-night-950);
-}
-
-.marquee.band-marquee .pause {
-  right: calc(var(--spacing-gutter) + 5vw);
-  color: var(--color-bone);
-}
-
 /* ---------- Opening curtain ---------- */
 
 .curtain {
@@ -230,13 +194,7 @@ a:focus-visible .frame img,
   }
 
   @supports (animation-timeline: view()) {
-    #tour::before,
-    #live::before,
-    #band::before,
-    #scaletta::before,
-    #booking::before,
-    #galleria::before,
-    #recensioni::before {
+    .section[data-word]::before {
       animation: word-slide linear both;
       animation-timeline: view() !important;
     }

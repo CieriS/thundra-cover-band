@@ -11,7 +11,7 @@ const hasRealVideo = videos.some((video) => youtubeId(video.data.youtube));
 const [main, ...others] = videos;
 ---
 
-<section id="live" class="section" aria-labelledby="live-title">
+<section id="live" data-word={copy.live.word} class="section" aria-labelledby="live-title">
   <div class="wrap grid gap-10">
     <Equalizer />
     <SectionHeading

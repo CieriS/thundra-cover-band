@@ -1,7 +1,7 @@
 ---
-import { Image } from 'astro:assets';
-import creditMark from '@/assets/credit/samuele-cieri.png';
+import creditMark from '@/assets/credit/samuele-cieri-mark.png';
 import Icon from '@/components/ui/Icon.astro';
+import { copy } from '@/config/copy';
 import { isTodo, nav, showTodo, site, TODO } from '@/config/site';
 import Brand from './Brand.astro';
 
@@ -20,7 +20,7 @@ const links = [...nav, { label: 'Archivio date', href: '/archivio/' }];
     </div>
 
     <nav id="navigazione" aria-label="Pagine del sito" tabindex="-1">
-      <h2 class="label mb-3 text-red-ink">Naviga</h2>
+      <h2 class="label mb-3 text-red-ink">{copy.ui.navTitle}</h2>
       <ul class="grid grid-cols-2 gap-x-6">
         {
           links.map((item) => (
@@ -35,7 +35,7 @@ const links = [...nav, { label: 'Archivio date', href: '/archivio/' }];
     </nav>
 
     <div>
-      <h2 class="label mb-3 text-red-ink">Contatti</h2>
+      <h2 class="label mb-3 text-red-ink">{copy.ui.contactsTitle}</h2>
       <ul>
         <li>
           <a class="footer-link" href={site.contact.phoneHref}>
@@ -83,18 +83,21 @@ const links = [...nav, { label: 'Archivio date', href: '/archivio/' }];
   <div class="border-t border-line">
     <div class="wrap grid gap-2 py-6 text-xs text-mute md:flex md:items-center md:justify-between">
       <p>{site.disclaimer}</p>
-      <p class="flex flex-wrap items-center gap-x-4">
+      <p class="flex grow flex-wrap items-center gap-x-4 md:grow-0">
         <span>© {year} {site.name}</span>
         <a class="footer-link underline underline-offset-4" href="/privacy/">Privacy</a>
         <a class="footer-link underline underline-offset-4" href="/accessibilita/">Accessibilità</a>
+        {/* The author's signature: a small monochrome mark that blends in with the footer. */}
+        <a
+          class="signature"
+          href={site.credit.url}
+          rel="noopener noreferrer"
+          aria-label={`${copy.ui.creditLabel} ${site.credit.name}`}
+          title={`${copy.ui.creditLabel} ${site.credit.name}`}
+        >
+          <span class="signature-mark" style={`--mark: url(${creditMark.src})`} aria-hidden="true" />
+        </a>
       </p>
-    </div>
-    <div class="wrap pb-6 text-xs text-mute">
-      <a class="footer-link credit" href={site.credit.url} rel="noopener noreferrer">
-        {site.credit.label}
-        <Image src={creditMark} alt="" width={22} height={22} />
-        <span class="underline underline-offset-4">{site.credit.name}</span>
-      </a>
     </div>
   </div>
 </footer>
@@ -109,9 +112,33 @@ const links = [...nav, { label: 'Archivio date', href: '/archivio/' }];
     color: var(--color-bone);
   }
 
-  .credit {
-    gap: 0.45rem;
+  .signature {
+    display: inline-grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    margin-left: auto;
     color: var(--color-mute);
+    opacity: 0.5;
+    transition:
+      opacity var(--duration-fast) linear,
+      color var(--duration-fast) linear;
+  }
+
+  /* The mark is a mask: it takes the colour of the text around it. */
+  .signature-mark {
+    display: block;
+    width: 2rem;
+    aspect-ratio: 133 / 96;
+    background: currentColor;
+    -webkit-mask: var(--mark) center / contain no-repeat;
+    mask: var(--mark) center / contain no-repeat;
+  }
+
+  .signature:hover,
+  .signature:focus-visible {
+    color: var(--color-red-ink);
+    opacity: 1;
   }
 
   a.footer-link:hover {

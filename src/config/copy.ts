@@ -1,26 +1,34 @@
 /**
- * Site copy, grouped by section. Italian, short sentences.
- * Rules: no song lyrics (not even one line), no invented numbers.
+ * Every text of the site, grouped by section: edit here, nothing is written in the components.
+ * Italian, short sentences, one idea per line, every block ends on an action.
+ * Rules: no song lyrics (not even one line), no invented numbers or facts.
+ * `word` is the giant outlined word that slides behind a section.
  */
 export const copy = {
   hero: {
-    claim: 'Due ore di rock’n’roll a tutto volume.',
-    ctaFans: 'Prossime date',
+    claim: 'Tutti i classici degli AC/DC. Dal vivo.',
+    /** Followed by the cities of site.area: "Tra Bologna, Modena, Reggio Emilia e dintorni." */
+    areaPrefix: 'Tra',
+    ctaFans: 'Vedi le date',
     ctaBooking: 'Porta Thundra nel tuo locale',
     nextLabel: 'Prossima data',
   },
   nextShow: {
     eyebrow: 'Prossimo concerto',
-    title: ['Segnatelo.', 'Poi vieni.'],
+    title: ['Ci vediamo', 'qui'],
     timeUnknown: 'Orario da confermare',
-    calendar: 'Aggiungi al calendario',
+    calendar: 'Salva la data',
     directions: 'Come arrivare',
+    share: 'Invita gli amici',
+    /** Text of the WhatsApp invitation; date, venue and link are added automatically. */
+    shareMessage: 'Vieni con me a sentire i Thundra, tributo agli AC/DC?',
     today: 'È stasera. Ci vediamo lì.',
   },
   tour: {
+    word: 'Tour',
     eyebrow: 'Tour',
-    title: ['Date', 'live'],
-    intro: 'Data, locale, città. Il resto lo diciamo dal palco.',
+    title: ['Prossime', 'date'],
+    intro: 'Scegli la serata, salvala in calendario e porta chi vuoi.',
     all: 'Tutte le date',
     archive: 'Date passate',
     emptyTitle: 'Nuove date in arrivo',
@@ -28,35 +36,45 @@ export const copy = {
     emptyCta: 'Seguici su Instagram',
   },
   live: {
+    word: 'Live',
     eyebrow: 'Live',
-    title: ['Dal vivo,', 'senza filtri'],
-    intro: 'Le parole contano poco. Guarda come suona una serata con Thundra.',
-    comingSoon: 'I primi video dal palco stanno arrivando. Nel frattempo seguici sui social.',
+    title: ['Senti', 'come suona'],
+    intro: 'Prima di venire, o prima di chiamarci: guarda una serata vera.',
+    comingSoon: 'I video dal palco sono in arrivo. Su Instagram escono prima.',
     play: 'Riproduci il video',
     consent: 'Il video si carica da YouTube solo dopo il tuo tocco.',
+    soon: 'Presto online',
   },
   reviews: {
+    word: 'Rock',
     eyebrow: 'Dicono di noi',
     title: ['Chi c’era', 'lo racconta'],
   },
   band: {
+    word: 'Band',
     eyebrow: 'La band',
     title: ['Cinque.', 'Forte.'],
     text: [
       'Cinque musicisti e una fissazione in comune: gli AC/DC.',
       'Li suoniamo come vanno suonati: forte, precisi, senza fronzoli. I pantaloncini corti restano facoltativi.',
     ],
+    lineup: 'Formazione',
   },
   setlist: {
+    word: 'Loud',
     eyebrow: 'Scaletta tipo',
     title: ['I pezzi', 'che aspetti'],
-    intro: 'I classici che tutti vogliono sentire, più qualche chicca per chi i dischi li ha consumati.',
+    intro: 'Quelli che canti dal primo accordo. E qualche chicca per chi i dischi li ha consumati.',
   },
   booking: {
-    eyebrow: 'Per gestori e organizzatori',
+    word: 'Book',
+    eyebrow: 'Per locali ed eventi',
     title: ['Porta Thundra', 'nel tuo locale'],
     intro:
-      'Uno show completo dedicato agli AC/DC, dal primo riff all’ultimo bis. Noi pensiamo al palco. Tu pensi al bancone.',
+      'Una serata AC/DC chiavi in mano: i classici che tutti conoscono, dal primo riff all’ultimo bis. Tu apri le porte, al palco pensiamo noi.',
+    /** First call to action, right under the intro: on a phone the contact panel is far below. */
+    quickCta: 'Chiedi disponibilità su WhatsApp',
+    quickNote: 'Risponde la band, senza intermediari. Nessun impegno.',
     benefitsTitle: 'Cosa ottiene il locale',
     benefits: [
       {
@@ -64,12 +82,12 @@ export const copy = {
         text: 'Il repertorio degli AC/DC lo conoscono tutti: richiama pubblico di ogni età, dai fan storici a chi viene per curiosità.',
       },
       {
-        title: 'Consumazioni',
+        title: 'Più consumazioni',
         text: 'Uno show lungo e coinvolgente tiene le persone nel locale per tutta la serata.',
       },
       {
-        title: 'Una serata che si ricorda',
-        text: 'Il tipo di concerto che i clienti raccontano il giorno dopo, e per cui tornano.',
+        title: 'Clienti che tornano',
+        text: 'Il tipo di concerto che si racconta il giorno dopo, e per cui si chiede quando è il prossimo.',
       },
     ],
     reliabilityTitle: 'Come lavoriamo',
@@ -88,24 +106,23 @@ export const copy = {
     },
     riderCta: 'Scarica la scheda tecnica (PDF)',
     riderPlaceholder: 'Il PDF attuale è un segnaposto.',
-    contactTitle: 'Chiedi una data',
-    contactIntro:
-      'Scrivici su WhatsApp o chiamaci: rispondiamo con disponibilità e condizioni. Nessun impegno.',
+    contactTitle: 'Chiedi disponibilità',
+    contactIntro: 'Dicci data e locale: ti rispondiamo con disponibilità e condizioni. Senza impegno.',
     whatsappCta: 'Scrivici su WhatsApp',
     callCta: 'Chiama',
     emailCta: 'Scrivi una email',
     form: {
-      title: 'Oppure compila qui',
+      title: 'Preferisci un modulo?',
       hint: 'Il modulo non invia nulla al sito: prepara il messaggio e apre WhatsApp, dove lo confermi tu.',
       venue: 'Nome del locale',
       city: 'Città',
-      date: 'Data ipotizzata',
+      date: 'Data che hai in mente',
       contact: 'Il tuo nome e un recapito',
-      submit: 'Apri WhatsApp con il messaggio',
+      submit: 'Invia la richiesta su WhatsApp',
     },
-    pageCta: 'Tutto per i gestori',
   },
   gallery: {
+    word: 'Foto',
     eyebrow: 'Galleria',
     title: ['Visti da', 'sotto il palco'],
     open: 'Ingrandisci la foto',
@@ -115,17 +132,35 @@ export const copy = {
   },
   social: {
     eyebrow: 'Social',
-    title: ['Seguici'],
-    text: 'Date nuove, dietro le quinte e video dal palco: sui social arrivano prima.',
+    title: ['Non perderti', 'la prossima'],
+    text: 'Le date nuove escono prima sui social. Seguici e sei a posto.',
   },
   finalCta: {
     title: ['Ci vediamo', 'sotto il palco'],
-    text: 'Fan o gestore, la strada è la stessa: scegli una data oppure creane una.',
+    text: 'Vieni a sentirci. Oppure portaci nel tuo locale.',
   },
   archive: {
     title: ['Archivio', 'date'],
     intro: 'I palchi su cui siamo già saliti.',
     empty: 'L’archivio si riempie da solo: ogni data, il giorno dopo il concerto, finisce qui.',
   },
-  placeholderBadge: 'Immagine segnaposto',
+  /** Small interface texts shared by several components. */
+  ui: {
+    skip: 'Vai al contenuto',
+    menu: 'Menu',
+    close: 'Chiudi',
+    navTitle: 'Naviga',
+    contactsTitle: 'Contatti',
+    barDates: 'Date',
+    barBooking: 'Booking',
+    quickActions: 'Azioni rapide',
+    pauseMarquee: 'Ferma lo scorrimento',
+    startsAt: 'Inizio ore',
+    book: 'Prenota',
+    cancelled: 'Annullato',
+    postponed: 'Rinviato',
+    opensMaps: '(apre Google Maps in una nuova scheda)',
+    opensNewTab: '(apre una nuova scheda)',
+    creditLabel: 'Sito realizzato da',
+  },
 } as const;
