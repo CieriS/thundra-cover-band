@@ -91,6 +91,8 @@ const members = await getMembers();
     /* Cards waiting for their reveal are shifted down: never show a vertical scrollbar. */
     overflow-y: hidden;
     scroll-snap-type: x mandatory;
+    /* The row is a scroll container: photos inside follow this timeline, tied to the page. */
+    view-timeline-name: --members;
     scroll-padding-inline: var(--spacing-gutter);
     overscroll-behavior-x: contain;
     scrollbar-width: thin;

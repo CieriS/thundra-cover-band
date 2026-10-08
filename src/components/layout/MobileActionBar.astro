@@ -72,7 +72,7 @@ const { afterHero = false } = Astro.props;
     @media (prefers-reduced-motion: no-preference) {
       .after-hero {
         animation: bar-in linear both;
-        animation-timeline: scroll(root block);
+        animation-timeline: scroll(root block) !important;
         animation-range: 55svh 80svh;
       }
     }

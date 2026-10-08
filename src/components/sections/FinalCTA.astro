@@ -29,7 +29,7 @@ import { site } from '@/config/site';
     /* Slides under the previous section so the diagonal cut shows it, not the page background. */
     margin-top: calc(var(--slant) * -1);
     padding-block: calc(var(--spacing-section) + var(--slant));
-    overflow: hidden;
+    overflow: clip;
     background: var(--color-red);
     clip-path: polygon(0 var(--slant), 100% 0, 100% 100%, 0 100%);
     isolation: isolate;

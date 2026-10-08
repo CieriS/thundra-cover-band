@@ -9,6 +9,9 @@
  *   animations that never start from opacity 0;
  * - photosensitivity: no element flashes more than twice within a second,
  *   glows are confined to small areas, nothing flashes full screen;
+ * - every `animation-timeline` is declared `!important`: the CSS minifier would otherwise fold it
+ *   into the `animation` shorthand, which browsers reject, silently disabling the animation
+ *   in production builds (it works in dev, where nothing is minified);
  * - prefers-reduced-motion: no bolts, no glow, only short fades.
  */
 
@@ -268,14 +271,14 @@
     /* Hero image drifts slower than the page while it scrolls away. */
     .hero .media {
       animation: hero-drift linear both;
-      animation-timeline: scroll(root block);
+      animation-timeline: scroll(root block) !important;
       animation-range: 0 100svh;
     }
 
     /* The oversized band name slides across as the final section passes. */
     .final .ghost {
       animation: ghost-slide linear both;
-      animation-timeline: view();
+      animation-timeline: view() !important;
       animation-range: entry 0% exit 100%;
     }
   }

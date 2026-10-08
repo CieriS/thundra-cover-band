@@ -55,7 +55,9 @@ const usable = widths.filter((width) => width <= src.width);
 <style>
   .frame {
     position: relative;
-    overflow: hidden;
+    /* clip, not hidden: hidden would make the frame a scroll container and freeze
+       the scroll-driven animations of what is inside. */
+    overflow: clip;
     background: var(--color-night-800);
   }
 

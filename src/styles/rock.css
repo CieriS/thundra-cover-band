@@ -45,7 +45,7 @@
   position: relative;
   z-index: 2;
   height: 0.85rem;
-  overflow: hidden;
+  overflow: clip;
   background: var(--color-night-950);
 }
 
@@ -245,23 +245,23 @@
     .voltage {
       display: block;
       animation: voltage linear both;
-      animation-timeline: scroll(root block);
+      animation-timeline: scroll(root block) !important;
     }
 
     .knob-dial {
       animation: knob-turn linear both;
-      animation-timeline: view();
+      animation-timeline: view() !important;
       animation-range: entry 10% exit 90%;
     }
 
     .hazard::before {
       animation: hazard-slide linear both;
-      animation-timeline: view();
+      animation-timeline: view() !important;
     }
 
     .beams {
       animation: beams-tilt linear both;
-      animation-timeline: scroll(root block);
+      animation-timeline: scroll(root block) !important;
       animation-range: 0 90svh;
     }
   }

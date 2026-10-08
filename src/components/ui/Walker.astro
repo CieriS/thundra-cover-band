@@ -56,7 +56,8 @@
   .walker-lane {
     position: relative;
     height: clamp(9rem, 22vw, 15rem);
-    overflow: hidden;
+    /* clip, not hidden: the walker's scroll timeline must be the page, not this lane. */
+    overflow: clip;
     background: linear-gradient(to bottom, var(--color-night-950), var(--color-night-800));
   }
 
@@ -82,25 +83,25 @@
         left: 0;
         translate: none;
         animation: walk-across linear both;
-        animation-timeline: view();
+        animation-timeline: view() !important;
         animation-range: entry 20% exit 80%;
       }
 
       .walker-hop {
         animation: walk-hop linear both;
-        animation-timeline: view();
+        animation-timeline: view() !important;
         animation-range: entry 20% exit 80%;
       }
 
       .frame-a {
         animation: walk-a steps(1, end) both;
-        animation-timeline: view();
+        animation-timeline: view() !important;
         animation-range: entry 20% exit 80%;
       }
 
       .frame-b {
         animation: walk-b steps(1, end) both;
-        animation-timeline: view();
+        animation-timeline: view() !important;
         animation-range: entry 20% exit 80%;
       }
     }

@@ -238,27 +238,33 @@ a:focus-visible .frame img,
     #galleria::before,
     #recensioni::before {
       animation: word-slide linear both;
-      animation-timeline: view();
+      animation-timeline: view() !important;
     }
 
     /* Photos develop from red duotone to full colour while they cross the screen. */
     .frame::after {
       animation: develop-tint linear both;
-      animation-timeline: view();
+      animation-timeline: view() !important;
       animation-range: entry 30% cover 45%;
     }
 
     .frame img {
       animation: develop-photo linear both;
-      animation-timeline: view();
+      animation-timeline: view() !important;
       animation-range: entry 30% cover 45%;
+    }
+
+    .members .frame::after,
+    .members .frame img {
+      animation-timeline: --members !important;
+      animation-range: entry 20% cover 40%;
     }
 
     /* Cards straighten up as they reach the middle of the screen. */
     #tour ol > li,
     #recensioni figure {
       animation: straighten linear both;
-      animation-timeline: view();
+      animation-timeline: view() !important;
       animation-range: entry 0% cover 50%;
     }
   }
