@@ -248,3 +248,7 @@ produzione e copia l'URL. Poi, su GitHub, salvalo come secret del repository con
 **Cloudflare Pages**: Settings → Builds & deployments → Deploy hooks, poi lo stesso secret.
 
 Per provare subito: scheda Actions su GitHub → "Daily rebuild" → Run workflow.
+
+## Git hooks
+
+`.githooks/pre-push` runs before every push: a secret scan of the outgoing commits (gitleaks, or its Docker image when the binary is missing) and then the fast checks (`bun run lint && bun run typecheck && bun test`). It is enabled on install by the `prepare` script. Skip it once with `git push --no-verify`. On CI, `.github/workflows/secret-scan.yml` scans the whole history of every branch and tag.
