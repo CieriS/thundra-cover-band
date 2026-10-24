@@ -243,6 +243,22 @@ describe('tour poster', () => {
     expect(all.filter((text) => text.startsWith('Locale '))).toHaveLength(TOUR_MAX_ROWS);
   });
 
+  test('a full poster, every date with a logo, stays inside the sheet', () => {
+    const full = Array.from({ length: TOUR_MAX_ROWS }, (_, index) => ({
+      date: `2027-0${index + 1}-15`,
+      venue: `Locale ${index}`,
+      place: 'Lama di Reno (BO)',
+      venueLogo: 'src/x.jpg',
+      venueLogoTone: 'light' as const,
+    }));
+    const scene = tourScene(full, tour);
+    expect(textsOf(scene)).toContain('DATE IN AGGIORNAMENTO');
+    for (const element of scene.elements) {
+      if (element.kind === 'line') expect(element.baseline).toBeLessThanOrEqual(scene.height - 30);
+      if (element.kind === 'venueLogo') expect(element.y + element.height).toBeLessThanOrEqual(scene.height - 30);
+    }
+  });
+
   test('without dates the poster still has title and footer', () => {
     const all = textsOf(tourScene([], tour));
     expect(all).toContain('DATE');
