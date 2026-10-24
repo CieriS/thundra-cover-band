@@ -276,40 +276,56 @@ export const TOUR_MAX_ROWS = 4;
 export function tourScene(rows: readonly TourRow[], texts: TourTexts): Scene {
   const height = FORMAT_HEIGHT.instagram;
   const shown = rows.slice(0, TOUR_MAX_ROWS);
-  const rowHeight = 104;
-  const blocks: Block[] = shown.map((row) => ({
-    height: rowHeight,
-    place: (top) => [
-      ...(row.venueLogo
-        ? [{ kind: 'venueLogo', x: 56, y: top + 4, width: 204, height: rowHeight - 14, tone: row.venueLogoTone, source: row.venueLogo } satisfies Element]
-        : []),
-      {
-        kind: 'line',
-        x: 290,
-        anchor: 'start',
-        baseline: top + 68,
-        maxWidth: 240,
-        segments: [{ text: flyerShortDate(row.date), size: 56, colour: FLYER_COLOURS.red, font: 'display' }],
-      },
-      {
-        kind: 'line',
-        x: 548,
-        anchor: 'start',
-        baseline: top + 44,
-        maxWidth: 400,
-        segments: [{ text: row.venue, size: 40, colour: FLYER_COLOURS.bone, font: 'display' }],
-      },
-      {
-        kind: 'line',
-        x: 548,
-        anchor: 'start',
-        baseline: top + 86,
-        maxWidth: 400,
-        segments: [{ text: row.place, size: 28, colour: FLYER_COLOURS.volt, font: 'display', tracking: 0.03 }],
-      },
-    ],
-  }));
-  blocks.push(textBlock([{ text: texts.footer.toUpperCase(), size: 54, colour: FLYER_COLOURS.volt, font: 'display', tracking: 0.02 }], 500, 880));
+  // Rows and footer shrink together when a full list does not fit under the logo.
+  const build = (scale: number): Block[] => {
+    const rowHeight = 104 * scale;
+    const blocks: Block[] = shown.map((row) => ({
+      height: rowHeight,
+      place: (top) => [
+        ...(row.venueLogo
+          ? [
+              {
+                kind: 'venueLogo',
+                x: 56,
+                y: top + 4 * scale,
+                width: 204,
+                height: rowHeight - 14 * scale,
+                tone: row.venueLogoTone,
+                source: row.venueLogo,
+              } satisfies Element,
+            ]
+          : []),
+        {
+          kind: 'line',
+          x: 290,
+          anchor: 'start',
+          baseline: top + 68 * scale,
+          maxWidth: 240,
+          segments: [{ text: flyerShortDate(row.date), size: 56 * scale, colour: FLYER_COLOURS.red, font: 'display' }],
+        },
+        {
+          kind: 'line',
+          x: 548,
+          anchor: 'start',
+          baseline: top + 44 * scale,
+          maxWidth: 400,
+          segments: [{ text: row.venue, size: 40 * scale, colour: FLYER_COLOURS.bone, font: 'display' }],
+        },
+        {
+          kind: 'line',
+          x: 548,
+          anchor: 'start',
+          baseline: top + 86 * scale,
+          maxWidth: 400,
+          segments: [{ text: row.place, size: 28 * scale, colour: FLYER_COLOURS.volt, font: 'display', tracking: 0.03 }],
+        },
+      ],
+    }));
+    blocks.push(
+      textBlock([{ text: texts.footer.toUpperCase(), size: 54 * scale, colour: FLYER_COLOURS.volt, font: 'display', tracking: 0.02 }], 500, 880),
+    );
+    return blocks;
+  };
   const headerHeight = 700;
   const years = tourYears(shown);
   return {
@@ -335,7 +351,7 @@ export function tourScene(rows: readonly TourRow[], texts: TourTexts): Scene {
         segments: [{ text: texts.tribute.toUpperCase(), size: 34, colour: FLYER_COLOURS.volt, font: 'display', tracking: 0.22 }],
       },
       { kind: 'social', cx: 500, baseline: 728, size: 19, items: texts.social },
-      ...stack(blocks, 770, height - 36, 16),
+      ...fitStack(build, 1, 770, height - 36, 16),
     ],
   };
 }
