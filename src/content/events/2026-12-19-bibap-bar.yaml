@@ -1,0 +1,16 @@
+date: 2026-12-19
+time: # [DA COMPILARE] orario di inizio, formato "22:00"
+venue: Bibap Bar
+city: Zocca
+province: MO
+address: # [DA COMPILARE] via e numero civico
+mapsUrl: # [DA COMPILARE] link Google Maps (se vuoto: ricerca automatica per nome e città)
+admission: # [DA COMPILARE] free | paid
+price:
+bookingUrl: # [DA COMPILARE] link per prenotare un tavolo, se esiste
+bookingLabel:
+poster:
+note:
+# [DA COMPILARE] logo più grande: questo è 271x271 e in stampa A4 esce sgranato.
+venueLogo: src/assets/venues/bibap-bar.jpg
+venueLogoTone: light
