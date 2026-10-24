@@ -14,3 +14,4 @@ note:
 # [DA COMPILARE] logo più grande: questo è 271x271 e in stampa A4 esce sgranato.
 venueLogo: src/assets/venues/bibap-bar.jpg
 venueLogoTone: light
+flyerVariant: natale
