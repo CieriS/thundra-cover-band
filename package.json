@@ -11,7 +11,8 @@
     "lint": "eslint .",
     "test": "bun test",
     "placeholders": "node scripts/generate-placeholders.mjs",
-    "todo": "node scripts/list-todo.mjs"
+    "todo": "node scripts/list-todo.mjs",
+    "prepare": "git config core.hooksPath .githooks"
   },
   "packageManager": "bun@1.4.0",
   "dependencies": {
